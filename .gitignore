@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# Custom
+client/node_modules/
+server/node_modules/
+.idea/
+
+
