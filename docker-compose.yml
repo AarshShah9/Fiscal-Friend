@@ -1,0 +1,32 @@
+# Version of Docker-compose
+version: '3.9'
+services:
+  # Add the node-js service
+  node:
+    # Location to the node.js dockerfile
+    build:
+      context: ./server
+      # Name of the dockerfile
+      dockerfile: Dockerfile
+    container_name: node-container
+    ports:
+      # Host port:Container port
+      - '4000:4000'
+    volumes:
+      # Bind-mounts configuration
+      - ./server:/app
+      # Ignoring any changes made in "node_modules" folder
+#      - ./app/node_modules
+  react:
+    # Location to the react.js dockerfile
+    build:
+      context: ./client
+      # Name of the dockerfile
+      dockerfile: Dockerfile
+    container_name: react-container
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      # Host port:Container port
+      - '3000:3000'
+    stdin_open: true
