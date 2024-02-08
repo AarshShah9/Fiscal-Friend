@@ -4,9 +4,7 @@ import { connectToDatabase } from './db/conn';
 import dotenv from 'dotenv';
 import userRoutes from "./routes/user.routes";
 
-//For env File
 dotenv.config();
-
 const app: Application = express();
 const PORT: number = parseInt(process.env.PORT as string, 10) || 4000;
 
@@ -23,7 +21,7 @@ app.use("/api/user", userRoutes);
 
 (async () => {
     try {
-        await connectToDatabase();
+        await connectToDatabase(process.env.ATLAS_URI!);
         console.log('Database connection established, starting server...');
         app.listen(PORT, () => {
             console.log(`Server is live at http://localhost:${PORT}`);

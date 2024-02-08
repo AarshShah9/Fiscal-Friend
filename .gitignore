@@ -132,7 +132,9 @@ dist
 
 # Custom
 client/node_modules/
+client/.env
 server/node_modules/
+server/.env
 .idea/
 
 
