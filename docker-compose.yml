@@ -16,7 +16,7 @@ services:
       # Bind-mounts configuration
       - ./server:/app
       # Ignoring any changes made in "node_modules" folder
-#      - ./app/node_modules
+  #      - ./app/node_modules
   react:
     # Location to the react.js dockerfile
     build:
