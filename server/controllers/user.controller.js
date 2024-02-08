@@ -12,28 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const conn_1 = require("./db/conn");
-const dotenv_1 = __importDefault(require("dotenv"));
-const user_routes_1 = __importDefault(require("./routes/user.routes"));
-//For env File
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const PORT = parseInt(process.env.PORT, 10) || 4000;
-app.use(express_1.default.json());
-app.get('/', (req, res) => {
-    res.send('Welcome to Express & TypeScript Server!!');
-});
-app.use("/api/user", user_routes_1.default);
-(() => __awaiter(void 0, void 0, void 0, function* () {
+exports.createUser = void 0;
+const User_1 = __importDefault(require("../models/User"));
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield (0, conn_1.connectToDatabase)();
-        console.log('Database connection established, starting server...');
-        app.listen(PORT, () => {
-            console.log(`Server is live at http://localhost:${PORT}`);
+        console.log('Request Body:', req.body);
+        const newUser = yield User_1.default.create({
+            email: req.body.email,
+            password: req.body.password,
         });
+        res.status(201).json(newUser);
     }
     catch (error) {
-        console.error('Failed to connect to the database:', error);
+        console.error('Failed to create user:', error);
+        res.status(400).json({ error: 'Failed to create user' });
     }
-}))();
+});
+exports.createUser = createUser;

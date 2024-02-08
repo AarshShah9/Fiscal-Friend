@@ -12,28 +12,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const conn_1 = require("./db/conn");
-const dotenv_1 = __importDefault(require("dotenv"));
-const user_routes_1 = __importDefault(require("./routes/user.routes"));
-//For env File
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const PORT = parseInt(process.env.PORT, 10) || 4000;
-app.use(express_1.default.json());
-app.get('/', (req, res) => {
-    res.send('Welcome to Express & TypeScript Server!!');
-});
-app.use("/api/user", user_routes_1.default);
-(() => __awaiter(void 0, void 0, void 0, function* () {
+exports.connectToDatabase = void 0;
+const mongoose_1 = __importDefault(require("mongoose"));
+// Assuming MONGO_URI is a string, adjust as necessary for your environment
+let MONGO_URI = process.env.ATLAS_URI;
+MONGO_URI = "mongodb+srv://allaccess:8lbtpYuPmMAAzOmj@fiscalfriendfirst.envrqpu.mongodb.net/?retryWrites=true&w=majority";
+let connectionInstance = null;
+const connectToDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (connectionInstance) {
+        console.log('Using existing database connection');
+        return connectionInstance;
+    }
     try {
-        yield (0, conn_1.connectToDatabase)();
-        console.log('Database connection established, starting server...');
-        app.listen(PORT, () => {
-            console.log(`Server is live at http://localhost:${PORT}`);
-        });
+        yield mongoose_1.default.connect(MONGO_URI);
+        console.log('Database Connected Successfully');
+        connectionInstance = mongoose_1.default.connection;
+        return connectionInstance;
     }
     catch (error) {
-        console.error('Failed to connect to the database:', error);
+        console.error('Database connection failed:', error);
+        throw error;
     }
-}))();
+});
+exports.connectToDatabase = connectToDatabase;

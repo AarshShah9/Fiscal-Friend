@@ -1,16 +1,35 @@
-import express, { Express, Request, Response , Application } from 'express';
+import express, { Request, Response , Application } from 'express';
+import { connectToDatabase } from './db/conn';
+
 import dotenv from 'dotenv';
+import userRoutes from "./routes/user.routes";
 
 //For env File
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 4000;
+const PORT: number = parseInt(process.env.PORT as string, 10) || 4000;
+
+app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Welcome to Express & TypeScript Server!!');
+
 });
 
-app.listen(port, () => {
-    console.log(`Server is Fire at http://localhost:${port}`);
-});
+app.use("/api/user", userRoutes);
+
+
+
+(async () => {
+    try {
+        await connectToDatabase();
+        console.log('Database connection established, starting server...');
+        app.listen(PORT, () => {
+            console.log(`Server is live at http://localhost:${PORT}`);
+        });
+
+    } catch (error) {
+        console.error('Failed to connect to the database:', error);
+    }
+})();
