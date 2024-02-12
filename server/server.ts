@@ -1,10 +1,10 @@
 import express, { Request, Response, Application } from 'express';
 import { connectToDatabase } from './db/conn';
 
-import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes';
 
-dotenv.config();
+require('dotenv').config({ path: "../.env"});
+
 const app: Application = express();
 const PORT: number = parseInt(process.env.PORT as string, 10) || 4000;
 
