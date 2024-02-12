@@ -1,8 +1,17 @@
 {
   "scripts": {
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "install:all": "npm install && cd client && npm install && cd .. && cd server && npm install && cd ..",
+    "build": "cd client && npm run build && cd .. && cd server && npm run build && cd ..",
+    "dev:back": "cd server && npm run dev && cd ..",
+    "dev:front": "cd client && npm start && cd ..",
+    "dev:full": "concurrently \"cd server && npm run dev\" \"cd client && npm start\""
   },
   "devDependencies": {
     "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.4.2"
   }
 }
