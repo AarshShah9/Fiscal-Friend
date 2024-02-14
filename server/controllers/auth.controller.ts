@@ -41,19 +41,19 @@ export const register = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
 	try {
 		if (!req.body.email || !req.body.password) {
-			return res.status(400).json({ success: false, mesage: 'Missing email or password'});
+			return res.status(400).json({ success: false, message: 'Missing email or password'});
 		}
 
 		const user = await User.findOne({ email: req.body.email });
 
 		if (!user) {
-			return res.status(400).json({ success: false, mesage: 'User not found' });
+			return res.status(400).json({ success: false, message: 'User not found' });
 		}
 		
 		// Check if password is correct
 		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 		if (!passwordMatch) {
-			return res.status(400).json({ success: false, mesage: 'Invalid password'} );
+			return res.status(400).json({ success: false, message: 'Invalid password'} );
 		}
 
 		// Create a JWT token
