@@ -1,6 +1,7 @@
 import User from '../models/User';
 import { Request, Response } from 'express';
 import { createSecretToken } from '../utils/secretToken';
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 export const register = async (req: Request, res: Response) => {
@@ -80,4 +81,20 @@ export const login = async (req: Request, res: Response) => {
 	} catch (error) {
 		res.status(500).json({ message: 'Authentication failed', error: error });
 	}
+};
+
+export const logout = async (req: Request, res: Response) => {
+	try {
+		req.body.user = null;
+		res.status(201).clearCookie('token').json({ success: true, message: 'Logged out successfully' });
+	} catch (error) {
+		res.status(500).json({ message: 'Failed to logout', error: error });
+	}
+};
+
+export const me = async (req: Request, res: Response) => {
+	if(req.body.user) {
+		return res.status(201).json({ success: true, message: 'User authenticated', user: req.body.user });
+	}
+	return res.status(400).json({ success: false, message: 'User not authenticated' });
 };
