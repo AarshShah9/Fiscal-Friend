@@ -2,6 +2,8 @@ import express, { Request, Response, Application } from 'express';
 import { connectToDatabase } from './db/conn';
 
 import userRoutes from './routes/user.routes';
+import http from "http";
+import {Connection} from "mongoose";
 
 require('dotenv').config({ path: "../.env"});
 
@@ -14,16 +16,27 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Express & TypeScript Server!!');
 });
 
+app.get('/test', (req: Request, res: Response) => {
+    res.send({message: 'Test Endpoint'});
+});
+
 app.use('/api/user', userRoutes);
+
+let server: http.Server;
+let mongoClient: Connection;
 
 (async () => {
   try {
-    await connectToDatabase(process.env.ATLAS_URI!);
-    console.log('Database connection established, starting server...');
-    app.listen(PORT, () => {
+    mongoClient = await connectToDatabase(process.env.ATLAS_URI!);
+    server = app.listen(PORT, () => {
       console.log(`Server is live at http://localhost:${PORT}`);
     });
   } catch (error) {
     console.error('Failed to connect to the database:', error);
   }
 })();
+
+
+
+export default app;
+export { server, mongoClient };
