@@ -1,20 +1,13 @@
 import express, { Request, Response, Application } from 'express';
 import { connectToDatabase } from './db/conn';
-
-import userRoutes from './routes/user.routes';
-
+const cookieParser = require("cookie-parser");
 require('dotenv').config({ path: "../.env"});
+
+// import userRoutes from './routes/user.routes';
+import authRoutes from './routes/auth.routes';
 
 const app: Application = express();
 const PORT: number = parseInt(process.env.PORT as string, 10) || 4000;
-
-app.use(express.json());
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server!!');
-});
-
-app.use('/api/user', userRoutes);
 
 (async () => {
   try {
@@ -27,3 +20,16 @@ app.use('/api/user', userRoutes);
     console.error('Failed to connect to the database:', error);
   }
 })();
+
+app.use(cookieParser());
+
+app.use(express.json());
+
+app.get('/', (req: Request, res: Response) => {
+  res.send('Welcome to Express & TypeScript Server!!');
+});
+
+// app.use('/api/user', userRoutes);
+app.use('/auth', authRoutes);
+
+
