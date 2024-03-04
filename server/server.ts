@@ -1,7 +1,11 @@
 import express, { Request, Response, Application } from 'express';
 import { connectToDatabase } from './db/conn';
+const cookieParser = require("cookie-parser");
+require('dotenv').config({ path: "../.env"});
 
-import userRoutes from './routes/user.routes';
+// import userRoutes from './routes/user.routes';
+import authRoutes from './routes/auth.routes';
+
 import http from 'http';
 import { Connection } from 'mongoose';
 
@@ -18,17 +22,19 @@ try {
 const app: Application = express();
 const PORT: number = parseInt(env.PORT as string, 10) || 4000;
 
+app.use(cookieParser());
+
 app.use(express.json());
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Express & TypeScript Server!!');
 });
 
+app.use('/auth', authRoutes);
+
 app.get('/test', (req: Request, res: Response) => {
   res.send({ message: 'Test Endpoint' });
 });
-
-app.use('/api/user', userRoutes);
 
 let server: http.Server;
 let mongoClient: Connection;
@@ -48,3 +54,7 @@ if (require.main === module) {
 
 export default app;
 export { server, mongoClient };
+
+
+
+
