@@ -6,7 +6,7 @@ import http from 'http';
 import { Connection } from 'mongoose';
 
 require('dotenv').config({ path: '../.env' });
-import { env, validateEnv } from './env.d.t';
+import { env, validateEnv } from './env';
 
 try {
   // Validates the Env file
