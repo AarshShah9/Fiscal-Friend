@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 
-require("dotenv").config();
+require("dotenv").config("../.env");
 const jwt = require("jsonwebtoken");
 
 export const checkAuth = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,7 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
     return res.status(400).json({ success: false, message: "User not authenticated" })
   }
   try{
-    const decodedToken = jwt.verify(token, process.env.TOKEN_KEY);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
     //Try to find user
     const user = await User.findById(decodedToken.userId);

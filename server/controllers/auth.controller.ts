@@ -6,7 +6,13 @@ const bcrypt = require('bcrypt');
 
 export const register = async (req: Request, res: Response) => {
   try {
-    console.log('Request Body:', req.body);
+
+	if (!req.body.email || !req.body.password) {
+		return res.status(400).json({ success: false, message: 'Missing email or password'});
+	}
+	if (!req.body.firstName && !req.body.lastName) {
+		return res.status(400).json({ success: false, message: 'Missing name'});
+	}
 
 		// Check if user already exists
 		const existingUser = await User.findOne({
@@ -21,21 +27,21 @@ export const register = async (req: Request, res: Response) => {
 
 		// Create new user
     const newUser = await User.create({
-      email: req.body.email,
-      password: req.body.password,
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
+		email: req.body.email,
+      	password: req.body.password,
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
     });
 		
-		res.status(201).json({
-			success: true,
-			message: 'User created successfully',
-			user: newUser,
-		});
+	return res.status(201).json({
+		success: true,
+		message: 'User created successfully',
+		user: newUser,
+	});
 		
   } catch (error) {
     console.error('Failed to create user:', error);
-    res.status(400).json({ error: 'Failed to create user' });
+    return res.status(400).json({ error: 'Failed to create user' });
   }
 };
 
