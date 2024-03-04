@@ -4,6 +4,7 @@ const envSchema = z.object({
   ATLAS_URI: z.string(),
   PORT: z.string(),
   NODE_ENV: z.string(),
+  JWT_SECRET: z.string(),
 });
 
 type EnvType = z.infer<typeof envSchema>;
@@ -16,6 +17,7 @@ const env = {
   ATLAS_URI: process.env.ATLAS_URI!,
   PORT: process.env.PORT!,
   NODE_ENV: process.env.NODE_ENV!,
+  JWT_SECRET: process.env.JWT_SECRET!,
 };
 
 export { env, validateEnv };

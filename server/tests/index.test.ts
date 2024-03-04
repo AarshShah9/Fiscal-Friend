@@ -1,6 +1,6 @@
 // Write a jest test to hit the /Test Endpoint
 import request from 'supertest';
-import app from '../server'; 
+import app from '../app'; 
 import { connectToDatabase } from '../db/conn';
 import { Connection } from 'mongoose';
 let mongoClient: Connection;
@@ -8,7 +8,7 @@ let mongoClient: Connection;
 beforeAll(async() => {
   try{
     mongoClient = await connectToDatabase(process.env.ATLAS_URI!);
-    console.log('Connected to the database:', mongoClient);
+    console.log('Connected to the database');
   } catch (error) {
     console.error('Failed to connect to the database:', error);
   }
