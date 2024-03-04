@@ -1,6 +1,18 @@
 // Write a jest test to hit the /Test Endpoint
 import request from 'supertest';
-import app, { mongoClient, server } from '../server';
+import app from '../server'; 
+import { connectToDatabase } from '../db/conn';
+import { Connection } from 'mongoose';
+let mongoClient: Connection;
+
+beforeAll(async() => {
+  try{
+    mongoClient = await connectToDatabase(process.env.ATLAS_URI!);
+    console.log('Connected to the database:', mongoClient);
+  } catch (error) {
+    console.error('Failed to connect to the database:', error);
+  }
+})
 
 test('Initial Test', async () => {
   const res = await request(app).get('/test');
@@ -9,5 +21,5 @@ test('Initial Test', async () => {
 });
 
 afterAll(async () => {
-  server.close();
+  await mongoClient.close();
 });

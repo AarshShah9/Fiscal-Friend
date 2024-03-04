@@ -33,16 +33,18 @@ app.use('/api/user', userRoutes);
 let server: http.Server;
 let mongoClient: Connection;
 
-(async () => {
-  try {
-    // mongoClient = await connectToDatabase(process.env.ATLAS_URI!);
-    server = app.listen(PORT, () => {
-      console.log(`Server is live at http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('Failed to connect to the database:', error);
-  }
-})();
+if (require.main === module) {
+  (async () => {
+    try {
+      mongoClient = await connectToDatabase(process.env.ATLAS_URI!);
+      server = app.listen(PORT, () => {
+        console.log(`Server is live at http://localhost:${PORT}`);
+      });
+    } catch (error) {
+      console.error('Failed to connect to the database:', error);
+    }
+  })();
+}
 
 export default app;
 export { server, mongoClient };
