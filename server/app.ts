@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
-const cookieParser = require('cookie-parser');
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 // Configure environment variables (for tests)
 require('dotenv').config({ path: '../.env' });
@@ -12,6 +13,12 @@ const app: Application = express();
 // Middlewares
 app.use(cookieParser());
 app.use(express.json());
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // adjust this to match your React app's URL
+  credentials: true, // allow the server to accept cookies
+};
+app.use(cors(corsOptions));
 
 // Test routes
 app.get('/', (req: Request, res: Response) => {

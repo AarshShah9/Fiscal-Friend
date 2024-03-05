@@ -1,7 +1,31 @@
+import {useForm} from "react-hook-form";
+import {useCallback} from "react";
+import axios from "axios";
+import {URL} from "../utils/constants";
+
+type FormData = {
+    email: string;
+    password: string;
+}
+
 export default function Login() {
+    const {register, handleSubmit} = useForm<FormData>();
 
+    const SignIn = useCallback((data: FormData)=>{
+        // axios.post("http://localhost:4000/auth/login", {
+        //     email: data.email,
+        //     password: data.password
+        // }).then(res => {
+        //     console.log(res)
+        // }).catch(err => {
+        //     console.log(err)
+        // })
 
+        axios.get(`http://localhost:4000`).then(res => {
+            console.log(res)
+        })
 
+    }, [])
 
     return (
         <>
@@ -18,7 +42,7 @@ export default function Login() {
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6" action="#" method="POST">
+                    <form className="space-y-6" onSubmit={handleSubmit(SignIn)}>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-white">
                                 Email address
@@ -26,10 +50,10 @@ export default function Login() {
                             <div className="mt-2">
                                 <input
                                     id="email"
-                                    name="email"
                                     type="email"
                                     autoComplete="email"
                                     required
+                                    {...register('email')}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -49,10 +73,10 @@ export default function Login() {
                             <div className="mt-2">
                                 <input
                                     id="password"
-                                    name="password"
                                     type="password"
                                     autoComplete="current-password"
                                     required
+                                    {...register('password')}
                                     className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -71,7 +95,7 @@ export default function Login() {
                     <p className="mt-10 text-center text-sm text-gray-400">
                         Not a member?{' '}
                         <a href="#" className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
-                            Start a 14 day free trial
+                            Sign up now
                         </a>
                     </p>
                 </div>
