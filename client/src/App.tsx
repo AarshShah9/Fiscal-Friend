@@ -1,21 +1,29 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
-import Login from "./views/Login";
-import LandingPage from "./views/LandingPage";
-import NotFound from "./views/NotFound";
+import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import Login from './views/Login';
+import LandingPage from './views/LandingPage';
+import NotFound from './views/NotFound';
 import axios from 'axios';
-
+import Main from './views/Main';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-    // axios.defaults.withCredentials = true;
+  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
 
   return (
     <div className="App">
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<LandingPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route path="/dashboard/" element={<Main />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </div>
   );
 }
