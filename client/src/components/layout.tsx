@@ -12,40 +12,39 @@
   }
   ```
 */
-import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
   ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
   HomeIcon,
-  UsersIcon,
   XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+  BanknotesIcon,
+  ArrowTrendingUpIcon,
+} from '@heroicons/react/24/outline';
+import {
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/20/solid';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Team', href: '#', icon: UsersIcon, current: false },
-  { name: 'Projects', href: '#', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
-]
+  { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
+  { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
+  { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
+];
 const userNavigation = [
   { name: 'Your profile', href: '#' },
   { name: 'Sign out', href: '#' },
-]
+];
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 export default function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
@@ -59,7 +58,11 @@ export default function Layout() {
       */}
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -93,19 +96,26 @@ export default function Layout() {
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                      <button
+                        type="button"
+                        className="-m-2.5 p-2.5"
+                        onClick={() => setSidebarOpen(false)}
+                      >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
 
-                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-2 ring-1 ring-white/10">
+                  <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-emerald-500 px-6 pb-2 ring-1 ring-white/10">
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
+                        src="/images/logo.png"
+                        alt="Fiscal Friend"
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">
@@ -116,12 +126,15 @@ export default function Layout() {
                               href={item.href}
                               className={classNames(
                                 item.current
-                                  ? 'bg-gray-800 text-white'
-                                  : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                                  ? 'bg-emerald-400 text-black'
+                                  : 'text-black hover:bg-emerald-400',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                               )}
                             >
-                              <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                              <item.icon
+                                className="h-6 w-6 shrink-0"
+                                aria-hidden="true"
+                              />
                               {item.name}
                             </a>
                           </li>
@@ -136,12 +149,12 @@ export default function Layout() {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-emerald-500 lg:pb-4">
           <div className="flex h-16 shrink-0 items-center justify-center">
             <img
               className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Your Company"
+              src="/images/logo.png"
+              alt="Fiscal Friend"
             />
           </div>
           <nav className="mt-8">
@@ -151,11 +164,16 @@ export default function Layout() {
                   <a
                     href={item.href}
                     className={classNames(
-                      item.current ? 'bg-gray-800 text-white' : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                      item.current
+                        ? 'bg-emerald-600 text-black'
+                        : 'text-black hover:text-black hover:bg-emerald-600',
                       'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
                     )}
                   >
-                    <item.icon className="h-6 w-6 shrink-0" aria-hidden="true" />
+                    <item.icon
+                      className="h-6 w-6 shrink-0"
+                      aria-hidden="true"
+                    />
                     <span className="sr-only">{item.name}</span>
                   </a>
                 </li>
@@ -166,16 +184,23 @@ export default function Layout() {
 
         <div className="lg:pl-20">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-            <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <button
+              type="button"
+              className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
               <span className="sr-only">Open sidebar</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
 
             {/* Separator */}
-            <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
+            <div
+              className="h-6 w-px bg-gray-900/10 lg:hidden"
+              aria-hidden="true"
+            />
 
-            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-              <form className="relative flex flex-1" action="#" method="GET">
+            <div className="flex flex-1 gap-x-4 justify-end self-stretch lg:gap-x-6">
+              {/* <form className="relative flex flex-1" action="#" method="GET">
                 <label htmlFor="search-field" className="sr-only">
                   Search
                 </label>
@@ -190,15 +215,21 @@ export default function Layout() {
                   type="search"
                   name="search"
                 />
-              </form>
+              </form> */}
               <div className="flex items-center gap-x-4 lg:gap-x-6">
-                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                <button
+                  type="button"
+                  className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
+                >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
 
                 {/* Separator */}
-                <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
+                <div
+                  className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
+                  aria-hidden="true"
+                />
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative">
@@ -206,14 +237,20 @@ export default function Layout() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src="https://miro.medium.com/v2/resize:fit:612/1*2kLD3EnaJ-6INo0O-MvjzQ.jpeg"
                       alt=""
                     />
                     <span className="hidden lg:flex lg:items-center">
-                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Tom Cook
+                      <span
+                        className="ml-4 text-sm font-semibold leading-6 text-gray-900"
+                        aria-hidden="true"
+                      >
+                        Scrooge Mcduck
                       </span>
-                      <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                      <ChevronDownIcon
+                        className="ml-2 h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
                     </span>
                   </Menu.Button>
                   <Transition
@@ -249,7 +286,9 @@ export default function Layout() {
           </div>
 
           <main className="xl:pl-96">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">{/* Main area */}</div>
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+              {/* Main area */}
+            </div>
           </main>
         </div>
 
@@ -258,5 +297,5 @@ export default function Layout() {
         </aside>
       </div>
     </>
-  )
+  );
 }
