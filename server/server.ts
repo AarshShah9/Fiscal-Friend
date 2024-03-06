@@ -13,6 +13,8 @@ try {
   throw new Error('Failed to validate environment variables' + error);
 }
 
+
+
 const PORT: number = parseInt(env.PORT as string, 10) || 4000;
 
 let server: http.Server;
