@@ -3,7 +3,7 @@
 ### Running the dev server
 - When in base directory, to install all dependencies run:
 ```bash
-npm install:all
+npm run install:all
 ```
 - To run the full stack, run:
 ```bash
