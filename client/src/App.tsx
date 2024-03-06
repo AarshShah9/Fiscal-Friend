@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Main from './views/Main';
 import LoginPage from './views/LoginPage';
 import LandingPage from './views/LandingPage';
-import NotFound from './views/NotFount';
+import NotFound from './views/NotFound';
 
 function App() {
   return (
