@@ -4,6 +4,7 @@ import Main from './views/Main';
 import LoginPage from './views/LoginPage';
 import LandingPage from './views/LandingPage';
 import NotFound from './views/NotFound';
+import LayoutWide from './components/layout_wide';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/home" element={<Main />} />
+        <Route path="/home2" element={<LayoutWide />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
