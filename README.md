@@ -38,6 +38,11 @@ For VSCode Users you can add this to your `.vscode/settings.json` file to enable
   }
 }
 ```
+### Backend Testing
+Please write unit tests to go with any controllers. These use the Jest testing framework. To run tests, while in the /server/ directory execute:
+```bash
+npm run test
+```
 
 
 ## Team Members
