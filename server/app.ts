@@ -14,11 +14,13 @@ const app: Application = express();
 app.use(cookieParser());
 app.use(express.json());
 
-const corsOptions = {
-  origin: 'http://localhost:3000', // adjust this to match your React app's URL
-  credentials: true, // allow the server to accept cookies
-};
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: ["http://localhost:4000", "http://localhost:3000", "http://localhost"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 // Test routes
 app.get('/', (req: Request, res: Response) => {

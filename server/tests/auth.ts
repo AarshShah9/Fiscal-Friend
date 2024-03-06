@@ -78,7 +78,7 @@ export const authTests = () => {
                 });
                 expect(res.statusCode).toEqual(400);
                 expect(res.body.success).toEqual(false);
-                expect(res.body.error).toEqual("User already exists");
+                expect(res.body.message).toEqual("User already exists");
             });
 
         });
