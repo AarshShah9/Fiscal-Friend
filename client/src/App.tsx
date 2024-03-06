@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Login from './views/Login';
+import Signup from './views/Signup';
 import LandingPage from './views/LandingPage';
 import NotFound from './views/NotFound';
 import axios from 'axios';
@@ -17,6 +18,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>

@@ -13,6 +13,7 @@ import { SubmitHandler } from 'react-hook-form';
 interface AuthContextType {
   isAuthenticated: boolean;
   login: SubmitHandler<LoginData>;
+  signup: SubmitHandler<SignupData>;
   logout: () => void;
   isLoading: boolean;
 }
@@ -20,6 +21,14 @@ interface AuthContextType {
 export type LoginData = {
   email: string;
   password: string;
+};
+
+export type SignupData = {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -64,13 +73,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
   }, []);
 
+  const signup = useCallback((data: SignupData) => {
+    axios
+      .post('http://localhost:4000/auth/register', {
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      })
+      .then((res) => {
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        navigate('/dashboard/');
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, []);
+
   const logout = () => {
-    // Implement logout logic here
-    setIsAuthenticated(false);
+    // const logout = useCallback(() => {
+    //   axios
+    //     .post('http://localhost:4000/auth/logout')
+    //     .then((res) => {
+    //       setIsAuthenticated(false);
+    //       setIsLoading(false);
+    //       navigate('/login');
+    //     })
+    //     .catch((err) => {
+    //       setIsLoading(false);
+    //     });
+    // }, []);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, signup, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

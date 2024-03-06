@@ -8,7 +8,7 @@ const ProtectedRoute: React.FC = () => {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      navigate('/login');
+      navigate('/');
     }
   }, [isLoading, isAuthenticated, navigate]);
 
