@@ -3,7 +3,7 @@
 ### Running the dev server
 - When in base directory, to install all dependencies run:
 ```bash
-npm install:all
+npm run install:all
 ```
 - To run the full stack, run:
 ```bash
@@ -37,6 +37,11 @@ For VSCode Users you can add this to your `.vscode/settings.json` file to enable
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
+```
+### Backend Testing
+Please write unit tests to go with any controllers. These use the Jest testing framework. To run tests, while in the /server/ directory execute:
+```bash
+npm run test
 ```
 
 
