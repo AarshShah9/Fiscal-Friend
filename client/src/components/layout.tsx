@@ -27,12 +27,13 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
+import {useLocation } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
-  { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
-  { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
+  { name: 'Savings', href: '/savings', icon: BanknotesIcon, current: false },
+  { name: 'Stocks', href: '/stocks', icon: ArrowTrendingUpIcon, current: false },
+  { name: 'Budget', href: '/budget', icon: ChartPieIcon, current: false },
 ];
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -45,6 +46,15 @@ function classNames(...classes: string[]) {
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  navigation.forEach(element => {
+    if (element.href === location.pathname) {
+      element.current = true;
+    } else {
+      element.current = false;
+    }
+  });
 
   return (
     <>
@@ -167,7 +177,8 @@ export default function Layout() {
                       item.current
                         ? 'bg-emerald-600 text-black'
                         : 'text-black hover:text-black hover:bg-emerald-600',
-                      'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
+                        'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold',
+                      
                     )}
                   >
                     <item.icon
