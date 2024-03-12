@@ -5,7 +5,7 @@ import LayoutWide from '../components/layout_wide';
 const Main = () => {
   return (
     <div>
-      <Layout></Layout>
+      <h1>Main</h1>
     </div>
   );
 };

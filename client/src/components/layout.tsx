@@ -27,6 +27,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
+import { Outlet } from 'react-router-dom';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -287,6 +288,7 @@ export default function Layout() {
 
           <main className="xl:pl-96">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+              <Outlet />
               {/* Main area */}
             </div>
           </main>

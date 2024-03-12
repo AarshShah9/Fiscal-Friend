@@ -8,6 +8,7 @@ import axios from 'axios';
 import Main from './views/Main';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Layout from './components/layout';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -22,7 +23,9 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>
-            <Route path="/dashboard/" element={<Main />} />
+            <Route element={<Layout />} >
+              <Route path="/dashboard/" element={<Main />} />
+            </Route>
           </Route>
         </Routes>
       </AuthProvider>
