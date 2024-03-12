@@ -28,6 +28,7 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
 import {useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const navigation = [
   { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
@@ -320,8 +321,9 @@ export default function Layout(content: any) {
             </div>
           </div>
 
-          <main className="xl:pl-6 h-full items-center place-items-center">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 place-items-center items-center justify-center">
+          <main className="xl:pl-96">
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+              <Outlet />
               {/* Main area */}
               <div>
                 <h1 className="text-5xl pb-2">Savings</h1>
