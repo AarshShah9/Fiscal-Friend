@@ -7,6 +7,7 @@ require('dotenv').config({ path: '../.env' });
 
 // Route imports
 import authRoutes from './routes/auth.routes';
+import stockRoutes from './routes/stock.routes';
 
 const app: Application = express();
 
@@ -16,8 +17,12 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:4000", "http://localhost:3000", "http://localhost"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      'http://localhost:4000',
+      'http://localhost:3000',
+      'http://localhost',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
@@ -33,5 +38,8 @@ app.get('/test', (req: Request, res: Response) => {
 
 // Routing
 app.use('/auth', authRoutes);
+
+// Stock Data
+app.use('/stock', stockRoutes);
 
 export default app;
