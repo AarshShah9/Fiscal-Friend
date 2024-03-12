@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../app'; 
 import { connectToDatabase } from '../db/conn';
 import { Connection } from 'mongoose';
+import { createSecretToken } from '../utils/secretToken';
 const agent = request.agent(app);
 
 // Import tests
@@ -19,21 +20,18 @@ beforeAll(async() => {
     console.error('Failed to connect to the database:', error);
   }
 
-  // Create a new user
-  const newUser = await agent.post('/auth/register').send({
+  const TEST_USER = {
     email: 'testuser@fiscalfriend.com',
     password: 'password',
     firstName: 'Test',
     lastName: 'User',
-  });
-  expect(newUser.statusCode).toEqual(201);
-  
-  // Log agent in
-  const res = await agent.post('/auth/login').send({
-    email: 'testuser@fiscalfriend.com',
-    password: 'password',
-  });
-  expect(res.statusCode).toEqual(201);
+    _id: '65e7b7d3b57aa86390016afb'
+  }
+  // Create jwt
+  const token = createSecretToken(TEST_USER._id);
+
+  // attatch token to the agent
+  agent.set('Cookie', `token=${token}`);
 })
 
 describe('Fiscal Friend API Tests', () => {
@@ -42,6 +40,5 @@ describe('Fiscal Friend API Tests', () => {
 
 afterAll(async () => {
   // Delete the test user
-  await User.deleteMany({ email: 'testuser@fiscalfriend.com' });
   await mongoClient.close();
 });

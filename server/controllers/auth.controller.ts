@@ -21,7 +21,7 @@ export const register = async (req: Request, res: Response) => {
 		if (existingUser) {
 			return res.status(400).json({ 
 				success: false, 
-				error: 'User already exists'
+				message: 'User already exists'
 			});
 		}
 
@@ -32,8 +32,11 @@ export const register = async (req: Request, res: Response) => {
 		firstName: req.body.firstName,
 		lastName: req.body.lastName,
     });
+
+	const token = createSecretToken(newUser._id);
 		
-	return res.status(201).json({
+	return res.status(201).cookie("token", token, {httpOnly:false})
+	.json({
 		success: true,
 		message: 'User created successfully',
 		user: newUser,
@@ -69,7 +72,7 @@ export const login = async (req: Request, res: Response) => {
 
 			// Send token as cookie
 			try {
-				res.status(201).cookie("token", token).json({
+				res.status(201).cookie("token", token, {httpOnly:false}).json({
 					success: true,
 					message: "Login successful",
 				});
