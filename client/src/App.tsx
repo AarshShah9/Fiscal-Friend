@@ -24,8 +24,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>
             <Route path="/dashboard/" element={<Main />} />
-            <Route path = "/savings/" element ={<Savings/>}/>
           </Route>
+          <Route path = "/savings/" element ={<Savings/>}/>
         </Routes>
       </AuthProvider>
     </div>
