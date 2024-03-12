@@ -31,7 +31,7 @@ import {useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Dashboard', href: '/home', icon: HomeIcon, current: true },
+  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
   { name: 'Savings', href: '/savings', icon: BanknotesIcon, current: false },
   { name: 'Stocks', href: '/stocks', icon: ArrowTrendingUpIcon, current: false },
   { name: 'Budget', href: '/budget', icon: ChartPieIcon, current: false },
@@ -45,33 +45,9 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Layout(content: any) {
+export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-
-  const [userInfo, setUserInfo] = useState(content.content);
-
-  const handleSavingsChange = (e: { target: { value: string; }; }) => {
-    setUserInfo({
-        ...userInfo,
-        savings: e.target.value,
-    });
-  };
-  console.log(userInfo)
-
-  const handleLoanChange = (e: { target: { value: string; }; }) => {
-    setUserInfo({
-        ...userInfo,
-        loans: e.target.value,
-    });
-  };
-
-  const handleDebtChange = (e: { target: { value: string; }; }) => {
-    setUserInfo({
-        ...userInfo,
-        debts: e.target.value,
-    });
-  };
   
   navigation.forEach(element => {
     if (element.href === location.pathname) {
@@ -325,46 +301,6 @@ export default function Layout(content: any) {
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <Outlet />
               {/* Main area */}
-              <div>
-                <h1 className="text-5xl pb-2">Savings</h1>
-                <p>To get started on tracking your savings on Fiscal Friend, please enter the information below!</p>
-                <p className="pb-12">(The information may be changed later.)</p>
-              </div>
-              <form>
-                <div className="pb-8">
-                  <label htmlFor="savings" className="block text-sm font-medium leading-6 text-gray-900">Savings</label>
-                  <div className="relative mt-2 rounded-md shadow-sm">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span className="text-gray-500 sm:text-sm">$</span>
-                    </div>
-                    <input type="text" name="savings" onChange={handleSavingsChange} className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="0.00"></input>
-                  </div>
-                </div>
-                <div className="pb-8">
-                  <label htmlFor="debt" className="block text-sm font-medium leading-6 text-gray-900">Loans</label>
-                  <div className="relative mt-2 rounded-md shadow-sm">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span className="text-gray-500 sm:text-sm">$</span>
-                    </div>
-                    <input type="text" name="debt" onChange={handleDebtChange} className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="0.00"></input>
-                  </div>
-                </div>
-                <div className="pb-8">
-                  <label htmlFor="loan" className="block text-sm font-medium leading-6 text-gray-900">Debts</label>
-                  <div className="relative mt-2 rounded-md shadow-sm py-">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                      <span className="text-gray-500 sm:text-sm">$</span>
-                    </div>
-                    <input type="text" name="loan" onChange={handleLoanChange} className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="0.00"></input>
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  className="flex w-50 justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Continue
-                </button>
-              </form>
               {/* <div className="mb-6">
                 <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
                 <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
