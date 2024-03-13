@@ -1,11 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "exclude": [
-    "node_modules",
     "tests",
-    "**/*.spec.ts",
     "**/*.test.ts"
   ],
   "compilerOptions": {
-  }
+  },
+  "include": ["node_modules/@types"]
 }
