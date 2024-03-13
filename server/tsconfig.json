@@ -99,5 +99,4 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "outDir": "./dist"
   },
-//  "exclude": ["tests", "node_modules"]
 }
