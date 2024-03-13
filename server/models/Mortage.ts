@@ -7,7 +7,6 @@ const mortgageSchema = new mongoose.Schema({
   monthlyPayment: Number,
   startDate: Date,
   endDate: Date,
-  borrower: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 });
 
 const Mortgage = mongoose.model('Mortgage', mortgageSchema);
