@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/server.js\"",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "start": "node dist/server.js"
   },
   "keywords": [],
