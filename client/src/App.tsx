@@ -24,12 +24,14 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>
-            <Route element={<Layout />} >
+            <Route element={<Layout />}>
               <Route path="/dashboard/" element={<Main />} />
             </Route>
-            
           </Route>
-          <Route path = "/savings/" element ={<Savings/>}/>
+          {/* Change this to protectedroute when done testing */}
+          <Route element={<Layout />}>
+            <Route path="/savings/" element={<Savings />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </div>
