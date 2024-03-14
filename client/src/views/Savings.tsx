@@ -7,6 +7,7 @@ const Savings = () => {
     savings: 0,
     loans: 0,
     debts: 0,
+    mortgage: 0,
   });
   console.log(userSavings);
 
@@ -28,6 +29,13 @@ const Savings = () => {
     setUserSavings({
       ...userSavings,
       debts: e.target.value,
+    });
+  };
+
+  const handleMortgage = (e: { target: { value: any } }) => {
+    setUserSavings({
+      ...userSavings,
+      savings: e.target.value,
     });
   };
 
