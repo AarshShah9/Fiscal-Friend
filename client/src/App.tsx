@@ -29,7 +29,6 @@ function App() {
               <Route path="/savings/" element={<Savings />} />
             </Route>
           </Route>
-          {/* Change this to protectedroute when done testing */}
         </Routes>
       </AuthProvider>
     </div>
