@@ -26,12 +26,10 @@ function App() {
           <Route path="/" element={<ProtectedRoute />}>
             <Route element={<Layout />}>
               <Route path="/dashboard/" element={<Main />} />
+              <Route path="/savings/" element={<Savings />} />
             </Route>
           </Route>
           {/* Change this to protectedroute when done testing */}
-          <Route element={<Layout />}>
-            <Route path="/savings/" element={<Savings />} />
-          </Route>
         </Routes>
       </AuthProvider>
     </div>
