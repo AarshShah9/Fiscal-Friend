@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-type UserSavingsType = {
+type SavingAccountType = {
   chequing: number;
   savings: number;
   resp: number;
+};
+
+type LoanAccountType = {
   loc: number;
   mortgage: number;
+};
+
+type UserAccountType = {
+  savingAccount: SavingAccountType;
+  loanAccount: LoanAccountType;
 };
 
 const Savings: React.FC = () => {
@@ -17,29 +25,43 @@ const Savings: React.FC = () => {
     mortgage: '',
   });
 
-  const [userSavings, setUserSavings] = useState<UserSavingsType>({
-    chequing: 0,
-    savings: 0,
-    resp: 0,
-    loc: 0,
-    mortgage: 0,
+  const [userAccounts, setUserAccounts] = useState<UserAccountType>({
+    savingAccount: { chequing: 0, savings: 0, resp: 0 },
+    loanAccount: {
+      loc: 0,
+      mortgage: 0,
+    },
   });
 
   const handleFormButton = () => {
-    const toNumericValues: UserSavingsType = {
+    const updateSavingAccount: SavingAccountType = {
       chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
       savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
       resp: parseFloat(parseFloat(formValues.resp).toFixed(2)) || 0,
+    };
+
+    const updateLoanAccount: LoanAccountType = {
       loc: parseFloat(parseFloat(formValues.loc).toFixed(2)) || 0,
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
 
-    setUserSavings(toNumericValues);
+    // const toNumericValues: UserSavingsType = {
+    //   chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
+    //   savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
+    //   resp: parseFloat(parseFloat(formValues.resp).toFixed(2)) || 0,
+    //   loc: parseFloat(parseFloat(formValues.loc).toFixed(2)) || 0,
+    //   mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
+    // };
+
+    setUserAccounts({
+      savingAccount: updateSavingAccount,
+      loanAccount: updateLoanAccount,
+    });
   };
 
   useEffect(() => {
-    console.log(userSavings);
-  }, [userSavings]);
+    console.log(userAccounts);
+  }, [userAccounts]);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
