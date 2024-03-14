@@ -45,14 +45,6 @@ const Savings: React.FC = () => {
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
 
-    // const toNumericValues: UserSavingsType = {
-    //   chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
-    //   savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
-    //   resp: parseFloat(parseFloat(formValues.resp).toFixed(2)) || 0,
-    //   loc: parseFloat(parseFloat(formValues.loc).toFixed(2)) || 0,
-    //   mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
-    // };
-
     setUserAccounts({
       savingAccount: updateSavingAccount,
       loanAccount: updateLoanAccount,
