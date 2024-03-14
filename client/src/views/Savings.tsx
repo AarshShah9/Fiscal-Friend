@@ -1,41 +1,46 @@
-import React from 'react';
-import { useState } from 'react';
-import Layout from '../components/layout';
+// Note: Have Savings wrapped in Layer in ../App.tsx
 
-const Savings = () => {
-  const [userSavings, setUserSavings] = useState({
+import React, { useState } from 'react';
+
+type UserSavingsType = {
+  savings: number;
+  loans: number;
+  debts: number;
+  mortgage: number;
+};
+
+const Savings: React.FC = () => {
+  const [formValues, setFormValues] = useState<{ [key: string]: string }>({
+    savings: '',
+    loans: '',
+    debts: '',
+    mortgage: '',
+  });
+
+  const [userSavings, setUserSavings] = useState<UserSavingsType>({
     savings: 0,
     loans: 0,
     debts: 0,
     mortgage: 0,
   });
-  console.log(userSavings);
 
-  const handleSavingsChange = (e: { target: { value: any } }) => {
-    setUserSavings({
-      ...userSavings,
-      savings: e.target.value,
-    });
+  const handleFormButton = () => {
+    const toNumericValues: UserSavingsType = {
+      savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0.0,
+      loans: parseFloat(parseFloat(formValues.loans).toFixed(2)) || 0,
+      debts: parseFloat(parseFloat(formValues.debts).toFixed(2)) || 0,
+      mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
+    };
+
+    setUserSavings(toNumericValues);
+    console.log(userSavings);
   };
 
-  const handleLoanChange = (e: { target: { value: any } }) => {
-    setUserSavings({
-      ...userSavings,
-      loans: e.target.value,
-    });
-  };
-
-  const handleDebtChange = (e: { target: { value: any } }) => {
-    setUserSavings({
-      ...userSavings,
-      debts: e.target.value,
-    });
-  };
-
-  const handleMortgage = (e: { target: { value: any } }) => {
-    setUserSavings({
-      ...userSavings,
-      savings: e.target.value,
+  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
     });
   };
 
@@ -64,7 +69,7 @@ const Savings = () => {
             <input
               type="text"
               name="savings"
-              onChange={handleSavingsChange}
+              onChange={handleFormInput}
               className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               placeholder="0.00"
             ></input>
@@ -83,8 +88,8 @@ const Savings = () => {
             </div>
             <input
               type="text"
-              name="debt"
-              onChange={handleDebtChange}
+              name="loans"
+              onChange={handleFormInput}
               className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               placeholder="0.00"
             ></input>
@@ -103,16 +108,17 @@ const Savings = () => {
             </div>
             <input
               type="text"
-              name="loan"
-              onChange={handleLoanChange}
+              name="debts"
+              onChange={handleFormInput}
               className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               placeholder="0.00"
             ></input>
           </div>
         </div>
         <button
-          type="submit"
+          type="button"
           className="flex w-50 justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          onClick={handleFormButton}
         >
           Continue
         </button>
