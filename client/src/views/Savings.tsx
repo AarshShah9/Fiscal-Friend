@@ -1,40 +1,45 @@
-// Note: Have Savings wrapped in Layer in ../App.tsx
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type UserSavingsType = {
+  chequing: number;
   savings: number;
-  loans: number;
-  debts: number;
+  resp: number;
+  loc: number;
   mortgage: number;
 };
 
 const Savings: React.FC = () => {
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
+    chequing: '',
     savings: '',
-    loans: '',
-    debts: '',
+    resp: '',
+    loc: '',
     mortgage: '',
   });
 
   const [userSavings, setUserSavings] = useState<UserSavingsType>({
+    chequing: 0,
     savings: 0,
-    loans: 0,
-    debts: 0,
+    resp: 0,
+    loc: 0,
     mortgage: 0,
   });
 
   const handleFormButton = () => {
     const toNumericValues: UserSavingsType = {
-      savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0.0,
-      loans: parseFloat(parseFloat(formValues.loans).toFixed(2)) || 0,
-      debts: parseFloat(parseFloat(formValues.debts).toFixed(2)) || 0,
+      chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
+      savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
+      resp: parseFloat(parseFloat(formValues.resp).toFixed(2)) || 0,
+      loc: parseFloat(parseFloat(formValues.loc).toFixed(2)) || 0,
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
 
     setUserSavings(toNumericValues);
-    console.log(userSavings);
   };
+
+  useEffect(() => {
+    console.log(userSavings);
+  }, [userSavings]);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,64 +60,90 @@ const Savings: React.FC = () => {
         <p className="pb-12">(The information may be changed later.)</p>
       </div>
       <form>
-        <div className="pb-8">
-          <label
-            htmlFor="savings"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Savings
-          </label>
-          <div className="relative mt-2 rounded-md shadow-sm">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
+        <h2 className="text-3xl pb-2"> Savings</h2>
+        <div className="flex space-x-4">
+          <div className="pb-8">
+            <label
+              htmlFor="chequing"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Chequing
+            </label>
+            <input
+              type="text"
+              name="chequing"
+              value={formValues.chequing}
+              onChange={handleFormInput}
+              className="block rounded-md border-gray-300 shadow-sm"
+              placeholder="0.00"
+            />
+          </div>
+          <div className="pb-8">
+            <label
+              htmlFor="savings"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Savings
+            </label>
             <input
               type="text"
               name="savings"
+              value={formValues.savings}
               onChange={handleFormInput}
-              className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
-            ></input>
+            />
           </div>
-        </div>
-        <div className="pb-8">
-          <label
-            htmlFor="debt"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Loans
-          </label>
-          <div className="relative mt-2 rounded-md shadow-sm">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
+          <div className="pb-8">
+            <label
+              htmlFor="resp"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              RESP
+            </label>
             <input
               type="text"
-              name="loans"
+              name="resp"
+              value={formValues.resp}
               onChange={handleFormInput}
-              className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
-            ></input>
+            />
           </div>
         </div>
-        <div className="pb-8">
-          <label
-            htmlFor="loan"
-            className="block text-sm font-medium leading-6 text-gray-900"
-          >
-            Debts
-          </label>
-          <div className="relative mt-2 rounded-md shadow-sm py-">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <span className="text-gray-500 sm:text-sm">$</span>
-            </div>
+        <h2 className="text-3xl pb-2"> Loans</h2>
+        <div className="flex space-x-4">
+          <div className="pb-8">
+            <label
+              htmlFor="loc"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Principal Line of Credit
+            </label>
             <input
               type="text"
-              name="debts"
+              name="loc"
+              value={formValues.loc}
               onChange={handleFormInput}
-              className="block w-50 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
-            ></input>
+            />
+          </div>
+          <div className="pb-8">
+            <label
+              htmlFor="mortgage"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Principal Mortgage
+            </label>
+            <input
+              type="text"
+              name="mortgage"
+              value={formValues.mortgage}
+              onChange={handleFormInput}
+              className="block rounded-md border-gray-300 shadow-sm"
+              placeholder="0.00"
+            />
           </div>
         </div>
         <button
