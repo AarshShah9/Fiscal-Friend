@@ -20,6 +20,7 @@ const UserSchema: Schema = new Schema({
   Stocks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
   Mortgages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mortgage' }],
   Expenses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Expense' }],
+  Incomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Income' }],
 });
 
 UserSchema.pre('save', async function () {
