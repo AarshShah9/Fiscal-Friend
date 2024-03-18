@@ -2,9 +2,9 @@ import { Fragment } from 'react'
 import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
 
 const statuses = {
-  Paid: 'text-green-700 bg-green-50 ring-green-600/20',
-  Withdraw: 'text-gray-600 bg-gray-50 ring-gray-500/10',
-  Overdue: 'text-red-700 bg-red-50 ring-red-600/10',
+  'Paid': 'text-green-700 bg-green-50 ring-green-600/20',
+  'Withdraw': 'text-gray-600 bg-gray-50 ring-gray-500/10',
+  'Overdue': 'text-red-700 bg-red-50 ring-red-600/10',
 }
 const days = [
   {
@@ -60,22 +60,75 @@ const days = [
         description: 'Website redesign',
         icon: ArrowUpCircleIcon,
       },
+      {
+        id: 5,
+        invoiceNumber: '00010',
+        href: '#',
+        amount: '$14,000.00 USD',
+        tax: '$900.00',
+        status: 'Paid',
+        client: 'SavvyCal',
+        description: 'Website redesign',
+        icon: ArrowUpCircleIcon,
+      },
+      {
+        id: 6,
+        invoiceNumber: '00010',
+        href: '#',
+        amount: '$14,000.00 USD',
+        tax: '$900.00',
+        status: 'Paid',
+        client: 'SavvyCal',
+        description: 'Website redesign',
+        icon: ArrowUpCircleIcon,
+      },
+      {
+        id: 7,
+        invoiceNumber: '00010',
+        href: '#',
+        amount: '$14,000.00 USD',
+        tax: '$900.00',
+        status: 'Paid',
+        client: 'SavvyCal',
+        description: 'Website redesign',
+        icon: ArrowUpCircleIcon,
+      },
+      {
+        id: 8,
+        invoiceNumber: '00010',
+        href: '#',
+        amount: '$14,000.00 USD',
+        tax: '$900.00',
+        status: 'Paid',
+        client: 'SavvyCal',
+        description: 'Website redesign',
+        icon: ArrowUpCircleIcon,
+      },
+      {
+        id: 9,
+        invoiceNumber: '00010',
+        href: '#',
+        amount: '$14,000.00 USD',
+        tax: '$900.00',
+        status: 'Paid',
+        client: 'SavvyCal',
+        description: 'Website redesign',
+        icon: ArrowUpCircleIcon,
+      },
     ],
   },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function TransactionsTable() {
   return (
     <div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <h2 className="mx-auto max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
-          Recent activity
-        </h2>
-      </div>
+      <h2 className="max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
+        Recent activity
+      </h2>
       <div className="mt-6 overflow-hidden border-t border-gray-100">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
@@ -110,7 +163,7 @@ export default function Example() {
                                 <div className="text-sm font-medium leading-6 text-gray-900">{transaction.amount}</div>
                                 <div
                                   className={classNames(
-                                    statuses[transaction.status],
+                                    statuses[transaction.status as keyof typeof statuses],
                                     'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
                                   )}
                                 >
