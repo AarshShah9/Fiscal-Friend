@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 interface IIncome extends Document {
+  user: mongoose.Types.ObjectId;
   name: string;
   amount: number;
   date: Date;
@@ -9,6 +10,7 @@ interface IIncome extends Document {
 }
 
 const incomeSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   name: { type: String, required: true },
   amount: { type: Number, required: true },
   date: Date,
