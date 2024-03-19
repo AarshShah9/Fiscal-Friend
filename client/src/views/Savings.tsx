@@ -53,7 +53,7 @@ const Savings: React.FC = () => {
 
     const postData = async () => {
       try {
-        const res = await axios.post('/savings/create', {
+        const res = await axios.post('http://localhost:4000/savings/create', {
           user: 'testuser',
           name: 'testname',
           chequing: updateSavingAccount.chequing,
