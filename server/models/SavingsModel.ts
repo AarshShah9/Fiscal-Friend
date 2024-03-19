@@ -1,6 +1,8 @@
 import mongoose, { model, Schema, Model, Document } from 'mongoose';
 
-export interface SavingsTask extends Document {
+export interface ISavings extends Document {
+  user: mongoose.Types.ObjectId;
+  name: string;
   savingAccount: {
     chequing: Number;
     savings: Number;
@@ -12,7 +14,9 @@ export interface SavingsTask extends Document {
   };
 }
 
-const SavingsSchema: Schema = new Schema({
+const SavingsSchema: Schema<ISavings> = new Schema({
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
+  name: { type: String, required: true },
   savingAccount: {
     chequing: { type: Number, required: true },
     savings: { type: Number, required: true },
@@ -24,7 +28,7 @@ const SavingsSchema: Schema = new Schema({
   },
 });
 
-export const SavingsModel: Model<SavingsTask> = model<SavingsTask>(
-  'todos',
+export const SavingsModel: Model<ISavings> = model<ISavings>(
+  'Savings',
   SavingsSchema
 );
