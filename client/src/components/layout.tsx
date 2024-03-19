@@ -1,18 +1,4 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -27,17 +13,15 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import ProfileModal from './profileModal';
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
   { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
   { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
   { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
-];
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
 ];
 
 function classNames(...classes: string[]) {
@@ -46,18 +30,23 @@ function classNames(...classes: string[]) {
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const openProfile = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const userNavigation = [
+    { name: 'Your profile', onClick: openProfile },
+    { name: 'Sign out', onClick: logout },
+  ];
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div>
+        <ProfileModal open={open} setOpen={setOpen} />
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -267,15 +256,15 @@ export default function Layout() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }: { active: boolean }) => (
-                            <a
-                              href={item.href}
+                            <button
+                              onClick={item.onClick}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'
                               )}
                             >
                               {item.name}
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       ))}
