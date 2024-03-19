@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -16,8 +16,12 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:4000", "http://localhost:3000", "http://localhost"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [
+      'http://localhost:4000',
+      'http://localhost:3000',
+      'http://localhost',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
@@ -33,5 +37,11 @@ app.get('/test', (req: Request, res: Response) => {
 
 // Routing
 app.use('/auth', authRoutes);
+
+// error handler
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(error);
+  res.status(500).json({ message: error.message });
+});
 
 export default app;
