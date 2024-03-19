@@ -43,16 +43,10 @@ export const getBudget = async (req: Request, res: Response) => {
 
     try {
         // Income array
-        const incomes= [];
-        for (let i = 0; i < user.Incomes?.length; i++) {
-            incomes.push(await Income.findById(user.Incomes[i]));
-        }
+        const incomes = await Income.find({ user: req.body.user });
 
         // Expenses array
-        const expenses = [];
-        for (let i = 0; i < user.Expenses?.length; i++) {
-            expenses.push(await Expense.findById(user.Expenses[i]));
-        }
+        const expenses = await Expense.find({ user: req.body.user });
 
         // Credit Cards array
         const creditCards = [];

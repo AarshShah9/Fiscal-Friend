@@ -12,6 +12,7 @@ export const createExpense = async (req: Request, res: Response) => {
     }
 
     const newExpense = new Expense({
+        user: req.body.user,
         name: req.body.name,
         amount: req.body.amount,
         date: req.body.date,
@@ -37,16 +38,7 @@ export const getExpenses = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    const user = await User.findById(req.body.user);
-    if (!user) {
-        return res.status(400).json({ success: false, message: 'User not found' });
-    }
-
-    let expenses = [];
-    for (let i = 0; i < user.Expenses?.length; i++) {
-        expenses.push(await Expense.findById(user.Expenses[i]));
-    }
-
+    const expenses = await Expense.find({ user: req.body.user });
     return res.status(201).json({ success: true, expenses });
 };
 

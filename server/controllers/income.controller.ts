@@ -14,6 +14,7 @@ export const createIncome = async (req: Request, res: Response) => {
 
     try {
         const newIncome = new Income({
+            user: req.body.user,
             name: req.body.name,
             amount: req.body.amount,
             date: req.body.date,
@@ -37,15 +38,7 @@ export const getIncomes = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    const user = await User.findById(req.body.user);
-    if (!user) {
-        return res.status(400).json({ success: false, message: 'User not found' });
-    }
-
-    let incomes = [];
-    for (let i = 0; i < user.Incomes?.length; i++) {
-        incomes.push(await Income.findById(user.Incomes[i]));
-    }
+    const incomes = await Income.find({ user: req.body.user });
 
     return res.status(201).json({ success: true, incomes });
 };
