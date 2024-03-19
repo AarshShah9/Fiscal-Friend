@@ -1,5 +1,13 @@
 import mongoose from 'mongoose';
 
+interface IIncome extends Document {
+  name: string;
+  amount: number;
+  date?: Date;
+  recurring: 'One-time' | 'Weekly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
+  category?: string;
+}
+
 const incomeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   amount: { type: Number, required: true },
@@ -8,6 +16,6 @@ const incomeSchema = new mongoose.Schema({
   category: String,
 });
 
-const Income = mongoose.model('Income', incomeSchema);
+const Income = mongoose.model<IIncome>('Income', incomeSchema);
 
 export default Income;
