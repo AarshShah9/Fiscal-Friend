@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 interface IIncome extends Document {
   name: string;
   amount: number;
-  date?: Date;
+  date: Date;
   recurring: 'One-time' | 'Weekly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
   category?: string;
 }
