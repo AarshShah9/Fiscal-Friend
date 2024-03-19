@@ -50,6 +50,24 @@ const Savings: React.FC = () => {
       savingAccount: updateSavingAccount,
       loanAccount: updateLoanAccount,
     });
+
+    const postData = async () => {
+      try {
+        const res = await axios.post('/savings/create', {
+          user: 'testuser',
+          name: 'testname',
+          chequing: updateSavingAccount.chequing,
+          savings: updateSavingAccount.savings,
+          resp: updateSavingAccount.resp,
+          loc: updateLoanAccount.loc,
+          mortgage: updateLoanAccount.mortgage,
+        });
+      } catch (e) {
+        console.error('Error posting: ', e);
+      }
+    };
+
+    postData();
   };
 
   useEffect(() => {
