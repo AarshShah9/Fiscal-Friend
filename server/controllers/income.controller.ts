@@ -12,6 +12,10 @@ export const createIncome = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not found' });
     }
 
+    if (!req.body.name || !req.body.amount || !req.body.date || !req.body.recurring) {
+        return res.status(400).json({ success: false, message: 'Invalid request body' });
+    }
+
     try {
         const newIncome = new Income({
             user: req.body.user,
@@ -19,7 +23,6 @@ export const createIncome = async (req: Request, res: Response) => {
             amount: req.body.amount,
             date: req.body.date,
             recurring: req.body.recurring,
-            category: req.body.category,
         });
 
         user.Incomes.push(newIncome._id);

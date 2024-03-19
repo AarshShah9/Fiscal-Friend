@@ -10,6 +10,9 @@ export const createExpense = async (req: Request, res: Response) => {
     if (!user) {
         return res.status(400).json({ success: false, message: 'User not found' });
     }
+    if(!req.body.name || !req.body.amount || !req.body.date || !req.body.recurring || !req.body.category) {
+        return res.status(400).json({ success: false, message: 'Invalid request body' });
+    }
 
     const newExpense = new Expense({
         user: req.body.user,
@@ -28,7 +31,7 @@ export const createExpense = async (req: Request, res: Response) => {
         await newExpense.save();
         return res.status(201).json({ success: true, message: 'Expense created', expense: newExpense });
     } catch (error) {
-        return res.status(500).json({ success: false, message: 'Server error' });
+        return res.status(500).json({ success: false, message: 'Server error', error });
     }
 };
 
@@ -54,7 +57,11 @@ export const removeExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not found' });
     }
 
-    const expense = await Expense.findById(req.body.expese);
+    if (!req.body.expense) {
+        return res.status(400).json({ success: false, message: 'Invalid request body' });
+    }
+
+    const expense = await Expense.findById(req.body.expense);
 
     if (!expense) {
         return res.status(400).json({ success: false, message: 'Expense not found' });

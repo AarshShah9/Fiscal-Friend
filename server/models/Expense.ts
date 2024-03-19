@@ -16,10 +16,14 @@ const expenseSchema: Schema<IExpense> = new mongoose.Schema({
   date: Date,
   recurring: {
     type: String,
-    enum: ['Weekly', 'Bi-Weekly', 'Monthly', 'Quarterly', 'Annually'],
+    enum: ['One-time', 'Weekly', 'Bi-Weekly', 'Monthly', 'Quarterly', 'Annually'],
     required: true,
   },
-  category: { type: String, required: true, enum: ['Food', 'Utilities', 'Rent', 'Transportation', 'Insurance', 'Wellness', 'Entertainment', 'Other'] },
+  category: { 
+    type: String, 
+    required: true, 
+    enum: ['Food', 'Utilities', 'Rent', 'Transportation', 'Insurance', 'Wellness', 'Entertainment', 'Other']
+  },
 });
 
 const Expense = mongoose.model<IExpense>('Expense', expenseSchema);
