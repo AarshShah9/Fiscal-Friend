@@ -2,16 +2,38 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
+import CreateTransactionModal from './CreateTransactionDialogue';
+
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
+  type: "expenses" | "incomes";
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
+  const title = type === "expenses" ? "Manage Expenses" : "Manage Incomes";
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [transactionType, setCreateType] = useState<"expenses" | "incomes">("expenses");
+
+  const openModal = (type: "expenses" | "incomes") => {
+    setCreateType(type);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    // Keep sidebar open after closing modal
+    toggleSidebar();
+  };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={toggleSidebar}>
+        <CreateTransactionModal // Render the CreateTransactionModal component
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          type={transactionType}
+        />
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -60,11 +82,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
                   </Transition.Child>
                   <div className="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
                     <div className="px-4 sm:px-6">
-                      <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                        Panel title
+                      <Dialog.Title className="text-base font-semibold leading-6 text-gray-900 flex flex-row items-center justify-between">
+                        <span>{title}</span>
+                        <button
+                          type="button"
+                          className="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          onClick={() => openModal(type)}
+                        >
+                          Create new {type === "expenses" ? "expense" : "income"}
+                        </button>
                       </Dialog.Title>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{/* Your content */}</div>
+                    <div className="border-b border-gray-200 bg-white px-4 py-3 sm:px-6">
+                      <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+                        <div className="ml-4 mt-4">
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -73,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 };
 
 export default Sidebar;

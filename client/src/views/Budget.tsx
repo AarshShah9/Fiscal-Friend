@@ -26,9 +26,11 @@ export const BudgetContext = React.createContext<IBudget>(budget);
 
 export default function Budget() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarType, setSidebarType] = useState<"expenses" | "incomes">("expenses"); // Track which type of sidebar to open
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
+  const toggleSidebar = (type?: "expenses" | "incomes") => {
+    setSidebarType(type || "expenses");
+    setSidebarOpen(!sidebarOpen);
   }
 
   return (
@@ -39,14 +41,16 @@ export default function Budget() {
           <PieChart />
         </div>
         <div className="flex flex-col justify-start justify-items-center">
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4" onClick={toggleSidebar}>
-            Button 1
+          {/* Pass respective type as argument */}
+          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4" onClick={() => toggleSidebar("expenses")}>
+            Manage Expenses
           </button>
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full" onClick={toggleSidebar}>
-            Button 2
+          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full" onClick={() => toggleSidebar("incomes")}>
+            Manage Incomes
           </button>
         </div>
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+        {/* Pass sidebarType to Sidebar component */}
+        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} type={sidebarType} />
       </div>
       <StatsBoxes />
       <div className="min-h-10"></div>
