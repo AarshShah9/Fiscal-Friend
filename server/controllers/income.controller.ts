@@ -26,7 +26,7 @@ export const createIncome = async (req: Request, res: Response) => {
         await user.save();
 
         await newIncome.save();
-        return res.status(201).json({ success: true, message: 'Income created' });
+        return res.status(201).json({ success: true, message: 'Income created', income: newIncome });
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Server error', error });
     }

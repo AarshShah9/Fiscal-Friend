@@ -25,7 +25,7 @@ export const createExpense = async (req: Request, res: Response) => {
 
     try {
         await newExpense.save();
-        return res.status(201).json({ success: true, message: 'Expense created' });
+        return res.status(201).json({ success: true, message: 'Expense created', expense: newExpense });
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Server error' });
     }
