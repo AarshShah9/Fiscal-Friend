@@ -7,6 +7,7 @@ interface IUser extends Document {
   firstName: string;
   lastName: string;
   createdAt: Date;
+  Savings: mongoose.Types.ObjectId[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -20,6 +21,7 @@ const UserSchema: Schema = new Schema({
   Stocks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
   Mortgages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mortgage' }],
   Expenses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Expense' }],
+  Savings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Savings' }],
 });
 
 UserSchema.pre('save', async function () {
