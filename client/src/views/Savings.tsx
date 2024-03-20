@@ -3,6 +3,7 @@ import axios from 'axios';
 import SavingsSummary from '../components/SavingsSummary';
 import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
+import { useAuth } from '../contexts/AuthContext';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
@@ -41,6 +42,8 @@ type UserType = {
 };
 
 const Savings: React.FC = () => {
+  const { user } = useAuth();
+
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     chequing: '',
     savings: '',
@@ -77,6 +80,7 @@ const Savings: React.FC = () => {
     const postSavings = async () => {
       try {
         const res = await axios.post(`${URL}/savings/create`, {
+          // user: user?._id,
           chequing: updateSavingAccount.chequing,
           savings: updateSavingAccount.savings,
           resp: updateSavingAccount.resp,
