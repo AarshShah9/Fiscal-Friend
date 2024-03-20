@@ -207,5 +207,42 @@ export const authTests = () => {
         expect(res.body.user).toBeDefined();
       });
     });
+    describe('Update User information tests', () => {
+      let cookie: string;
+
+      beforeAll(async () => {
+        // Add the test user
+        await User.create({
+          email: 'johndoe@fiscalfriend.com',
+          password: 'password',
+          firstName: 'John',
+          lastName: 'Doe',
+        });
+        // Login the user
+        const res = await agent.post('/auth/login').send({
+          email: 'johndoe@fiscalfriend.com',
+          password: 'password',
+        });
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.success).toEqual(true);
+        expect(res.headers['set-cookie']).toBeDefined();
+        cookie = res.headers['set-cookie'][0];
+      });
+
+      afterAll(async () => {
+        await User.deleteMany({ email: 'johndoe@fiscalfriend.com' });
+      });
+
+      it('should update the user information', async () => {
+        const res = await agent.post('/auth/updateMe').send({
+          email: 'johndoe@fiscalfriend.com',
+          firstName: 'John New',
+          lastName: 'Doe New',
+        });
+
+        expect(res.statusCode).toEqual(201);
+        expect(res.body.success).toEqual(true);
+      });
+    });
   });
 };
