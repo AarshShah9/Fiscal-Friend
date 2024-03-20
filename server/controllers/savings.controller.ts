@@ -46,7 +46,7 @@ export const createSavings = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: 'Savings created',
-      expense: newSavings,
+      savings: newSavings,
     });
   } catch (e) {
     return res.status(500).json({ success: false, message: 'Server error', e });
