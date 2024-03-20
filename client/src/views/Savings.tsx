@@ -1,5 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SavingsSummary from "../components/SavingsSummary"
+import LoansSummary from "../components/LoansSummary"
+
+const testSavings: SavingAccountType = {
+  chequing: 100,
+  savings: 2000,
+  resp: 2500
+}
+
+const testLoans: LoanAccountType = {
+  loc: 3000,
+  mortgage: 20000
+}
+
+export const SavingsContext = React.createContext<SavingAccountType>(testSavings);
+export const LoansContext = React.createContext<LoanAccountType>(testLoans);
 
 type SavingAccountType = {
   chequing: number;
@@ -201,6 +217,22 @@ const Savings: React.FC = () => {
               placeholder="0.00"
             />
           </div>
+          <div className="pb-8">
+            <label
+              htmlFor="interest"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Interest Rate
+            </label>
+            <input
+              type="text"
+              name="interest"
+              // TODO: value={formValues.interest}
+              onChange={handleFormInput}
+              className="block rounded-md border-gray-300 shadow-sm"
+              placeholder="0.00"
+            />
+          </div>
         </div>
         <button
           type="button"
@@ -210,7 +242,14 @@ const Savings: React.FC = () => {
           Continue
         </button>
       </form>
+      <SavingsContext.Provider value={testSavings}>
+        <SavingsSummary/>
+      </SavingsContext.Provider>
+      <LoansContext.Provider value={testLoans}>
+        <LoansSummary/>
+      </LoansContext.Provider>
     </div>
+    
   );
 };
 
