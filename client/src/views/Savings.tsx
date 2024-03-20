@@ -58,6 +58,30 @@ const Savings: React.FC = () => {
   // });
 
   const handleFormButton = async () => {
+    const chequingElement = document.getElementById('chequingValue');
+    if (chequingElement === null) {
+      return;
+    } else {
+      if (formValues.chequing === '') {
+        chequingElement.classList.replace('invisible', 'visible');
+        return;
+      } else {
+        chequingElement.classList.replace('visible', 'invisible');
+      }
+    }
+
+    const savingElement = document.getElementById('savingValue');
+    if (savingElement === null) {
+      return;
+    } else {
+      if (formValues.savings === '') {
+        savingElement.classList.replace('invisible', 'visible');
+        return;
+      } else {
+        savingElement.classList.replace('visible', 'invisible');
+      }
+    }
+
     const updateSavingAccount: SavingAccountType = {
       chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
       savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
@@ -127,6 +151,12 @@ const Savings: React.FC = () => {
               className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
             />
+            <p
+              id="chequingValue"
+              className="invisible text-red-500 text-xs italic"
+            >
+              Please fill out this field.
+            </p>
           </div>
           <div className="pb-8">
             <label
@@ -143,6 +173,12 @@ const Savings: React.FC = () => {
               className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
             />
+            <p
+              id="savingValue"
+              className="invisible text-red-500 text-xs italic"
+            >
+              Please fill out this field.
+            </p>
           </div>
           <div className="pb-8">
             <label
