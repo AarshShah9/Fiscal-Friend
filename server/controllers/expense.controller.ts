@@ -6,10 +6,6 @@ export const createExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    const user = await User.findById(req.body.user);
-    if (!user) {
-        return res.status(400).json({ success: false, message: 'User not found' });
-    }
     if(!req.body.name || !req.body.amount || !req.body.date || !req.body.recurring || !req.body.category) {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
@@ -22,10 +18,6 @@ export const createExpense = async (req: Request, res: Response) => {
         recurring: req.body.recurring,
         category: req.body.category,
     });
-    
-    user.Expenses.push(newExpense._id);
-
-    await user.save();
 
     try {
         await newExpense.save();
@@ -51,12 +43,6 @@ export const removeExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    const user = await User.findById(req.body.user);
-
-    if (!user) {
-        return res.status(400).json({ success: false, message: 'User not found' });
-    }
-
     if (!req.body.expense) {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
@@ -66,10 +52,6 @@ export const removeExpense = async (req: Request, res: Response) => {
     if (!expense) {
         return res.status(400).json({ success: false, message: 'Expense not found' });
     }
-
-    user.Expenses = user.Expenses.filter((id) => id !== expense._id);
-
-    await user.save();
 
     try {
         await Expense.findByIdAndDelete(expense._id);
