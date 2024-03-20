@@ -14,7 +14,6 @@ import Budget from './views/Budget';
 
 function App() {
   axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
 
   return (
     <div className="App">
@@ -28,7 +27,7 @@ function App() {
             <Route element={<Layout />} path="/dashboard">
               <Route path="/dashboard/" element={<Main />} />
               <Route path="/dashboard/budget" element={<Budget />} />
-              <Route path="/dashboard/savings/" element={<Savings />} />
+              <Route path="/dashboard/savings" element={<Savings />} />
             </Route>
           </Route>
         </Routes>

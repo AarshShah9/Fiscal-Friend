@@ -33,25 +33,25 @@ export default function Layout() {
   const navigation = [
     {
       name: 'Dashboard',
-      href: '/dashboard',
+      onClick: () => navigate('/dashboard'),
       icon: HomeIcon,
       current: location.pathname === '/dashboard',
     },
     {
       name: 'Savings',
-      href: 'dashboard/savings',
+      onClick: () => navigate('/dashboard/savings'),
       icon: BanknotesIcon,
       current: location.pathname === '/dashboard/savings',
     },
     {
       name: 'Stocks',
-      href: 'dashboard/stocks',
+      onClick: () => navigate('/dashboard/stocks'),
       icon: ArrowTrendingUpIcon,
       current: location.pathname === '/dashboard/stocks',
     },
     {
       name: 'Budget',
-      href: '/dashboard/budget',
+      onClick: () => navigate('/dashboard/budget'),
       icon: ChartPieIcon,
       current: location.pathname === '/dashboard/budget',
     },
@@ -65,14 +65,6 @@ export default function Layout() {
     { name: 'Your profile', onClick: openProfile },
     { name: 'Sign out', onClick: logout },
   ];
-
-  navigation.forEach((element) => {
-    if (element.href === location.pathname) {
-      element.current = true;
-    } else {
-      element.current = false;
-    }
-  });
 
   return (
     <>
@@ -143,8 +135,8 @@ export default function Layout() {
                       <ul role="list" className="-mx-2 flex-1 space-y-1">
                         {navigation.map((item) => (
                           <li key={item.name}>
-                            <a
-                              href={item.href}
+                            <button
+                              onClick={item.onClick}
                               className={classNames(
                                 item.current
                                   ? 'bg-emerald-400 text-black'
@@ -157,7 +149,7 @@ export default function Layout() {
                                 aria-hidden="true"
                               />
                               {item.name}
-                            </a>
+                            </button>
                           </li>
                         ))}
                       </ul>
@@ -182,8 +174,8 @@ export default function Layout() {
             <ul role="list" className="flex flex-col items-center space-y-1">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  <a
-                    href={item.href}
+                  <button
+                    onClick={item.onClick}
                     className={classNames(
                       item.current
                         ? 'bg-emerald-600 text-black'
@@ -196,7 +188,7 @@ export default function Layout() {
                       aria-hidden="true"
                     />
                     <span className="sr-only">{item.name}</span>
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
