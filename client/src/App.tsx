@@ -28,7 +28,7 @@ function App() {
             <Route element={<Layout />} path="/dashboard">
               <Route path="/dashboard/" element={<Main />} />
               <Route path="/dashboard/budget" element={<Budget />} />
-              <Route path="/savings/" element={<Savings />} />
+              <Route path="/dashboard/savings/" element={<Savings />} />
             </Route>
           </Route>
         </Routes>

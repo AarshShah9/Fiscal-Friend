@@ -186,7 +186,7 @@ export default function TransactionsTable() {
                           <div className="flex justify-end">
                             <a
                               href={transaction.href}
-                              className="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500"
+                              className="text-sm font-medium leading-6 text-emerald-600 hover:text-emerald-500"
                             >
                               View<span className="hidden sm:inline"> transaction</span>
                               <span className="sr-only">
