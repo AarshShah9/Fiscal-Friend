@@ -10,6 +10,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Savings from './views/Savings';
 import Layout from './components/layout';
+import Budget from './views/Budget';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -25,7 +26,8 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/dashboard/" element={<Main />} />
+              <Route path="/dashboard" element={<Main />} />
+              <Route path="/budget" element={<Budget />} />
               <Route path="/savings/" element={<Savings />} />
             </Route>
           </Route>

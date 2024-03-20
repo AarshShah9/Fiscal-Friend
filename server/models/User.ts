@@ -4,9 +4,15 @@ const bcrypt = require('bcrypt');
 interface IUser extends Document {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   createdAt: Date;
+  Accounts: mongoose.Types.ObjectId[];
+  CreditCards: mongoose.Types.ObjectId[];
+  Stocks: mongoose.Types.ObjectId[];
+  Mortgages: mongoose.Types.ObjectId[];
+  Expenses: mongoose.Types.ObjectId[];
+  Incomes: mongoose.Types.ObjectId[];
   Savings: mongoose.Types.ObjectId[];
 }
 

@@ -1,18 +1,4 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -27,14 +13,15 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
-import {useLocation } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import ProfileModal from './profileModal';
 
 const navigation = [
-  { name: 'Dashboard', href: '/dashboard', icon: HomeIcon, current: true },
-  { name: 'Savings', href: '/savings', icon: BanknotesIcon, current: false },
-  { name: 'Stocks', href: '/stocks', icon: ArrowTrendingUpIcon, current: false },
-  { name: 'Budget', href: '/budget', icon: ChartPieIcon, current: false },
+  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
+  { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
+  { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
+  { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
 ];
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -47,9 +34,21 @@ function classNames(...classes: string[]) {
 
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const openProfile = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const userNavigation = [
+    { name: 'Your profile', onClick: openProfile },
+    { name: 'Sign out', onClick: logout },
+  ];
   const location = useLocation();
-  
-  navigation.forEach(element => {
+
+  navigation.forEach((element) => {
     if (element.href === location.pathname) {
       element.current = true;
     } else {
@@ -59,15 +58,8 @@ export default function Layout() {
 
   return (
     <>
-      {/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-white">
-        <body class="h-full">
-        ```
-      */}
       <div>
+        <ProfileModal open={open} setOpen={setOpen} />
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -178,8 +170,7 @@ export default function Layout() {
                       item.current
                         ? 'bg-emerald-600 text-black'
                         : 'text-black hover:text-black hover:bg-emerald-600',
-                        'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold',
-                      
+                      'group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold'
                     )}
                   >
                     <item.icon
@@ -278,15 +269,15 @@ export default function Layout() {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }: { active: boolean }) => (
-                            <a
-                              href={item.href}
+                            <button
+                              onClick={item.onClick}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
                                 'block px-3 py-1 text-sm leading-6 text-gray-900'
                               )}
                             >
                               {item.name}
-                            </a>
+                            </button>
                           )}
                         </Menu.Item>
                       ))}
@@ -313,11 +304,12 @@ export default function Layout() {
                 <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
                 <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
               </div> */}
-
-
             </div>
           </main>
         </div>
+
+        {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        </aside> */}
       </div>
     </>
   );

@@ -138,4 +138,6 @@ server/node_modules/
 .idea/
 client/build/
 
+
+/secrets
 **/.DS_Store

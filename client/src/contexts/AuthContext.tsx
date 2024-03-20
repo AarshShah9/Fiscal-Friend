@@ -7,8 +7,9 @@ import React, {
   useEffect,
 } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SubmitHandler } from 'react-hook-form';
+import { URL } from '../utils/constants';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -16,6 +17,7 @@ interface AuthContextType {
   signup: SubmitHandler<SignupData>;
   logout: () => void;
   isLoading: boolean;
+  user?: User;
 }
 
 export type LoginData = {
@@ -37,29 +39,40 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+type User = {
+  _id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  photo?: string;
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User>();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     axios
-      .post('http://localhost:4000/auth/me')
+      .post(`${URL}/auth/me`)
       .then((res) => {
         if (res.status === 201) {
           setIsAuthenticated(true);
           setIsLoading(false);
+          setUser(res.data.user);
         }
       })
       .catch((err) => {
         console.log(err);
         setIsLoading(false);
       });
-  }, []);
+  }, [isLoading, location.pathname]);
 
   const login = useCallback((data: LoginData) => {
     axios
-      .post('http://localhost:4000/auth/login', {
+      .post(`${URL}/auth/login`, {
         email: data.email,
         password: data.password,
       })
@@ -75,7 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signup = useCallback((data: SignupData) => {
     axios
-      .post('http://localhost:4000/auth/register', {
+      .post(`${URL}/auth/register`, {
         email: data.email,
         password: data.password,
         firstName: data.firstName,
@@ -91,23 +104,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
   }, []);
 
-  const logout = () => {
-    // const logout = useCallback(() => {
-    //   axios
-    //     .post('http://localhost:4000/auth/logout')
-    //     .then((res) => {
-    //       setIsAuthenticated(false);
-    //       setIsLoading(false);
-    //       navigate('/login');
-    //     })
-    //     .catch((err) => {
-    //       setIsLoading(false);
-    //     });
-    // }, []);
-  };
+  const logout = useCallback(() => {
+    axios
+      .post(`${URL}/auth/logout`)
+      .then((res) => {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        setUser(undefined);
+        navigate('/');
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  }, [navigate]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, signup, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, login, signup, logout, isLoading, user }}
+    >
       {children}
     </AuthContext.Provider>
   );
