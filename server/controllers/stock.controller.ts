@@ -20,7 +20,8 @@ export const getStockData = (req: Request, res: Response) => {
     .then((res) => res.json())
     .then((data: any) => {
       const dataList: StockData[] = formatStockDataList(data);
-      res.status(200).json(dataList);
+      const metaData = data['Meta Data'];
+      res.status(200).json({metaData, dataList});
     })
     .catch((err) => {
       console.log(err);
@@ -57,7 +58,6 @@ export const getStockData = (req: Request, res: Response) => {
 // };
 
 const formatStockDataList = (data: any): StockData[] => {
-  const metaData = data['Meta Data'];
   const monthlyTimeSeries = data['Monthly Time Series'];
 
   const stockDataList: StockData[] = [];
