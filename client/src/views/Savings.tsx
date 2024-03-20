@@ -52,14 +52,6 @@ const Savings: React.FC = () => {
     mortgage: '',
   });
 
-  // const [userAccounts, setUserAccounts] = useState<UserAccountType>({
-  //   savingAccount: { chequing: 0, savings: 0, resp: 0 },
-  //   loanAccount: {
-  //     loc: 0,
-  //     mortgage: 0,
-  //   },
-  // });
-
   const handleFormButton = async () => {
     const updateSavingAccount: SavingAccountType = {
       chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
@@ -71,11 +63,6 @@ const Savings: React.FC = () => {
       loc: parseFloat(parseFloat(formValues.loc).toFixed(2)) || 0,
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
-
-    // setUserAccounts({
-    //   savingAccount: updateSavingAccount,
-    //   loanAccount: updateLoanAccount,
-    // });
 
     const postSavings = async () => {
       try {
