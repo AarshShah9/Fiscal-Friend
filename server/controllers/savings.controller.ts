@@ -15,7 +15,7 @@ export const createSavings = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.name || !req.body.chequing || !req.body.savings) {
+  if (!req.body.user || !req.body.chequing || !req.body.savings) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -23,7 +23,6 @@ export const createSavings = async (req: Request, res: Response) => {
 
   const newSavings = new SavingsModel({
     user: req.body.user,
-    name: req.body.name,
     savingAccount: {
       chequing: req.body.chequing,
       savings: req.body.savings,
