@@ -1,6 +1,11 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useEffect } from 'react';
+import { URL } from '../utils/constants';
+import axios from 'axios';
+import ExpenseCard from './ExpenseCard';
+import IncomeCard from './IncomeCard';
 
 import CreateTransactionModal from './CreateTransactionModal';
 
@@ -8,12 +13,48 @@ interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
   type: "expenses" | "incomes";
+};
+
+interface IIncome {
+  _id: string;
+  user: string;
+  name: string;
+  amount: number;
+  date: Date;
+  recurring: string;
+};
+
+interface IExpense {
+  _id: string;
+  user: string;
+  name: string;
+  amount: number;
+  date: Date;
+  recurring: string;
+  category: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
   const title = type === "expenses" ? "Manage Expenses" : "Manage Incomes";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setCreateType] = useState<"expenses" | "incomes">("expenses");
+  const [expenses, setExpenses] = useState<IExpense[]>([]);
+  const [incomes, setIncomes] = useState<IIncome[]>([]);
+  const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
+
+  useEffect(() => {
+    if (isOpen && !dataFetched) {
+      axios.post(`${URL}/expense/get`, { type: 'expenses' })
+        .then(res => setExpenses(res.data.expenses)) // Extract the data from the response object
+        .catch(error => console.error('Error fetching expenses:', error));
+
+      axios.post(`${URL}/income/get`, { type: 'incomes' })
+        .then(res => setIncomes(res.data.incomes))
+        .catch(error => console.error('Error fetching incomes:', error));
+
+      setDataFetched(true); // Update the flag
+    }
+  }, [isOpen, dataFetched]); // Fetch data whenever isOpen changes and dataFetched is false
 
   const openModal = (type: "expenses" | "incomes") => {
     setCreateType(type);
@@ -24,6 +65,24 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
     setIsModalOpen(false);
   };
 
+  const deleteExpense = (id: string) => {
+    axios.post(`${URL}/expense/remove`, { expense: id })
+      .then(res => {
+        console.log('Expense deleted:', res.data);
+        setExpenses(expenses.filter(expense => expense._id !== id));
+      })
+      .catch(error => console.error('Error removing expense:', error));
+  }
+
+  const deleteIncome = (id: string) => {
+    axios.post(`${URL}/income/remove`, { income: id })
+      .then(res => {
+        console.log('Income removed:', res.data);
+        setIncomes(incomes.filter(income => income._id !== id));
+      })
+      .catch(error => console.error('Error removing income:', error));
+  }
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={toggleSidebar}>
@@ -31,6 +90,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
           isOpen={isModalOpen}
           onClose={closeModal}
           type={transactionType}
+          incomes={incomes}
+          expenses={expenses}
         />
         <Transition.Child
           as={Fragment}
@@ -93,10 +154,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
                     </div>
                     <div className="border-b border-gray-200 bg-white px-4 py-3 sm:px-6">
                       <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-                        <div className="ml-4 mt-4">
-                        </div>
                       </div>
                     </div>
+                    <div className="ml-2 mt-2 mr-2">
+                          {/* Display expenses */}
+                          {type === 'expenses' && (
+                            <div>
+                              {expenses.map((expense) => (
+                                <ExpenseCard
+                                  key={expense._id}
+                                  expense={expense}
+                                  onDelete={() => deleteExpense(expense._id)}
+                                />
+                              ))}
+                            </div>
+                          )} 
+                          
+                          {/* Display incomes */}
+                          {type === 'incomes' && (
+                            <div>
+                              {incomes.map((income) => (
+                                <IncomeCard
+                                  key={income._id}
+                                  income={income}
+                                  onDelete={() => deleteIncome(income._id)}
+                                />
+                              ))}
+                            </div>
+                          )}
+                        </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

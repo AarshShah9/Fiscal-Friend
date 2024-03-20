@@ -9,6 +9,8 @@ interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
   type: "expenses" | "incomes";
+  incomes: any[];
+  expenses: any[];
 }
 
 type incomeForm = {
@@ -26,7 +28,7 @@ type expenseForm = {
   category: string;
 };
 
-const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type }) => {
+const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type, incomes, expenses }) => {
   const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
     defaultValues: {
       name: "New",
@@ -46,11 +48,13 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
       if (type === 'expenses') {
         const expenseFormData: expenseForm = data as expenseForm;
         axios.post(`${URL}/expense/create`, expenseFormData).then((res) => {
+          expenses.push(res.data.expense);
           onClose();
         });
       } else {
         const incomeFormData: incomeForm = data as incomeForm;
         axios.post(`${URL}/income/create`, incomeFormData).then((res) => {
+          incomes.push(res.data.income);
           onClose();
         });
       }
