@@ -19,7 +19,7 @@ interface IMortgage extends Document {
     | 'Monthly (12x per year)';
 }
 
-const mortgageSchema = new mongoose.Schema({
+const mortgageSchema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   mortgage: {
     amount: { type: Number, required: true },
