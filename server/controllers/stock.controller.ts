@@ -31,6 +31,7 @@ export const getStockData = (req: Request, res: Response) => {
     });
 };
 
+
 const formatStockDataList = (data: any): StockData[] => {
   const monthlyTimeSeries = data['Monthly Time Series'];
 
