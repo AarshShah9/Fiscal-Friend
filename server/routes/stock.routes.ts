@@ -4,6 +4,6 @@ import { checkAuth } from '../middleware/checkAuth';
 
 const router = express.Router();
 
-router.get('/test', checkAuth, getStockData);
+router.post('/test', checkAuth, getStockData);
 
 export default router;
