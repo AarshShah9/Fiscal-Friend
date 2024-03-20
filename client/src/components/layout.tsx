@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
+import { useLocation } from 'react-router-dom';
 import {
   Bars3Icon,
   BellIcon,
@@ -17,17 +18,6 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ProfileModal from './profileModal';
 
-const navigation = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
-  { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
-  { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
-];
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
@@ -37,6 +27,34 @@ export default function Layout() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const location = useLocation();
+  const navigation = [
+    {
+      name: 'Dashboard',
+      href: '/dashboard',
+      icon: HomeIcon,
+      current: location.pathname === '/dashboard',
+    },
+    {
+      name: 'Savings',
+      href: 'dashboard/savings',
+      icon: BanknotesIcon,
+      current: location.pathname === '/dashboard/savings',
+    },
+    {
+      name: 'Stocks',
+      href: 'dashboard/stocks',
+      icon: ArrowTrendingUpIcon,
+      current: location.pathname === '/dashboard/stocks',
+    },
+    {
+      name: 'Budget',
+      href: '/dashboard/budget',
+      icon: ChartPieIcon,
+      current: location.pathname === '/dashboard/budget',
+    },
+  ];
 
   const openProfile = useCallback(() => {
     setOpen(true);
