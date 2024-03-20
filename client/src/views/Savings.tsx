@@ -71,10 +71,9 @@ const Savings: React.FC = () => {
     };
 
     getUser();
-    console.log(user.user);
   }, []);
 
-  const handleFormButton = () => {
+  const handleFormButton = async () => {
     const updateSavingAccount: SavingAccountType = {
       chequing: parseFloat(parseFloat(formValues.chequing).toFixed(2)) || 0,
       savings: parseFloat(parseFloat(formValues.savings).toFixed(2)) || 0,
@@ -108,10 +107,6 @@ const Savings: React.FC = () => {
 
     postSavings();
   };
-
-  // useEffect(() => {
-  //   console.log(userAccounts);
-  // }, [userAccounts]);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
