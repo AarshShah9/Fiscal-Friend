@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import SavingsSummary from '../components/SavingsSummary';
 import LoansSummary from '../components/LoansSummary';
+import { URL } from '../utils/constants';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
@@ -48,32 +49,13 @@ const Savings: React.FC = () => {
     mortgage: '',
   });
 
-  const [userAccounts, setUserAccounts] = useState<UserAccountType>({
-    savingAccount: { chequing: 0, savings: 0, resp: 0 },
-    loanAccount: {
-      loc: 0,
-      mortgage: 0,
-    },
-  });
-
-  const [user, setUser] = useState<UserType>({
-    user: '',
-  });
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get('http://localhost:4000/auth/me');
-        setUser({
-          user: res.data.user,
-        });
-      } catch (e) {
-        console.error('Error getting user: ', e);
-      }
-    };
-
-    getUser();
-  }, []);
+  // const [userAccounts, setUserAccounts] = useState<UserAccountType>({
+  //   savingAccount: { chequing: 0, savings: 0, resp: 0 },
+  //   loanAccount: {
+  //     loc: 0,
+  //     mortgage: 0,
+  //   },
+  // });
 
   const handleFormButton = async () => {
     const updateSavingAccount: SavingAccountType = {
@@ -87,15 +69,14 @@ const Savings: React.FC = () => {
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
 
-    setUserAccounts({
-      savingAccount: updateSavingAccount,
-      loanAccount: updateLoanAccount,
-    });
+    // setUserAccounts({
+    //   savingAccount: updateSavingAccount,
+    //   loanAccount: updateLoanAccount,
+    // });
 
     const postSavings = async () => {
       try {
-        const res = await axios.post('http://localhost:4000/savings/create', {
-          user: user.user,
+        const res = await axios.post(`${URL}/savings/create`, {
           chequing: updateSavingAccount.chequing,
           savings: updateSavingAccount.savings,
           resp: updateSavingAccount.resp,

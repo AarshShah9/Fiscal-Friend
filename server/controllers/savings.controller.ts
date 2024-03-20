@@ -15,7 +15,7 @@ export const createSavings = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.user || !req.body.chequing || !req.body.savings) {
+  if (!req.body.chequing || !req.body.savings) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -33,10 +33,6 @@ export const createSavings = async (req: Request, res: Response) => {
       mortgage: req.body.mortgage,
     },
   });
-
-  user.Savings.push(newSavings._id);
-
-  await user.save();
 
   try {
     await newSavings.save();
@@ -71,7 +67,7 @@ export const updateSavings = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.user || !req.body.chequing || !req.body.savings) {
+  if (!req.body.chequing || !req.body.savings) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -89,10 +85,6 @@ export const updateSavings = async (req: Request, res: Response) => {
       mortgage: req.body.mortgage,
     },
   });
-
-  user.Savings.push(updateSavings._id);
-
-  await user.save();
 
   try {
     await updateSavings.save();
