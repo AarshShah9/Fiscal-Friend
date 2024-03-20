@@ -45,6 +45,8 @@ const Savings: React.FC = () => {
     mortgage: '',
   });
 
+  const [isContinueClick, setIsContinueClick] = useState(false);
+
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
   const handleFormButton = async () => {
@@ -92,6 +94,8 @@ const Savings: React.FC = () => {
     } else {
       postSavings();
     }
+
+    setIsContinueClick(true);
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,9 +124,20 @@ const Savings: React.FC = () => {
     fetchData();
   }, [handleFormButton]);
 
+  const isMortgageCalculatorEnabled =
+    isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
+
   return (
     <div>
-      <div>
+      <div className="relative">
+        <div className="absolute top-0 right-0 mr-4 mt-4">
+          <button
+            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4 ${!isMortgageCalculatorEnabled && 'opacity-50 cursor-not-allowed'}`}
+            disabled={!isMortgageCalculatorEnabled}
+          >
+            Mortgage Calculator
+          </button>
+        </div>
         <h1 className="text-5xl pb-2">Savings</h1>
         <p>
           To get started on tracking your savings on Fiscal Friend, please enter
@@ -130,6 +145,7 @@ const Savings: React.FC = () => {
         </p>
         <p className="pb-12">(The information may be changed later.)</p>
       </div>
+
       <form>
         <h2 className="text-3xl pb-2"> Savings</h2>
         <div className="flex space-x-4">
@@ -241,6 +257,7 @@ const Savings: React.FC = () => {
           Continue
         </button>
       </form>
+
       <SavingsContext.Provider value={testSavings}>
         <SavingsSummary />
       </SavingsContext.Provider>
