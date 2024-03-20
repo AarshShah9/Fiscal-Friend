@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PieChart from '../components/PieChart';
 import StatsBoxes from '../components/StatsBoxes';
 import TransactionsTable from '../components/TransactionsTable';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/sidebar';
 
 type ExpenseItem = { [key: string]: number };
 

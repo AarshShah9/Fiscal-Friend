@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
-import CreateTransactionModal from './CreateTransactionDialogue';
+import CreateTransactionModal from './CreateTransactionModal';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -22,8 +22,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    // Keep sidebar open after closing modal
-    toggleSidebar();
   };
 
   return (
@@ -86,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
                         <span>{title}</span>
                         <button
                           type="button"
-                          className="relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="relative inline-flex items-center rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
                           onClick={() => openModal(type)}
                         >
                           Create new {type === "expenses" ? "expense" : "income"}
