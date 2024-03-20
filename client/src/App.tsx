@@ -26,6 +26,7 @@ function App() {
           <Route path="/" element={<ProtectedRoute />}>
             <Route element={<Layout />} path="/dashboard">
               <Route path="/dashboard/" element={<Main />} />
+              <Route path="/dashboard/budget" element={<Budget />} />
             </Route>
           </Route>
         </Routes>

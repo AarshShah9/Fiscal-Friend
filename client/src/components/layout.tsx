@@ -32,25 +32,25 @@ export default function Layout() {
   const navigation = [
     {
       name: 'Dashboard',
-      href: '#',
+      href: '/dashboard',
       icon: HomeIcon,
       current: location.pathname === '/dashboard',
     },
     {
       name: 'Savings',
-      href: '#',
+      href: 'dashboard/savings',
       icon: BanknotesIcon,
       current: location.pathname === '/dashboard/savings',
     },
     {
       name: 'Stocks',
-      href: '#',
+      href: 'dashboard/stocks',
       icon: ArrowTrendingUpIcon,
       current: location.pathname === '/dashboard/stocks',
     },
     {
       name: 'Budget',
-      href: '#',
+      href: '/dashboard/budget',
       icon: ChartPieIcon,
       current: location.pathname === '/dashboard/budget',
     },
