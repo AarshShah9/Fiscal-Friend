@@ -1,8 +1,8 @@
-import { on } from 'events';
 import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { URL } from '../utils/constants';
 
 
 interface CreateTransactionModalProps {
@@ -27,30 +27,9 @@ type expenseForm = {
 };
 
 const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type }) => {
-
-  // if (type === 'expenses') {
-  //   const { register, handleSubmit, setValue } = useForm<expenseForm>({
-  //     defaultValues: {
-  //       name: 'New Expense',
-  //       amount: 0,
-  //       date: new Date(),
-  //       recurring: false,
-  //       category: 'Other',
-  //     },
-  //   });
-  // } else {
-  //   const { register, handleSubmit, setValue } = useForm<incomeForm>({
-  //     defaultValues: {
-  //       name: 'New Income',
-  //       amount: 0,
-  //       date: new Date(),
-  //       recurring: false,
-  //     },
-  //   });
-  // }
   const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
     defaultValues: {
-      name: type === 'expenses' ? 'New Expense' : 'New Income',
+      name: "New",
       amount: 0,
       date: new Date(),
       recurring: 'One-time',
@@ -63,10 +42,19 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
     onClose(); // Close the modal
     };
 
-  const onSubmit = () => {
-    // Implement your submit logic here
-    onClose(); // Close the modal after submitting
-  };
+    const onSubmit = (data: incomeForm | expenseForm) => {
+      if (type === 'expenses') {
+        const expenseFormData: expenseForm = data as expenseForm;
+        axios.post(`${URL}/expense/create`, expenseFormData).then((res) => {
+          onClose();
+        });
+      } else {
+        const incomeFormData: incomeForm = data as incomeForm;
+        axios.post(`${URL}/income/create`, incomeFormData).then((res) => {
+          onClose();
+        });
+      }
+    };
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -183,7 +171,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                                 </label>
                                 <div className="mt-2">
                                   <select
-                                    id="Category"
+                                    id="category"
                                     {...register('category')}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
                                     >
