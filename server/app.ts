@@ -45,8 +45,8 @@ app.use('/budget', budgeetRoutes);
 app.use('/expense', expenseRoutes);
 app.use('/income', incomeRoutes);
 app.use('/stock', stockRoutes);
+app.use('/stock', stockRoutes);
 
-// error handler
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
   res.status(500).json({ message: error.message });
