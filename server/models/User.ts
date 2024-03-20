@@ -11,8 +11,7 @@ interface IUser extends Document {
   CreditCards: mongoose.Types.ObjectId[];
   Stocks: mongoose.Types.ObjectId[];
   Mortgages: mongoose.Types.ObjectId[];
-  Expenses: mongoose.Types.ObjectId[];
-  Incomes: mongoose.Types.ObjectId[];
+  Savings: mongoose.Types.ObjectId[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -25,6 +24,7 @@ const UserSchema: Schema = new Schema({
   CreditCards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CreditCard' }],
   Stocks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
   Mortgages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mortgage' }],
+  Savings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Savings' }],
 });
 
 UserSchema.pre('save', async function () {

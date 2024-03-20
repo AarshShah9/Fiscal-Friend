@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import { useLocation } from 'react-router-dom';
 import {
   Bars3Icon,
   BellIcon,
@@ -14,7 +13,7 @@ import {
   ChevronDownIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/20/solid';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import ProfileModal from './profileModal';
 
@@ -27,6 +26,8 @@ export default function Layout() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  const {user} = useAuth();
 
   const location = useLocation();
   const navigation = [
@@ -64,6 +65,14 @@ export default function Layout() {
     { name: 'Your profile', onClick: openProfile },
     { name: 'Sign out', onClick: logout },
   ];
+
+  navigation.forEach((element) => {
+    if (element.href === location.pathname) {
+      element.current = true;
+    } else {
+      element.current = false;
+    }
+  });
 
   return (
     <>
@@ -257,7 +266,7 @@ export default function Layout() {
                         className="ml-4 text-sm font-semibold leading-6 text-gray-900"
                         aria-hidden="true"
                       >
-                        Scrooge Mcduck
+                        {user?.firstName} {user?.lastName}
                       </span>
                       <ChevronDownIcon
                         className="ml-2 h-5 w-5 text-gray-400"
@@ -297,10 +306,22 @@ export default function Layout() {
             </div>
           </div>
 
-          <main>
+          <main className="xl:pl-12">
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
               <Outlet />
               {/* Main area */}
+              {/* <div className="mb-6">
+                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
+                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
+              </div>
+              <div className="mb-6">
+                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Debts:</label>
+                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
+              </div>
+              <div className="mb-6">
+                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
+                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
+              </div> */}
             </div>
           </main>
         </div>

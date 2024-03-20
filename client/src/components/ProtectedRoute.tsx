@@ -12,10 +12,6 @@ const ProtectedRoute: React.FC = () => {
     }
   }, [isLoading, isAuthenticated, navigate]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return <Outlet />;
 };
 

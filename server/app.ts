@@ -7,6 +7,7 @@ require('dotenv').config({ path: '../.env' });
 
 // Route imports
 import authRoutes from './routes/auth.routes';
+import savingsRoutes from './routes/savings.routes';
 import budgeetRoutes from './routes/budget.routes';
 import expenseRoutes from './routes/expense.routes';
 import incomeRoutes from './routes/income.routes';
@@ -41,6 +42,7 @@ app.get('/test', (req: Request, res: Response) => {
 
 // Routing
 app.use('/auth', authRoutes);
+app.use('/savings', savingsRoutes);
 app.use('/budget', budgeetRoutes);
 app.use('/expense', expenseRoutes);
 app.use('/income', incomeRoutes);
