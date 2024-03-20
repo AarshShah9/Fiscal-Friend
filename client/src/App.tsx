@@ -14,7 +14,7 @@ import Budget from './views/Budget';
 
 function App() {
   axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
+  console.log('HELLO BITCH', process.env.REACT_APP_ENV);
 
   return (
     <div className="App">
