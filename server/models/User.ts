@@ -25,8 +25,6 @@ const UserSchema: Schema = new Schema({
   CreditCards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CreditCard' }],
   Stocks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
   Mortgages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mortgage' }],
-  Expenses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Expense' }],
-  Incomes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Income' }],
 });
 
 UserSchema.pre('save', async function () {

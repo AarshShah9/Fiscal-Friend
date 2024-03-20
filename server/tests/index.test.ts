@@ -8,6 +8,8 @@ const agent = request.agent(app);
 
 // Import tests
 import { authTests } from './auth';
+import { incomeTests } from './income';
+import { expenseTests } from './expense';
 
 let mongoClient: Connection;
 
@@ -35,6 +37,8 @@ beforeAll(async () => {
 
 describe('Fiscal Friend API Tests', () => {
   authTests();
+  incomeTests(agent);
+  expenseTests(agent);
 });
 
 afterAll(async () => {
