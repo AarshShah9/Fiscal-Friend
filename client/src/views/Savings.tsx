@@ -17,6 +17,10 @@ type UserAccountType = {
   loanAccount: LoanAccountType;
 };
 
+type UserType = {
+  user: string;
+};
+
 const Savings: React.FC = () => {
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     chequing: '',
@@ -33,6 +37,26 @@ const Savings: React.FC = () => {
       mortgage: 0,
     },
   });
+
+  const [user, setUser] = useState<UserType>({
+    user: '',
+  });
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await axios.get('http://localhost:4000/auth/me');
+        setUser({
+          user: res.data.user,
+        });
+      } catch (e) {
+        console.error('Error getting user: ', e);
+      }
+    };
+
+    getUser();
+    console.log(user.user);
+  }, []);
 
   const handleFormButton = () => {
     const updateSavingAccount: SavingAccountType = {
@@ -51,11 +75,10 @@ const Savings: React.FC = () => {
       loanAccount: updateLoanAccount,
     });
 
-    const postData = async () => {
+    const postSavings = async () => {
       try {
         const res = await axios.post('http://localhost:4000/savings/create', {
-          user: 'testuser',
-          name: 'testname',
+          user: user.user,
           chequing: updateSavingAccount.chequing,
           savings: updateSavingAccount.savings,
           resp: updateSavingAccount.resp,
@@ -67,12 +90,12 @@ const Savings: React.FC = () => {
       }
     };
 
-    postData();
+    postSavings();
   };
 
-  useEffect(() => {
-    console.log(userAccounts);
-  }, [userAccounts]);
+  // useEffect(() => {
+  //   console.log(userAccounts);
+  // }, [userAccounts]);
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
