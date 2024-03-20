@@ -24,9 +24,9 @@ function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/" element={<ProtectedRoute />}>
-            <Route element={<Layout />}>
-              <Route path="/dashboard" element={<Main />} />
-              <Route path="/budget" element={<Budget />} />
+            <Route element={<Layout />} path="/dashboard">
+              <Route path="/dashboard/" element={<Main />} />
+              <Route path="/dashboard/budget" element={<Budget />} />
             </Route>
           </Route>
         </Routes>
