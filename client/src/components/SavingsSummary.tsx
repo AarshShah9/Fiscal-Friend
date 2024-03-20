@@ -39,7 +39,7 @@ type SavingAccountType = {
   resp: number;
 };
 
-export default function SavingsSummary() {
+const SavingsSummary: React.FC = () => {
   const savingAccount = useContext(SavingsContext) as SavingAccountType;
 
   useEffect(() => {
@@ -82,4 +82,6 @@ export default function SavingsSummary() {
       <div className="py-6 flex justify-center" id="bar-chart-savings"></div>
     </div>
   );
-}
+};
+
+export default SavingsSummary;

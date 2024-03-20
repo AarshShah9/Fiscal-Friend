@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import SavingsSummary from "../components/SavingsSummary"
-import LoansSummary from "../components/LoansSummary"
+import SavingsSummary from '../components/SavingsSummary';
+import LoansSummary from '../components/LoansSummary';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
   savings: 2000,
-  resp: 2500
-}
+  resp: 2500,
+};
 
 const testLoans: LoanAccountType = {
   loc: 3000,
-  mortgage: 20000
-}
+  mortgage: 20000,
+};
 
-export const SavingsContext = React.createContext<SavingAccountType>(testSavings);
+export const SavingsContext =
+  React.createContext<SavingAccountType>(testSavings);
+
 export const LoansContext = React.createContext<LoanAccountType>(testLoans);
 
 type SavingAccountType = {
@@ -238,13 +240,12 @@ const Savings: React.FC = () => {
         </button>
       </form>
       <SavingsContext.Provider value={testSavings}>
-        <SavingsSummary/>
+        <SavingsSummary />
       </SavingsContext.Provider>
       <LoansContext.Provider value={testLoans}>
-        <LoansSummary/>
+        <LoansSummary />
       </LoansContext.Provider>
     </div>
-    
   );
 };
 
