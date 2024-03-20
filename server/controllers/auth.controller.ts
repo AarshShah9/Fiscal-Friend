@@ -1,4 +1,4 @@
-import User from '../models/User';
+import { User } from '../models';
 import { Request, Response } from 'express';
 import { createSecretToken } from '../utils/secretToken';
 const jwt = require('jsonwebtoken');
