@@ -62,7 +62,8 @@ const formatStockDataList = (data: any): StockData[] => {
   return stockDataList;
 };
 
-export const saveFavouriteSymbol = async (req: Request, res: Response) => {
+// Method to save user favourite symbol 
+export const saveSymbol = async (req: Request, res: Response) => {
   if (!req.body.user) {
     return res
       .status(400)
@@ -92,6 +93,7 @@ export const saveFavouriteSymbol = async (req: Request, res: Response) => {
   }
 };
 
+// Method to retrieve user favourites
 export const getSavedStocks = async (req: Request, res: Response) => {
   if (!req.body.user) {
     return res
@@ -104,6 +106,7 @@ export const getSavedStocks = async (req: Request, res: Response) => {
   return res.status(201).json({ success: true, stocks });
 };
 
+// Method to remove a stock from favourites
 export const removeStock = async (req: Request, res: Response) => {
   if (!req.body.user) {
     return res
