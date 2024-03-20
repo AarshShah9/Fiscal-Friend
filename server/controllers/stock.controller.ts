@@ -30,32 +30,6 @@ export const getStockData = (req: Request, res: Response) => {
         .json({ success: false, message: 'Error fetching stock data' });
     });
 };
-// export const getStockData = (req: Request, res: Response) => {
-//   // Mock data for testing
-//   const mockData = {
-//     'Meta Data': {
-//       '1. Information': 'Monthly Prices (open, high, low, close) and Volumes',
-//       '2. Symbol': 'AAPL',
-//       '3. Last Refreshed': '2024-03-16',
-//       '4. Time Zone': 'US/Eastern',
-//     },
-//     'Monthly Time Series': {
-//       '2024-03-16': {
-//         '1. open': '180.56',
-//         '2. high': '184.56',
-//         '3. low': '179.15',
-//         '4. close': '183.22',
-//         '5. volume': '123456789',
-//       },
-//       // Add more sample data as needed
-//     },
-//   };
-
-//   // Format mock data
-//   const formattedStockData = formatStockDataList(mockData);
-//   // Sending formatted data as response
-//   res.status(200).json(formattedStockData);
-// };
 
 const formatStockDataList = (data: any): StockData[] => {
   const monthlyTimeSeries = data['Monthly Time Series'];
