@@ -40,7 +40,7 @@ export default function Budget() {
         <div className="grow">
           <PieChart />
         </div>
-        <div className="flex flex-col justify-start justify-items-center">
+        <div className="flex flex-col justify-start justify-items-center absolute right-0 top-16 px-4 py-4">
           {/* Pass respective type as argument */}
           <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4" onClick={() => toggleSidebar("expenses")}>
             Manage Expenses
