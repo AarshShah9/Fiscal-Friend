@@ -35,9 +35,34 @@ const MortgageCalculation: React.FC = () => {
       ...mortgageRequired,
       [name]: parseFloat(value),
     });
+    console.log(mortgageRequired);
   };
 
-  return <div></div>;
+  return (
+    <div>
+      <input
+        type="number"
+        name="amount"
+        value={mortgageRequired.amount}
+        onChange={handleMortgageRequired}
+        placeholder="Loan amount"
+      />
+      <input
+        type="number"
+        name="apr"
+        value={mortgageRequired.apr}
+        onChange={handleMortgageRequired}
+        placeholder="Annual Percentage Rate"
+      />
+      <input
+        type="number"
+        name="period"
+        value={mortgageRequired.period}
+        onChange={handleMortgageRequired}
+        placeholder="Loan period in years"
+      />
+    </div>
+  );
 };
 
 export default MortgageCalculation;
