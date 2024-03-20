@@ -23,12 +23,12 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="*" element={<NotFound />} />
-          {/* <Route path="/" element={<ProtectedRoute />}> */}
-            <Route element={<Layout />} >
+          <Route path="/" element={<ProtectedRoute />}>
+            <Route element={<Layout />}>
               <Route path="/dashboard/" element={<Main />} />
-              <Route path = "/savings/" element ={<Savings/>}/>
+              <Route path="/savings/" element={<Savings />} />
             </Route>
-          {/* </Route> */}
+          </Route>
         </Routes>
       </AuthProvider>
     </div>

@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 interface IUser extends Document {
   email: string;
@@ -7,6 +7,7 @@ interface IUser extends Document {
   firstName: string;
   lastName: string;
   createdAt: Date;
+  Savings: mongoose.Types.ObjectId[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -14,10 +15,16 @@ const UserSchema: Schema = new Schema({
   password: { type: String, required: true },
   firstName: { type: String, required: false },
   lastName: { type: String, required: false },
-  createdAt: { type: Date, default: new Date()},
+  createdAt: { type: Date, default: new Date() },
+  Accounts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Account' }],
+  CreditCards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CreditCard' }],
+  Stocks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Stock' }],
+  Mortgages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mortgage' }],
+  Expenses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Expense' }],
+  Savings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Savings' }],
 });
 
-UserSchema.pre("save", async function () {
+UserSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, 12);
 });
 
