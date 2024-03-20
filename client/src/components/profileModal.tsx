@@ -22,7 +22,7 @@ export default function ProfileModal({
   setOpen: (set: boolean) => void;
 }) {
   const cancelButtonRef = useRef(null);
-  const { user } = useAuth();
+  const { user, setIsLoading, isLoading } = useAuth();
   const { register, handleSubmit, setValue } = useForm<ProfileUpdate>({
     defaultValues: {
       email: user?.email,
@@ -36,7 +36,7 @@ export default function ProfileModal({
     setValue('email', user?.email!);
     setValue('firstName', user?.firstName!);
     setValue('lastName', user?.lastName!);
-  }, [user]);
+  }, [user, isLoading]);
 
   const onSubmit = (data: ProfileUpdate) => {
     const submitData = {
@@ -48,6 +48,7 @@ export default function ProfileModal({
 
     axios.post(`${URL}/auth/updateMe`, submitData).then((res) => {
       setOpen(false);
+      setIsLoading(true);
     });
   };
 
