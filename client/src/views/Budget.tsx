@@ -18,20 +18,27 @@ const budget: IBudget = {
   income: 3000,
   expenses: {
     total: 1600,
-    itemized: [{ 'rent': 1000 }, { 'food': 400 }, { 'gas': 100}, { 'entertainment': 100 }],
+    itemized: [
+      { rent: 1000 },
+      { food: 400 },
+      { gas: 100 },
+      { entertainment: 100 },
+    ],
   },
 };
 
 export const BudgetContext = React.createContext<IBudget>(budget);
 
 export default function Budget() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarType, setSidebarType] = useState<"expenses" | "incomes">("expenses"); // Track which type of sidebar to open
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarType, setSidebarType] = useState<'expenses' | 'incomes'>(
+    'expenses'
+  ); // Track which type of sidebar to open
 
-  const toggleSidebar = (type?: "expenses" | "incomes") => {
-    setSidebarType(type || "expenses");
+  const toggleSidebar = (type?: 'expenses' | 'incomes') => {
+    setSidebarType(type || 'expenses');
     setSidebarOpen(!sidebarOpen);
-  }
+  };
 
   return (
     <BudgetContext.Provider value={budget}>
@@ -40,17 +47,27 @@ export default function Budget() {
         <div className="grow">
           <PieChart />
         </div>
-        <div className="flex flex-col justify-start justify-items-center absolute right-0 top-16 px-4 py-4">
+        <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
           {/* Pass respective type as argument */}
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4" onClick={() => toggleSidebar("expenses")}>
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4"
+            onClick={() => toggleSidebar('expenses')}
+          >
             Manage Expenses
           </button>
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full" onClick={() => toggleSidebar("incomes")}>
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full"
+            onClick={() => toggleSidebar('incomes')}
+          >
             Manage Incomes
           </button>
         </div>
         {/* Pass sidebarType to Sidebar component */}
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} type={sidebarType} />
+        <Sidebar
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          type={sidebarType}
+        />
       </div>
       <StatsBoxes />
       <div className="min-h-10"></div>
