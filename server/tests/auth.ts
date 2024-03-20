@@ -178,6 +178,7 @@ export const authTests = () => {
       let cookie: string;
 
       beforeAll(async () => {
+        await User.deleteMany({ email: 'johndoe@fiscalfriend.com' });
         // Add the test user
         await User.create({
           email: 'johndoe@fiscalfriend.com',
@@ -211,6 +212,7 @@ export const authTests = () => {
       let cookie: string;
 
       beforeAll(async () => {
+        await User.deleteMany({ email: 'johndoe@fiscalfriend.com' });
         // Add the test user
         await User.create({
           email: 'johndoe@fiscalfriend.com',
