@@ -144,7 +144,7 @@ export const updateMe = async (req: Request, res: Response) => {
     // if the password is not provided, then we don't want to update the password
     let password = req.body.fullUser.password;
     if (req.body.password) {
-      password = await bcrypt.hash(req.body.password, 10);
+      password = await bcrypt.hash(req.body.password, 12);
     }
 
     // Update the user object with the new information with the body
