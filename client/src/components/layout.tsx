@@ -1,6 +1,5 @@
 import { Fragment, useCallback, useState } from 'react';
 import { Dialog, Menu, Transition } from '@headlessui/react';
-import { useLocation } from 'react-router-dom';
 import {
   Bars3Icon,
   BellIcon,
@@ -64,7 +63,6 @@ export default function Layout() {
     { name: 'Your profile', onClick: openProfile },
     { name: 'Sign out', onClick: logout },
   ];
-  const location = useLocation();
 
   navigation.forEach((element) => {
     if (element.href === location.pathname) {
