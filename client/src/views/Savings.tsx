@@ -3,7 +3,6 @@ import axios from 'axios';
 import SavingsSummary from '../components/SavingsSummary';
 import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
-import { useAuth } from '../contexts/AuthContext';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
@@ -42,8 +41,6 @@ type UserType = {
 };
 
 const Savings: React.FC = () => {
-  const { user } = useAuth();
-
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     chequing: '',
     savings: '',
@@ -51,6 +48,8 @@ const Savings: React.FC = () => {
     loc: '',
     mortgage: '',
   });
+
+  const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
   const handleFormButton = async () => {
     const updateSavingAccount: SavingAccountType = {
@@ -67,7 +66,6 @@ const Savings: React.FC = () => {
     const postSavings = async () => {
       try {
         const res = await axios.post(`${URL}/savings/create`, {
-          // user: user?._id,
           chequing: updateSavingAccount.chequing,
           savings: updateSavingAccount.savings,
           resp: updateSavingAccount.resp,
@@ -79,7 +77,25 @@ const Savings: React.FC = () => {
       }
     };
 
-    postSavings();
+    const updateSavings = async () => {
+      try {
+        const res = await axios.put(`${URL}/savings/update`, {
+          chequing: updateSavingAccount.chequing,
+          savings: updateSavingAccount.savings,
+          resp: updateSavingAccount.resp,
+          loc: updateLoanAccount.loc,
+          mortgage: updateLoanAccount.mortgage,
+        });
+      } catch (e) {
+        console.error('Error posting: ', e);
+      }
+    };
+
+    if (fetchedData) {
+      updateSavings();
+    } else {
+      postSavings();
+    }
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,6 +105,24 @@ const Savings: React.FC = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${URL}/savings/get`);
+        if (res.data.savings && res.data.savings.length > 0) {
+          setFetchedData(res.data.savings[0]);
+        } else {
+          setFetchedData(null);
+        }
+      } catch (e) {
+        console.error('Error fetching data:', e);
+        setFetchedData(null);
+      }
+    };
+
+    fetchData();
+  }, [handleFormButton]);
 
   return (
     <div>
