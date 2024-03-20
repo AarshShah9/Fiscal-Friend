@@ -1,4 +1,4 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
@@ -7,6 +7,9 @@ require('dotenv').config({ path: '../.env' });
 
 // Route imports
 import authRoutes from './routes/auth.routes';
+import budgeetRoutes from './routes/budget.routes';
+import expenseRoutes from './routes/expense.routes';
+import incomeRoutes from './routes/income.routes';
 import stockRoutes from './routes/stock.routes';
 
 const app: Application = express();
@@ -38,8 +41,16 @@ app.get('/test', (req: Request, res: Response) => {
 
 // Routing
 app.use('/auth', authRoutes);
-
-// Stock Data
+app.use('/budget', budgeetRoutes);
+app.use('/expense', expenseRoutes);
+app.use('/income', incomeRoutes);
 app.use('/stock', stockRoutes);
+
+// error handler
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(error);
+  res.status(500).json({ message: error.message });
+});
+
 
 export default app;
