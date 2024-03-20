@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '../../.env' });
 import { Request, Response } from 'express';
+import { User, Stock } from '../models';
 
 // Format of data required by front-end graphs
 interface StockData {
@@ -22,13 +23,12 @@ export const getStockData = (req: Request, res: Response) => {
   fetch(url)
     .then((res) => res.json())
     .then((data: any) => {
-
-      // Call to method to format data for front-end 
+      // Call to method to format data for front-end
       const dataList: StockData[] = formatStockDataList(data);
 
       // Extracts the meta data from API response
       const metaData = data['Meta Data'];
-      res.status(200).json({metaData, dataList});
+      res.status(200).json({ metaData, dataList });
     })
     .catch((err) => {
       console.log(err);
@@ -37,7 +37,6 @@ export const getStockData = (req: Request, res: Response) => {
         .json({ success: false, message: 'Error fetching stock data' });
     });
 };
-
 
 // Method formats the data from the API response to be used in front-end graphs
 const formatStockDataList = (data: any): StockData[] => {
@@ -61,4 +60,61 @@ const formatStockDataList = (data: any): StockData[] => {
   }
 
   return stockDataList;
+};
+
+export const saveFavouriteSymbol = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  if (!req.body.symbol) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  try {
+    const newStock = new Stock({
+      user: req.body.user,
+      symbol: req.body.symbol,
+    });
+
+    await newStock.save();
+    return res
+      .status(201)
+      .json({ success: true, message: 'Stock saved', stock: newStock });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error', error });
+  }
+};
+
+export const getSavedStocks = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  const stocks = await Stock.find({ user: req.body.user });
+
+  return res.status(201).json({ success: true, stocks });
+};
+
+export const removeStock = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    await Stock.findByIdAndDelete(req.body.id);
+    return res.status(201).json({ success: true, message: 'Stock removed' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
 };
