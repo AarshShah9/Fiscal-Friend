@@ -36,10 +36,6 @@ type UserAccountType = {
   loanAccount: LoanAccountType;
 };
 
-type UserType = {
-  user: string;
-};
-
 const Savings: React.FC = () => {
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     chequing: '',
