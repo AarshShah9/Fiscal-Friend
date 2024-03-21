@@ -32,7 +32,7 @@ import { Outlet } from 'react-router-dom';
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
   { name: 'Savings', href: '#', icon: BanknotesIcon, current: false },
-  { name: 'Stocks', href: '#', icon: ArrowTrendingUpIcon, current: false },
+  { name: 'Stocks', href: 'stocks', icon: ArrowTrendingUpIcon, current: false },
   { name: 'Budget', href: '#', icon: ChartPieIcon, current: false },
 ];
 const userNavigation = [
@@ -57,7 +57,7 @@ export default function Layout() {
         <body class="h-full">
         ```
       */}
-      <div>
+      {/* <div> */}
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -183,7 +183,7 @@ export default function Layout() {
           </nav>
         </div>
 
-        <div className="lg:pl-20">
+        <div className="lg:pl-20 h-full w-full">
           <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
             <button
               type="button"
@@ -286,18 +286,18 @@ export default function Layout() {
             </div>
           </div>
 
-          <main className="xl:pl-96">
-            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
+          <main className="xl:pl-12 w-full" style={{height:"calc(100% - 4rem)"}}>
+            <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 w-full h-full">
               <Outlet />
               {/* Main area */}
             </div>
           </main>
         </div>
 
-        <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
+        {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block"> */}
           {/* Secondary column (hidden on smaller screens) */}
-        </aside>
-      </div>
+        {/* </aside> */}
+      {/* </div> */}
     </>
   );
 }
