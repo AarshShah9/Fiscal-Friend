@@ -123,7 +123,7 @@ const Savings: React.FC = () => {
     };
 
     fetchData();
-  }, [handleFormInput]);
+  }, [handleFormButton]);
 
   const isMortgageCalculatorEnabled =
     isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
@@ -247,22 +247,6 @@ const Savings: React.FC = () => {
               type="text"
               name="mortgage"
               value={formValues.mortgage}
-              onChange={handleFormInput}
-              className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
-            />
-          </div>
-          <div className="pb-8">
-            <label
-              htmlFor="interest"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Interest Rate
-            </label>
-            <input
-              type="text"
-              name="interest"
-              // TODO: value={formValues.interest}
               onChange={handleFormInput}
               className="block rounded-md border-gray-300 shadow-sm"
               placeholder="0.00"
