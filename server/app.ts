@@ -25,7 +25,6 @@ app.use(
       'http://localhost:4000',
       'http://localhost:3000',
       'http://localhost',
-      'https://fiscal-friend.vercel.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
