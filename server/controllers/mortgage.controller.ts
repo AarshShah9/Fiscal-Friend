@@ -21,6 +21,21 @@ export const createMortgage = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Invalid request body' });
   }
 
+  const mortgageAmount = req.body.amount;
+  const mortgageAPR = req.body.apr / 100;
+  const mortgagePeriod = req.body.period;
+  const mortgageFrequency = req.body.frequency;
+
+  const numberPayments = mortgagePeriod * 12;
+  const mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
+  const mortgageEPR = (1 + mortgageEAR) ** (1 / 12) - 1;
+  const interestPayment = mortgageAmount * mortgageEPR;
+  const monthly =
+    mortgageAmount /
+    ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+
+  const firstPayment = monthly - interestPayment;
+
   const newMortgage = new Mortgage({
     user: req.body.user,
     mortgage: {
@@ -29,10 +44,10 @@ export const createMortgage = async (req: Request, res: Response) => {
       period: req.body.period,
     },
     payments: {
-      principal: req.body.principal,
-      interest: req.body.interest,
-      repayment: req.body.repayment,
-      total: req.body.total,
+      principal: (mortgageEPR * 100).toFixed(2),
+      interest: interestPayment.toFixed(2),
+      repayment: firstPayment.toFixed(2),
+      total: monthly.toFixed(2),
     },
     frequency: req.body.frequency,
   });
