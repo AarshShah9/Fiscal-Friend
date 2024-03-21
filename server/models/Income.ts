@@ -4,7 +4,7 @@ interface IIncome extends Document {
   user: mongoose.Types.ObjectId;
   name: string;
   amount: number;
-  date: Date;
+  date?: Date;
   recurring: 'One-time' | 'Weekly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
 }
 
