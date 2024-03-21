@@ -4,32 +4,14 @@ import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 
-type MortgageRequiredType = {
+type MortgageForm = {
   amount: number;
   apr: number;
   period: number;
-};
-
-type PaymentsType = {
   principal: number;
   interest: number;
   repayment: number;
   total: number;
-};
-
-type FrequencyType = {
-  frequency: string;
-};
-
-type MortgageType = {
-  mortgage: MortgageRequiredType;
-  payments: PaymentsType;
-  frequency: string;
-};
-
-type MortgageForm = {
-  apr: number;
-  period: number;
   frequency: string;
 };
 
@@ -40,43 +22,38 @@ type MortgageProps = {
 
 const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [formValues, setFormValues] = useState<{ [key: string]: string }>({
-    apr: '',
-    period: '',
-    frequency: 'Bi-Weekly (every 2 weeks)',
-  });
-
-  const handleMortgageForm = () => {
-    const updateMortgageRequired: MortgageRequiredType = {
-      amount: amount,
-      apr: parseFloat(parseFloat(formValues.apr).toFixed(2)) || 0,
-      period: parseFloat(parseFloat(formValues.period).toFixed(2)) || 0,
-    };
-
-    const updateMortgageFrequency: FrequencyType = {
-      frequency: formValues.frequency,
-    };
-  };
-
-  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
-  };
 
   const { register, handleSubmit } = useForm<MortgageForm>({
     defaultValues: {
+      amount: amount,
       apr: 5.0,
-      period: 60,
+      period: 20,
+      principal: 0,
+      interest: 0,
+      repayment: 0,
+      total: 0,
       frequency: 'Bi-Weekly (every 2 weeks)',
     },
   });
 
-  // const onClose = () => {
-  //   setIsOpen(false);
-  // };
+  const onSubmit = async (data: MortgageForm) => {
+    const mortgageData = {
+      ...data,
+      mortgage: {
+        amount: data.amount,
+        apr: Number(data.apr),
+        period: Number(data.period),
+      },
+    };
+    try {
+      // const mortgageFormData: MortgageForm = data as MortgageForm;
+      const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
+      onClose();
+      console.log(res.data);
+    } catch (e) {
+      console.error('Error: ', e);
+    }
+  };
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -203,7 +180,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 sm:ml-3 sm:w-auto"
-                      // onClick={handleSubmit(onSubmit)}
+                      onClick={handleSubmit(onSubmit)}
                     >
                       Calculate
                     </button>
