@@ -20,8 +20,14 @@ const loanOptions = (loanAccount: LoanAccountType) => {
     xaxis: {
       categories: ['Line of Credit', 'Mortgages'],
     },
+    yaxis: {
+      show: false,
+      lines: {
+        show: false,
+      },
+    },
     fill: {
-      colors: ['#10B981'],
+      colors: ['#34D399'],
     },
     dataLabels: {
       enabled: false,
@@ -42,36 +48,40 @@ const LoansSummary: React.FC = () => {
 
     if (loanElement && typeof ApexCharts !== 'undefined') {
       if (loanElement.children.length === 0) {
-        const savingsChart = new ApexCharts(
+        const loansChart = new ApexCharts(
           loanElement,
           loanOptions(loanAccount)
         );
-        savingsChart.render();
+        loansChart.render();
       }
     }
   }, []);
+  var loaningStats = [
+    { name: 'Line of Credit', stat: '$' + loanAccount.loc },
+    { name: 'Mortgage', stat: '$' + loanAccount.mortgage },
+    // { name: 'RESP', stat: '$' + loanAccount.resp },
+  ];
 
   return (
-    <div className="flex-col items-center justify-center pt-28">
-      <div className="flex justify-center items-center">
-        <div className="bg-[#D1FAE5] bg-opacity-25 flex justify-center h-36 w-3/5 p-4 border-[1.5px] border-[#10B981]">
-          <div>
-            <p>
-              <u>Summary of Loans</u>
-            </p>
-            <div>
-              <ul className="text-center">
-                <li>
-                  <b>Line of Credit:</b> ${loanAccount.loc}
-                </li>
-                <li>
-                  <b>Mortgage:</b> ${loanAccount.mortgage}
-                </li>
-              </ul>
-            </div>
+    <div className="flex-col items-center justify-center pt-28 pb-24">
+      <h3 className="text-base font-semibold leading-6 text-gray-900">
+        Loans Account
+      </h3>
+      <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        {loaningStats.map((item) => (
+          <div
+            key={item.name}
+            className="overflow-hidden rounded-lg bg-[#D1FAE5] bg-opacity-50 px-4 py-5 shadow sm:p-6"
+          >
+            <dt className="truncate text-sm font-medium text-gray-500">
+              {item.name}
+            </dt>
+            <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+              {item.stat}
+            </dd>
           </div>
-        </div>
-      </div>
+        ))}
+      </dl>
       <div className="py-6 flex justify-center" id="bar-chart-loans"></div>
     </div>
   );

@@ -8,7 +8,7 @@ const savingOptions = (savingAccount: SavingAccountType) => {
       height: 450,
       width: '80%',
       type: 'bar',
-      background: '#f4f4f4',
+      background: '#F4F4F4',
       foreColour: '#333',
     },
     series: [
@@ -23,9 +23,18 @@ const savingOptions = (savingAccount: SavingAccountType) => {
     ],
     xaxis: {
       categories: ['Cheqings', 'Savings', 'RESP'],
+      lines: {
+        show: false,
+      },
+    },
+    yaxis: {
+      show: false,
+      lines: {
+        show: false,
+      },
     },
     fill: {
-      colors: ['#10B981'],
+      colors: ['#34D399'],
     },
     dataLabels: {
       enabled: false,
@@ -57,28 +66,32 @@ const SavingsSummary: React.FC = () => {
     }
   }, []);
 
+  var savingStats = [
+    { name: 'Chequings', stat: '$' + savingAccount.chequing },
+    { name: 'Savings', stat: '$' + savingAccount.savings },
+    { name: 'RESP', stat: '$' + savingAccount.resp },
+  ];
+
   return (
     <div className="flex-col items-center justify-center pt-80">
-      <div className="flex justify-center items-center">
-        <div className="bg-[#D1FAE5] bg-opacity-25 flex justify-center h-36 w-3/5 p-4 border-[1.5px] border-[#10B981]">
-          <div>
-            <p>
-              <u>Summary of Savings</u>
-            </p>
-            <ul className="text-center">
-              <li>
-                <b>Chequing:</b> ${savingAccount.chequing}
-              </li>
-              <li>
-                <b>Savings:</b> ${savingAccount.savings}
-              </li>
-              <li>
-                <b>RESP:</b> ${savingAccount.resp}
-              </li>
-            </ul>
+      <h3 className="text-base font-semibold leading-6 text-gray-900">
+        Saving Account
+      </h3>
+      <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        {savingStats.map((item) => (
+          <div
+            key={item.name}
+            className="overflow-hidden rounded-lg bg-[#D1FAE5] bg-opacity-50 px-4 py-5 shadow sm:p-6"
+          >
+            <dt className="truncate text-sm font-medium text-gray-500">
+              {item.name}
+            </dt>
+            <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
+              {item.stat}
+            </dd>
           </div>
-        </div>
-      </div>
+        ))}
+      </dl>
       <div className="py-6 flex justify-center" id="bar-chart-savings"></div>
     </div>
   );
