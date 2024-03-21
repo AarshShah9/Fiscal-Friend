@@ -3,6 +3,7 @@ import axios from 'axios';
 import SavingsSummary from '../components/SavingsSummary';
 import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
+import MortgageCalculation from '../components/MortgageCalculation';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
@@ -46,7 +47,7 @@ const Savings: React.FC = () => {
   });
 
   const [isContinueClick, setIsContinueClick] = useState(false);
-
+  const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
   const handleFormButton = async () => {
@@ -122,10 +123,20 @@ const Savings: React.FC = () => {
     };
 
     fetchData();
-  }, [handleFormButton]);
+  }, [handleFormInput]);
 
   const isMortgageCalculatorEnabled =
     isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
+
+  const handleMortgageCalculatorButton = () => {
+    if (isMortgageCalculatorEnabled) {
+      setShowMortgageCalculation(true);
+    }
+  };
+
+  const handleCloseMortgageCalculation = () => {
+    setShowMortgageCalculation(false);
+  };
 
   return (
     <div>
@@ -134,9 +145,18 @@ const Savings: React.FC = () => {
           <button
             className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4 ${!isMortgageCalculatorEnabled && 'opacity-50 cursor-not-allowed'}`}
             disabled={!isMortgageCalculatorEnabled}
+            onClick={() => {
+              handleMortgageCalculatorButton();
+            }}
           >
             Mortgage Calculator
           </button>
+          {showMortgageCalculation && (
+            <MortgageCalculation
+              amount={fetchedData?.loanAccount.mortgage || 0}
+              onClose={handleCloseMortgageCalculation}
+            />
+          )}
         </div>
         <h1 className="text-5xl pb-2">Savings</h1>
         <p>
