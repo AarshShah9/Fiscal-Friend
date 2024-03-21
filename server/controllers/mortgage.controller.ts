@@ -54,3 +54,15 @@ export const createMortgage = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: 'Server error', e });
   }
 };
+
+export const getMortgage = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  const savings = await Mortgage.find({ user: req.body.user });
+
+  return res.status(201).json({ success: true, savings });
+};
