@@ -6,7 +6,11 @@ export const createIncome = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    if (!req.body.name || !req.body.amount || !req.body.date || !req.body.recurring) {
+    if (!req.body.name || !req.body.amount || !req.body.recurring) {
+        return res.status(400).json({ success: false, message: 'Invalid request body' });
+    }
+
+    if (req.body.recurring !== 'One-time' && !req.body.date) {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
 

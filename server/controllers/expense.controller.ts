@@ -6,7 +6,11 @@ export const createExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
-    if(!req.body.name || !req.body.amount || !req.body.date || !req.body.recurring || !req.body.category) {
+    if(!req.body.name || !req.body.amount || !req.body.recurring || !req.body.category) {
+        return res.status(400).json({ success: false, message: 'Invalid request body' });
+    }
+
+    if (req.body.recurring !== 'One-time' && !req.body.date) {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
 
