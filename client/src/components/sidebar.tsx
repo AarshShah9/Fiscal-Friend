@@ -13,6 +13,7 @@ interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
   type: "expenses" | "incomes" | undefined;
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface IIncome {
@@ -34,7 +35,7 @@ interface IExpense {
   category: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefreshRequired }) => {
   const title = type === "expenses" ? "Manage Expenses" : "Manage Incomes";
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setCreateType] = useState<"expenses" | "incomes" | undefined>(undefined);
@@ -55,6 +56,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
       setDataFetched(true); // Update the flag
     }
   }, [isOpen, dataFetched]); // Fetch data whenever isOpen changes and dataFetched is false
+
+  useEffect(() => {
+    setRefreshRequired(true);
+  }, [expenses, incomes]);
 
   const openModal = (type: "expenses" | "incomes" | undefined) => {
     setCreateType(type);
@@ -92,6 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
           type={transactionType}
           incomes={incomes}
           expenses={expenses}
+          setRefreshRequired={setRefreshRequired}
         />
         <Transition.Child
           as={Fragment}

@@ -222,6 +222,7 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
         });        const formattedTransactions = sortedDates.map(date => ({
             date: date,
             transactions: transactions[date].map(transaction => ({
+                id: transaction.id,
                 amount: transaction.amount.toFixed(2),
                 name: transaction.name,
                 category: transaction.category,

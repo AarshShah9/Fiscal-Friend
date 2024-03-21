@@ -2,6 +2,12 @@ import { Fragment, useEffect, useState } from 'react'
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
 import { URL } from '../utils/constants'
 import axios from 'axios'
+import { set } from 'react-hook-form';
+
+interface TransactionTableProps {
+  refreshRequired: boolean;
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -22,15 +28,21 @@ interface IFormattedTransactions {
   transactions: ITransaction[],
 }
 
-export default function TransactionsTable() {
+export default function TransactionsTable({ refreshRequired, setRefreshRequired }: TransactionTableProps) {
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
   const [days, setDays] = useState<IFormattedTransactions[]>([]);
 
   useEffect(() => {
-    axios.post(`${URL}/transaction/get`)
-    .then(res => { setDays(res.data.formattedTransactions); setDataFetched(true); })
-    .catch(error => console.error('Error fetching transactions:', error));
-  },[dataFetched]);
+    if (refreshRequired || !dataFetched) {
+      axios.post(`${URL}/transaction/get`)
+        .then(res => {
+          setDays(res.data.formattedTransactions);
+          setDataFetched(true);
+          setRefreshRequired(false);
+        })
+        .catch(error => console.error('Error fetching transactions:', error));
+    }
+  }, [dataFetched, refreshRequired, setRefreshRequired]);
 
   const currentDate = new Date();
 
@@ -61,7 +73,7 @@ export default function TransactionsTable() {
                       </th>
                     </tr>
                     {day.transactions.map((transaction) => (
-                      <tr>
+                      <tr key={transaction.id}>
                         <td className="relative py-5 pr-6">
                           <div className="flex gap-x-6">
                             {transaction.icon === 'in' ? (
