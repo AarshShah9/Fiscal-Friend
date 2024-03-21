@@ -1,24 +1,43 @@
 import { useContext } from "react";
 import { BudgetContext } from '../views/Budget';
 
-type ExpenseItem = { [key: string]: number };
-
-type Budget = {
-  income: number;
+interface IBudget {
+  income: Number;
   expenses: {
-    total: number;
-    itemized: ExpenseItem[];
+      total: Number;
+      itemized: {
+          food: Number;
+          housing: Number;
+          transportation: Number;
+          insurance: Number;
+          wellness: Number;
+          entertainment: Number;
+          other: Number;
+          mortgage?: Number;
+          creditCard?: Number;
+      };
+  };
+  recommendedBudget: {
+      food: Number;
+      housing: Number;
+      transportation: Number;
+      insurance: Number;
+      wellness: Number;
+      entertainment: Number;
+      other: Number;
+      mortgage?: Number;
+      creditCard?: Number;
   };
 };
 
 export default function StatsBoxes() {
 
-  const budget = useContext(BudgetContext) as Budget;
+  const budget = useContext(BudgetContext) as IBudget;
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];
 
-  budget.expenses.itemized.forEach((expenseItem) => {
+  Object.values(budget.expenses.itemized).forEach((expenseItem) => {
     // Iterate over each key-value pair in the expense object
     Object.entries(expenseItem).forEach(([itemName, itemValue]) => {
       expenseNames.push(itemName);
@@ -29,7 +48,7 @@ export default function StatsBoxes() {
   var stats = [
     { name: 'Income', stat: '$' + budget.income },
     { name: 'Spent', stat: '$' + budget.expenses.total },
-    { name: 'Remaining', stat: '$' + (budget.income - budget.expenses.total)},
+    { name: 'Remaining', stat: '$' + (Number(budget.income) - Number(budget.expenses.total))},
   ];
 
   return (

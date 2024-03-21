@@ -1,35 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PieChart from '../components/PieChart';
 import StatsBoxes from '../components/StatsBoxes';
 import TransactionsTable from '../components/TransactionsTable';
 import Sidebar from '../components/sidebar';
+import axios from 'axios';
+import { URL } from '../utils/constants';
 
-type ExpenseItem = { [key: string]: number };
-
-type IBudget = {
-  income: number;
+interface IBudget {
+  income: Number;
   expenses: {
-    total: number;
-    itemized: ExpenseItem[];
+    total: Number;
+    itemized: {
+      food: Number;
+      housing: Number;
+      transportation: Number;
+      insurance: Number;
+      wellness: Number;
+      entertainment: Number;
+      other: Number;
+      mortgage?: Number;
+      creditCard?: Number;
+    };
   };
-};
+  recommendedBudget: {
+    food: Number;
+    housing: Number;
+    transportation: Number;
+    insurance: Number;
+    wellness: Number;
+    entertainment: Number;
+    other: Number;
+    mortgage?: Number;
+    creditCard?: Number;
+  };
+}
 
-const budget: IBudget = {
-  income: 3000,
+const defaultBudget = {
+  income: 0,
   expenses: {
-    total: 1600,
-    itemized: [
-      { rent: 1000 },
-      { food: 400 },
-      { gas: 100 },
-      { entertainment: 100 },
-    ],
+    total: 0,
+    itemized: {
+      food: 0,
+      housing: 0,
+      transportation: 0,
+      insurance: 0,
+      wellness: 0,
+      entertainment: 0,
+      other: 0,
+    },
   },
-};
+  recommendedBudget: {
+    food: 0,
+    housing: 0,
+    transportation: 0,
+    insurance: 0,
+    wellness: 0,
+    entertainment: 0,
+    other: 0,
+  },
+} as IBudget;
 
-export const BudgetContext = React.createContext<IBudget>(budget);
+export const BudgetContext = React.createContext<IBudget>(defaultBudget);
 
 export default function Budget() {
+  const [budget, setBudget] = useState<IBudget>({
+    income: 0,
+    expenses: {
+      total: 0,
+      itemized: {
+        food: 0,
+        housing: 0,
+        transportation: 0,
+        insurance: 0,
+        wellness: 0,
+        entertainment: 0,
+        other: 0,
+      },
+    },
+    recommendedBudget: {
+      food: 0,
+      housing: 0,
+      transportation: 0,
+      insurance: 0,
+      wellness: 0,
+      entertainment: 0,
+      other: 0,
+    },
+  } as IBudget);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState<'expenses' | 'incomes'>(
     'expenses'
@@ -39,6 +96,12 @@ export default function Budget() {
     setSidebarType(type || 'expenses');
     setSidebarOpen(!sidebarOpen);
   };
+
+  useEffect(() => {
+    axios.post(`${URL}/budget/budget`).then((res) => {
+      setBudget(res.data.budget);
+    });
+  }, [sidebarOpen]);
 
   return (
     <BudgetContext.Provider value={budget}>

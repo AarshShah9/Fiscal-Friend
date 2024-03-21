@@ -3,19 +3,39 @@ import { list } from 'postcss';
 import { useContext, useEffect } from 'react';
 import { BudgetContext } from '../views/Budget';
 
-type ExpenseItem = { [key: string]: number };
-
-type Budget = {
-  income: number;
+interface IBudget {
+  income: Number;
   expenses: {
-    total: number;
-    itemized: ExpenseItem[];
+    total: Number;
+    itemized: {
+      food: Number;
+      housing: Number;
+      transportation: Number;
+      insurance: Number;
+      wellness: Number;
+      entertainment: Number;
+      other: Number;
+      mortgage?: Number;
+      creditCard?: Number;
+    };
   };
-};
+  recommendedBudget: {
+    food: Number;
+    housing: Number;
+    transportation: Number;
+    insurance: Number;
+    wellness: Number;
+    entertainment: Number;
+    other: Number;
+    mortgage?: Number;
+    creditCard?: Number;
+  };
+}
 
 const getChartOptions = (
   expensesValues: number[],
-  expensesLables: string[]
+  expensesLables: string[],
+  totalExpenses: number
 ) => {
   return {
     series: expensesValues,
@@ -24,12 +44,12 @@ const getChartOptions = (
       type: 'donut',
     },
     theme: {
-        monochrome: {
-            enabled: true,
-            color: '#10b981',
-            shadeTo: 'dark',
-            shadeIntensity: 0.65
-        },
+      monochrome: {
+        enabled: true,
+        color: '#10b981',
+        shadeTo: 'dark',
+        shadeIntensity: 0.65,
+      },
     },
     stroke: {
       colors: ['transparent'],
@@ -52,11 +72,8 @@ const getChartOptions = (
               fontFamily: 'Inter, sans-serif',
               fontWeight: 600,
               fontSize: 20,
-              formatter: function (w: any) {
-                const sum = w.globals.seriesTotals.reduce((a: any, b: any) => {
-                  return a + b;
-                }, 0);
-                return '$' + sum;
+              formatter: function () {
+                return '$' + totalExpenses;
               },
             },
             value: {
@@ -113,38 +130,39 @@ const getChartOptions = (
 };
 
 export default function PieChart() {
-  const budget = useContext(BudgetContext) as Budget;
+  const budget = useContext(BudgetContext) as IBudget;
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];
+  var totalExpenses = budget.expenses.total as number;
 
-  budget.expenses.itemized.forEach((expenseItem) => {
-    // Iterate over each key-value pair in the expense object
-    Object.entries(expenseItem).forEach(([itemName, itemValue]) => {
-      expenseNames.push(itemName);
-      expenseValues.push(itemValue);
-    });
-  });
+  console.log(Object.entries(budget.expenses.itemized));
 
   useEffect(() => {
+    // Iterate over each key-value pair in the expense object
+    Object.entries(budget.expenses.itemized).forEach(
+      ([itemName, itemValue]) => {
+        expenseNames.push(itemName);
+        expenseValues.push(itemValue as number);
+      }
+    );
+
+    totalExpenses = Number(budget.expenses.total);
+
     const chartElement = document.getElementById('donut-chart');
 
-    if (chartElement && typeof ApexCharts !== 'undefined') {
-      // Check if the chart already exists
-      if (chartElement.children.length === 0) {
-        const chart = new ApexCharts(
-          chartElement,
-          getChartOptions(expenseValues, expenseNames)
-        );
-        chart.render();
+    if (chartElement && typeof ApexCharts !== 'undefined' && Number(budget.expenses.total) > 0) {
+      // remove previous chart
+      chartElement.innerHTML = '';
 
-        // Get all the checkboxes by their class name
-        const checkboxes = document.querySelectorAll(
-          '#devices input[type="checkbox"]'
-        );
-      }
+      // create new chart
+      const chart = new ApexCharts(
+        chartElement,
+        getChartOptions(expenseValues, expenseNames, totalExpenses)
+      );
+      chart.render();
     }
-  }, []);
+  }, [budget]);
 
   return <div className="py-6 flex justify-center" id="donut-chart"></div>;
 }
