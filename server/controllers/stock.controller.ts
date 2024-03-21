@@ -62,7 +62,7 @@ const formatStockDataList = (data: any): StockData[] => {
   return stockDataList;
 };
 
-// Method to save user favourite symbol 
+// Method to save user favourite symbol
 export const saveSymbol = async (req: Request, res: Response) => {
   if (!req.body.user) {
     return res
@@ -118,6 +118,43 @@ export const removeStock = async (req: Request, res: Response) => {
     await Stock.findByIdAndDelete(req.body.id);
     return res.status(201).json({ success: true, message: 'Stock removed' });
   } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// Method to request user favorites from the stock API
+export const requestUserFavorites = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    const stocks = await Stock.find({ user: req.body.user });
+    const stockDataList: StockData[] = [];
+
+    // Iterate through each stock and make API request
+    for (const stock of stocks) {
+      const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${stock.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Format data and add it to the list
+      const formattedDataList: StockData[] = formatStockDataList(data);
+      stockDataList.push(...formattedDataList);
+    }
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: 'Requested user favorites from API',
+        data: stockDataList,
+      });
+  } catch (error) {
+    console.error('Error requesting user favorites:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 };
