@@ -1,17 +1,17 @@
 import mongoose, { model, Schema, Model, Document } from 'mongoose';
 
-interface IMortgage extends Document {
+export interface IMortgage extends Document {
   user: mongoose.Types.ObjectId;
   mortgage: {
-    amount: Number;
-    apr: Number;
-    period: Number;
+    amount: number;
+    apr: number;
+    period: number;
   };
   payments: {
-    principal: Number;
-    interest: Number;
-    repayment: Number;
-    total: Number;
+    principal: number;
+    interest: number;
+    repayment: number;
+    total: number;
   };
   frequency:
     | 'Bi-Weekly (every 2 weeks)'
@@ -19,7 +19,7 @@ interface IMortgage extends Document {
     | 'Monthly (12x per year)';
 }
 
-const mortgageSchema = new Schema({
+const mortgageSchema: Schema<IMortgage> = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   mortgage: {
     amount: { type: Number, required: true },
