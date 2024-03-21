@@ -59,27 +59,27 @@ const Savings: React.FC = () => {
 
   const handleFormButton = async () => {
     const chequingElement = document.getElementById('chequingValue');
-    if (chequingElement === null) {
+    const savingElement = document.getElementById('savingValue');
+
+    if (chequingElement === null || savingElement === null) {
       return;
     } else {
+      let notFilled = false;
       if (formValues.chequing === '') {
         chequingElement.classList.replace('invisible', 'visible');
-        return;
+        notFilled = true;
       } else {
         chequingElement.classList.replace('visible', 'invisible');
       }
-    }
 
-    const savingElement = document.getElementById('savingValue');
-    if (savingElement === null) {
-      return;
-    } else {
       if (formValues.savings === '') {
         savingElement.classList.replace('invisible', 'visible');
-        return;
+        notFilled = true;
       } else {
         savingElement.classList.replace('visible', 'invisible');
       }
+
+      if (notFilled) return;
     }
 
     const updateSavingAccount: SavingAccountType = {
@@ -113,6 +113,8 @@ const Savings: React.FC = () => {
     };
 
     postSavings();
+
+    window.scrollTo({ top: 800, behavior: 'smooth' });
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
