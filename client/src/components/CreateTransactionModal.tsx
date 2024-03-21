@@ -8,7 +8,7 @@ import { URL } from '../utils/constants';
 interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  type: "expenses" | "incomes";
+  type: "expenses" | "incomes" | undefined;
   incomes: any[];
   expenses: any[];
 }
@@ -29,7 +29,7 @@ type expenseForm = {
 };
 
 const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type, incomes, expenses }) => {
-  const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
+  const { register, handleSubmit, watch } = useForm<expenseForm | incomeForm>({
     defaultValues: {
       name: "New",
       amount: 0,
@@ -38,6 +38,8 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
       category: 'Other',
     },
   });
+
+  const recurring = watch('recurring');
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent propagation of click event to parent elements
@@ -149,22 +151,25 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                               </select>
                             </div>
                           </div>
-                          <div className="sm:col-span-3">
-                            <label
-                              htmlFor="Date"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
-                              Date
-                            </label>
-                            <div className="mt-2">
-                              <input
-                                id="date"
-                                type="date"
-                                autoComplete="date"
-                                {...register('date')}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-                              />
+                          {recurring !== 'One-time' && (
+                            <div className="sm:col-span-3">
+                              <label
+                                htmlFor="Date"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
+                                Date
+                              </label>
+                              <div className="mt-2">
+                                <input
+                                  id="date"
+                                  type="date"
+                                  autoComplete="date"
+                                  {...register('date')}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
                             </div>
+                          )}
                             {type === 'expenses' && (
                               <div className="sm:col-span-3">
                                 <label
@@ -196,7 +201,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                       </div>
                     </div>
                   </div>
-                </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
