@@ -9,7 +9,7 @@ interface IMortgage extends Document {
   };
   payments: {
     principal: Number;
-    ear: Number;
+    interest: Number;
     repayment: Number;
     total: Number;
   };
@@ -28,7 +28,7 @@ const mortgageSchema = new Schema({
   },
   payments: {
     principal: { type: Number, required: false },
-    ear: { type: Number, required: false },
+    interest: { type: Number, required: false },
     repayment: { type: Number, required: false },
     total: { type: Number, required: false },
   },
