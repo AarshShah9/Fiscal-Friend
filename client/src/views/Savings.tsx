@@ -3,6 +3,7 @@ import axios from 'axios';
 import SavingsSummary from '../components/SavingsSummary';
 import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
+import MortgageCalculation from '../components/MortgageCalculation';
 
 const testSavings: SavingAccountType = {
   chequing: 100,
@@ -36,10 +37,6 @@ type UserAccountType = {
   loanAccount: LoanAccountType;
 };
 
-type UserType = {
-  user: string;
-};
-
 const Savings: React.FC = () => {
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     chequing: '',
@@ -49,6 +46,8 @@ const Savings: React.FC = () => {
     mortgage: '',
   });
 
+  const [isContinueClick, setIsContinueClick] = useState(false);
+  const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
   const handleFormButton = async () => {
@@ -121,6 +120,8 @@ const Savings: React.FC = () => {
       postSavings();
     }
 
+    setIsContinueClick(true);
+
     window.scrollTo({ top: 800, behavior: 'smooth' });
   };
 
@@ -150,9 +151,39 @@ const Savings: React.FC = () => {
     fetchData();
   }, [handleFormButton]);
 
+  const isMortgageCalculatorEnabled =
+    isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
+
+  const handleMortgageCalculatorButton = () => {
+    if (isMortgageCalculatorEnabled) {
+      setShowMortgageCalculation(true);
+    }
+  };
+
+  const handleCloseMortgageCalculation = () => {
+    setShowMortgageCalculation(false);
+  };
+
   return (
     <div>
-      <div>
+      <div className="relative">
+        <div className="absolute top-0 right-0 mr-4 mt-4">
+          <button
+            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4 ${!isMortgageCalculatorEnabled && 'opacity-50 cursor-not-allowed'}`}
+            disabled={!isMortgageCalculatorEnabled}
+            onClick={() => {
+              handleMortgageCalculatorButton();
+            }}
+          >
+            Mortgage Calculator
+          </button>
+          {showMortgageCalculation && (
+            <MortgageCalculation
+              amount={fetchedData?.loanAccount.mortgage || 0}
+              onClose={handleCloseMortgageCalculation}
+            />
+          )}
+        </div>
         <h1 className="text-5xl pb-2">Savings</h1>
         <p>
           To get started on tracking your savings on Fiscal Friend, please enter
@@ -160,6 +191,7 @@ const Savings: React.FC = () => {
         </p>
         <p className="pb-12">(The information may be changed later.)</p>
       </div>
+
       <form>
         <h2 className="text-3xl pb-2"> Savings</h2>
         <div className="flex space-x-4">
@@ -258,22 +290,6 @@ const Savings: React.FC = () => {
               placeholder="0.00"
             />
           </div>
-          <div className="pb-8">
-            <label
-              htmlFor="interest"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Interest Rate
-            </label>
-            <input
-              type="text"
-              name="interest"
-              // TODO: value={formValues.interest}
-              onChange={handleFormInput}
-              className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
-            />
-          </div>
         </div>
         <button
           type="button"
@@ -283,6 +299,7 @@ const Savings: React.FC = () => {
           Continue
         </button>
       </form>
+
       <SavingsContext.Provider value={testSavings}>
         <SavingsSummary />
       </SavingsContext.Provider>
