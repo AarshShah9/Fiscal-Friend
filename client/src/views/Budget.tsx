@@ -26,10 +26,10 @@ export const BudgetContext = React.createContext<IBudget>(budget);
 
 export default function Budget() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarType, setSidebarType] = useState<"expenses" | "incomes">("expenses"); // Track which type of sidebar to open
+  const [sidebarType, setSidebarType] = useState<"expenses" | "incomes" | undefined>(undefined); // Track which type of sidebar to open
 
-  const toggleSidebar = (type?: "expenses" | "incomes") => {
-    setSidebarType(type || "expenses");
+  const toggleSidebar = (type?: "expenses" | "incomes" | undefined) => {
+    setSidebarType(type);
     setSidebarOpen(!sidebarOpen);
   }
 

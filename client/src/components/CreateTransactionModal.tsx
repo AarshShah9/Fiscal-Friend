@@ -151,7 +151,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                               </select>
                             </div>
                           </div>
-                          {recurring !== 'One-time' && (
+                          {recurring === 'One-time' && (
                             <div className="sm:col-span-3">
                               <label
                                 htmlFor="Date"

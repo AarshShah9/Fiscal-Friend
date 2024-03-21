@@ -8,6 +8,12 @@ interface ITransaction {
     amount: number,
     category: string | null,
     icon: 'in' | 'out',
+    recurring: string,
+}
+
+interface IFormattedTransactions {
+    date: string,
+    transactions: ITransaction[],
 }
 
 export const getRecentTransactions = async (req: Request, res: Response) => {
@@ -36,27 +42,37 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
             .find({ user: req.body.user, recurring: { $ne: 'One-time' } })
             .sort({ date: -1 });
         
-        const transactions: ITransaction[] = [];
+        const transactions: { [key: string]: ITransaction[] } = {};
+
+        const addTransaction = (transaction: ITransaction) => {
+            const dateKey = transaction.date?.toISOString().split('T')[0] ?? 'unknown';
+            if (!transactions[dateKey]) {
+                transactions[dateKey] = [];
+            }
+            transactions[dateKey].push(transaction);
+        };
 
         oneTimeExpenses.forEach(expense => {
-            transactions.push({
+            addTransaction({
                 id: expense._id.toHexString(),
                 name: expense.name,
                 date: expense.date,
                 amount: expense.amount,
                 category: expense.category,
                 icon: 'out',
+                recurring: 'One-time',
             });
         });
 
         oneTimeIncomes.forEach(income => {
-            transactions.push({
+            addTransaction({
                 id: income._id.toHexString(),
                 name: income.name,
                 date: income.date,
                 amount: income.amount,
                 category: null,
                 icon: 'in',
+                recurring: 'One-time',
             });
         });
 
@@ -66,59 +82,64 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
             switch(expense.recurring) {
                 case 'Weekly':
                     for (let week = 0; week < currentWeek; week++) {
-                        transactions.push({
+                        addTransaction({
                             id: expense._id.toHexString(),
                             name: expense.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), week * 7 + 1),
                             amount: expense.amount,
                             category: expense.category,
                             icon: 'out',
+                            recurring: expense.recurring,
                         });
                     }
                     break;
                 case 'Bi-Weekly':
                     for (let week = 0; week < currentWeek; week += 2) {
-                        transactions.push({
+                        addTransaction({
                             id: expense._id.toHexString(),
                             name: expense.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), week * 7 + 1),
                             amount: expense.amount,
                             category: expense.category,
                             icon: 'out',
+                            recurring: expense.recurring,
                         });
                     }
                     break;
                 case 'Monthly':
-                    transactions.push({
+                    addTransaction({
                         id: expense._id.toHexString(),
                         name: expense.name,
                         date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
                         amount: expense.amount,
                         category: expense.category,
                         icon: 'out',
+                        recurring: expense.recurring,
                     });
                     break;
                 case 'Quarterly':
                     if(currentMonth % 3 === 0) {
-                        transactions.push({
+                        addTransaction({
                             id: expense._id.toHexString(),
                             name: expense.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
                             amount: expense.amount,
                             category: expense.category,
                             icon: 'out',
+                            recurring: expense.recurring,
                         });
                     }
                     break;
                 case 'Annually':
                     if(currentMonth === 0) {
-                        transactions.push({
+                        addTransaction({
                             id: expense._id.toHexString(),
                             name: expense.name,
                             date: new Date(currentDate.getFullYear(), 0, 1),
                             amount: expense.amount,
                             category: expense.category,
                             icon: 'out',
+                            recurring: expense.recurring,
                         });
                     }
                     break;
@@ -131,70 +152,85 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
             switch(income.recurring) {
                 case 'Weekly':
                     for (let week = 0; week < currentWeek; week++) {
-                        transactions.push({
+                        addTransaction({
                             id: income._id.toHexString(),
                             name: income.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), week * 7 + 1),
                             amount: income.amount,
                             category: null,
                             icon: 'in',
+                            recurring: income.recurring,
                         });
                     }
                     break;
                 case 'Bi-Weekly':
                     for (let week = 0; week < currentWeek; week += 2) {
-                        transactions.push({
+                        addTransaction({
                             id: income._id.toHexString(),
                             name: income.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), week * 7 + 1),
                             amount: income.amount,
                             category: null,
                             icon: 'in',
+                            recurring: income.recurring,
                         });
                     }
                     break;
                 case 'Monthly':
-                    transactions.push({
+                    addTransaction({
                         id: income._id.toHexString(),
                         name: income.name,
                         date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
                         amount: income.amount,
                         category: null,
                         icon: 'in',
+                        recurring: income.recurring,
                     });
                     break;
                 case 'Quarterly':
                     if(currentMonth % 3 === 0) {
-                        transactions.push({
+                        addTransaction({
                             id: income._id.toHexString(),
                             name: income.name,
                             date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
                             amount: income.amount,
                             category: null,
                             icon: 'in',
+                            recurring: income.recurring,
                         });
                     }
                     break;
                 case 'Annually':
                     if(currentMonth === 0) {
-                        transactions.push({
+                        addTransaction({
                             id: income._id.toHexString(),
                             name: income.name,
                             date: new Date(currentDate.getFullYear(), 0, 1),
                             amount: income.amount,
                             category: null,
                             icon: 'in',
+                            recurring: income.recurring,
                         });
                     }
                     break;
             };
         });
         
-        //sort by date descending
-        transactions.sort((a, b) => {
-            return a.date?.getTime()! - b.date?.getTime()!;
-        });
-        return res.status(201).json({ success: true, transactions });
+        // Sort transactions by date
+        const sortedDates = Object.keys(transactions).sort((a, b) => {
+            return new Date(b).getTime() - new Date(a).getTime();
+        });        const formattedTransactions = sortedDates.map(date => ({
+            date: date,
+            transactions: transactions[date].map(transaction => ({
+                amount: transaction.amount.toFixed(2),
+                name: transaction.name,
+                category: transaction.category,
+                icon: transaction.icon,
+                recurring: transaction.recurring,
+            })),
+        }));
+
+        return res.status(201).json({ success: true, formattedTransactions });
     } catch (error) {
         console.error('Error fetching transactions:', error);
         return res.status(400).json({ success: false, message: 'Internal server error', error });
