@@ -44,10 +44,10 @@ export const createMortgage = async (req: Request, res: Response) => {
       period: req.body.period,
     },
     payments: {
-      principal: (mortgageEPR * 100).toFixed(2),
-      interest: interestPayment.toFixed(2),
-      repayment: firstPayment.toFixed(2),
-      total: monthly.toFixed(2),
+      epr: (mortgageEPR * 100).toFixed(2),
+      interestPayment: interestPayment.toFixed(2),
+      firstPayment: firstPayment.toFixed(2),
+      monthlyPayment: monthly.toFixed(2),
     },
     frequency: req.body.frequency,
   });
