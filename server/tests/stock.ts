@@ -50,6 +50,10 @@ export const stockTests = (agent: request.Agent) => {
       const res = await agent.post('/stock/get').send({});
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
+      expect(res.body.stocks.length).toBeGreaterThan(0);
+      expect(res.body.stocks[0].symbol).toEqual('IBM');
+      expect(res.body.stocks[0].boughtPrice).toEqual(100);
+      expect(res.body.stocks[0].quantity).toEqual(10);
     });
     it('Should remove stock symbol', async () => {
       const res = await agent.post('/stock/remove').send({});
