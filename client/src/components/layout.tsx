@@ -127,7 +127,7 @@ export default function Layout() {
                     <div className="flex h-16 shrink-0 items-center">
                       <img
                         className="h-8 w-auto"
-                        src="/images/logo.png"
+                        src="/images/logo.svg"
                         alt="Fiscal Friend"
                       />
                     </div>
@@ -166,7 +166,7 @@ export default function Layout() {
           <div className="flex h-16 shrink-0 items-center justify-center">
             <img
               className="h-8 w-auto"
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Fiscal Friend"
             />
           </div>

@@ -33,7 +33,7 @@ export default function Signup() {
           <Link to="/">
             <img
               className="mx-auto h-20 w-auto"
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Fiscal-Friend logo"
             />
           </Link>
