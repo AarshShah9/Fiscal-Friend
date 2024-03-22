@@ -95,7 +95,7 @@ const Savings: React.FC = () => {
     } else {
       postSavings();
     }
-
+    fetchData();
     setIsContinueClick(true);
   };
 
@@ -107,23 +107,23 @@ const Savings: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get(`${URL}/savings/get`);
-        if (res.data.savings && res.data.savings.length > 0) {
-          setFetchedData(res.data.savings[0]);
-        } else {
-          setFetchedData(null);
-        }
-      } catch (e) {
-        console.error('Error fetching data:', e);
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${URL}/savings/get`);
+      if (res.data.savings && res.data.savings.length > 0) {
+        setFetchedData(res.data.savings[0]);
+      } else {
         setFetchedData(null);
       }
-    };
+    } catch (e) {
+      console.error('Error fetching data:', e);
+      setFetchedData(null);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
-  }, [handleFormButton]);
+  }, []);
 
   const isMortgageCalculatorEnabled =
     isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
