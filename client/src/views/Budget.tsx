@@ -6,7 +6,7 @@ import Sidebar from '../components/sidebar';
 import axios from 'axios';
 import { URL } from '../utils/constants';
 
-interface IBudget {
+export interface IBudget {
   income: Number;
   expenses: {
     total: Number;
@@ -60,7 +60,7 @@ const defaultBudget = {
   },
 } as IBudget;
 
-export const BudgetContext = React.createContext<IBudget>(defaultBudget);
+export const BudgetContext = React.createContext<[IBudget, Function]>([defaultBudget, () => {}]);
 
 export default function Budget() {
   const [budget, setBudget] = useState<IBudget>({
@@ -101,10 +101,10 @@ export default function Budget() {
     axios.post(`${URL}/budget/budget`).then((res) => {
       setBudget(res.data.budget);
     });
-  }, [sidebarOpen]);
+  }, []);
 
   return (
-    <BudgetContext.Provider value={budget}>
+    <BudgetContext.Provider value={[budget, setBudget]}>
       <div className="flex flex-row flex-wrap-reverse">
         {/* First Column: Pie Chart */}
         <div className="grow">

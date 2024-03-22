@@ -1,36 +1,7 @@
 import ApexCharts from 'apexcharts';
-import { list } from 'postcss';
 import { useContext, useEffect } from 'react';
 import { BudgetContext } from '../views/Budget';
-
-interface IBudget {
-  income: Number;
-  expenses: {
-    total: Number;
-    itemized: {
-      food: Number;
-      housing: Number;
-      transportation: Number;
-      insurance: Number;
-      wellness: Number;
-      entertainment: Number;
-      other: Number;
-      mortgage?: Number;
-      creditCard?: Number;
-    };
-  };
-  recommendedBudget: {
-    food: Number;
-    housing: Number;
-    transportation: Number;
-    insurance: Number;
-    wellness: Number;
-    entertainment: Number;
-    other: Number;
-    mortgage?: Number;
-    creditCard?: Number;
-  };
-}
+import { IBudget } from '../views/Budget';
 
 const getChartOptions = (
   expensesValues: number[],
@@ -130,13 +101,11 @@ const getChartOptions = (
 };
 
 export default function PieChart() {
-  const budget = useContext(BudgetContext) as IBudget;
+  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];
   var totalExpenses = budget.expenses.total as number;
-
-  console.log(Object.entries(budget.expenses.itemized));
 
   useEffect(() => {
     // Iterate over each key-value pair in the expense object
@@ -161,6 +130,7 @@ export default function PieChart() {
         getChartOptions(expenseValues, expenseNames, totalExpenses)
       );
       chart.render();
+
     }
   }, [budget]);
 

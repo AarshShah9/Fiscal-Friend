@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
@@ -6,6 +6,8 @@ import { URL } from '../utils/constants';
 import axios from 'axios';
 import ExpenseCard from './ExpenseCard';
 import IncomeCard from './IncomeCard';
+import { BudgetContext } from '../views/Budget';
+import { IBudget } from '../views/Budget';
 
 import CreateTransactionModal from './CreateTransactionModal';
 
@@ -41,6 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
   const [expenses, setExpenses] = useState<IExpense[]>([]);
   const [incomes, setIncomes] = useState<IIncome[]>([]);
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
+  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
 
   useEffect(() => {
     if (isOpen && !dataFetched) {
@@ -86,13 +89,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={toggleSidebar}>
-        <CreateTransactionModal // Render the CreateTransactionModal component
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          type={transactionType}
-          incomes={incomes}
-          expenses={expenses}
-        />
+        <BudgetContext.Provider value={[budget, setBudget]}>
+          <CreateTransactionModal // Render the CreateTransactionModal component
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            type={transactionType}
+            incomes={incomes}
+            expenses={expenses}
+          />
+        </BudgetContext.Provider>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"

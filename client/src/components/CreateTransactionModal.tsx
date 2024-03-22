@@ -1,14 +1,15 @@
-import React, { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import React, { Fragment, useContext } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { URL } from '../utils/constants';
-
+import { IBudget } from '../views/Budget';
+import { BudgetContext } from '../views/Budget';
 
 interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  type: "expenses" | "incomes";
+  type: 'expenses' | 'incomes';
   incomes: any[];
   expenses: any[];
 }
@@ -28,10 +29,18 @@ type expenseForm = {
   category: string;
 };
 
-const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type, incomes, expenses }) => {
+const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
+  isOpen,
+  onClose,
+  type,
+  incomes,
+  expenses,
+}) => {
+  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
+
   const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
     defaultValues: {
-      name: "New",
+      name: 'New',
       amount: 0,
       date: new Date(),
       recurring: 'One-time',
@@ -42,23 +51,55 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent propagation of click event to parent elements
     onClose(); // Close the modal
-    };
+  };
 
-    const onSubmit = (data: incomeForm | expenseForm) => {
-      if (type === 'expenses') {
-        const expenseFormData: expenseForm = data as expenseForm;
-        axios.post(`${URL}/expense/create`, expenseFormData).then((res) => {
+  const onSubmit = (data: incomeForm | expenseForm) => {
+    if (type === 'expenses') {
+      const expenseFormData: expenseForm = data as expenseForm;
+      axios
+        .post(`${URL}/expense/create`, expenseFormData)
+        .then((res) => {
           expenses.push(res.data.expense);
           onClose();
-        });
-      } else {
-        const incomeFormData: incomeForm = data as incomeForm;
-        axios.post(`${URL}/income/create`, incomeFormData).then((res) => {
+
+          const newbudget = { ...budget };
+          newbudget.expenses.total =
+            Number(newbudget.expenses.total) + Number(expenseFormData.amount);
+
+          // loop through the itemized expenses and add the new expense to the correct category
+          Object.entries(newbudget.expenses.itemized).forEach(
+            ([key, value]) => {
+              if (
+                key.toLocaleLowerCase() ===
+                expenseFormData.category.toLowerCase()
+              ) {
+                newbudget.expenses.itemized[
+                  key as keyof typeof newbudget.expenses.itemized
+                ] = Number(value) + Number(expenseFormData.amount);
+              }
+            }
+          );
+
+          setBudget(newbudget);
+        })
+        .catch((err) => console.error('Error adding expense:', err));
+    } else {
+      const incomeFormData: incomeForm = data as incomeForm;
+      axios
+        .post(`${URL}/income/create`, incomeFormData)
+        .then((res) => {
           incomes.push(res.data.income);
           onClose();
-        });
-      }
-    };
+
+          const newbudget = { ...budget };
+          newbudget.income =
+            Number(newbudget.income) + Number(incomeFormData.amount);
+          setBudget(newbudget);
+        })
+        .catch((err) => console.error('Error adding income:', err));
+    }
+  };
+
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -89,11 +130,16 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        {type === 'expenses' ? 'Create New Expense' : 'Create New Income'}
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
+                        {type === 'expenses'
+                          ? 'Create New Expense'
+                          : 'Create New Income'}
                       </Dialog.Title>
                       <div className="mt-2">
-                      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                           <div className="sm:col-span-3">
                             <label
                               htmlFor="name"
@@ -135,7 +181,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                               Recurring?
                             </label>
                             <div className="mt-2">
-                            <select
+                              <select
                                 id="recurring"
                                 {...register('recurring')}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
@@ -178,14 +224,18 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                                     id="category"
                                     {...register('category')}
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-                                    >
+                                  >
                                     <option value="Food">Food</option>
                                     <option value="Utilities">Utilities</option>
                                     <option value="Rent">Rent</option>
-                                    <option value="Transportation">Transportation</option>
+                                    <option value="Transportation">
+                                      Transportation
+                                    </option>
                                     <option value="Insurance">Insurance</option>
                                     <option value="Wellness">Wellness</option>
-                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Entertainment">
+                                      Entertainment
+                                    </option>
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>
@@ -219,7 +269,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
         </div>
       </Dialog>
     </Transition.Root>
-  )
+  );
 };
 
 export default CreateTransactionModal;

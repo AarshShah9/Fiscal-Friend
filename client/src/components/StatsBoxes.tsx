@@ -32,7 +32,7 @@ interface IBudget {
 
 export default function StatsBoxes() {
 
-  const budget = useContext(BudgetContext) as IBudget;
+  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];
