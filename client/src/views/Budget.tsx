@@ -5,6 +5,8 @@ import TransactionsTable from '../components/TransactionsTable';
 import Sidebar from '../components/sidebar';
 import axios from 'axios';
 import { URL } from '../utils/constants';
+import ColumnChart from '../components/ColumnChart';
+import BarChart from '../components/BarChart';
 
 export interface IBudget {
   income: Number;
@@ -110,6 +112,15 @@ export default function Budget() {
         <div className="grow">
           <PieChart />
         </div>
+        {/* Second Column: Column Chart */}
+        <div className="grow">
+          <ColumnChart />
+        </div>
+        {/* Third Column: Bar Chart */}
+        <div className="grow">
+          <BarChart />
+        </div>
+
         <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
           {/* Pass respective type as argument */}
           <button
