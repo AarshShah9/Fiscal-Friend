@@ -47,6 +47,7 @@ const Savings: React.FC = () => {
   });
 
   const [isContinueClick, setIsContinueClick] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
@@ -121,8 +122,8 @@ const Savings: React.FC = () => {
     }
 
     setIsContinueClick(true);
-
-    window.scrollTo({ top: 800, behavior: 'smooth' });
+    setIsSubmit((current) => !current);
+    // window.scrollTo({ top: 800, behavior: 'smooth' });
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,7 +150,7 @@ const Savings: React.FC = () => {
     };
 
     fetchData();
-  }, [handleFormButton]);
+  }, [isSubmit]);
 
   const isMortgageCalculatorEnabled =
     isContinueClick && fetchedData && fetchedData.loanAccount.mortgage > 0;
