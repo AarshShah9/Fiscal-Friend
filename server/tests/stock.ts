@@ -1,6 +1,11 @@
 import request from 'supertest';
 import { Stock } from '../models';
 
+const testStock = {
+  _id: null,
+  symbol: 'IBM',
+};
+
 export const stockTests = (agent: request.Agent) => {
   beforeAll(async () => {
     await Stock.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
@@ -15,11 +20,13 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('Invalid request body');
     });
-    it('Should save stock symbol', async () => {
-      const res = await agent.post('/stock/save').send({});
+    it('should create a new income', async () => {
+      const res = await agent.post('/stock/save').send(testStock);
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
       expect(res.body.message).toEqual('Stock saved');
+      expect(res.body.stock.name).toEqual('IBM');
+      testStock._id = res.body.stock._id;
     });
     it('Should get saved stock symbols', async () => {
       const res = await agent.post('/stock/save').send({});
