@@ -5,6 +5,12 @@ const people = [
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg',
   },
+  {
+    name: 'Eadan Lay',
+    role: 'Co-Founder / water boy',
+    imageUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/%EA%A0%81%EA%A0%9F%EA%A0%98_%EA%A0%9D%EA%A0%A3%EA%A0%8D%EA%A0%86%EA%A0%87.jpg/120px-%EA%A0%81%EA%A0%9F%EA%A0%98_%EA%A0%9D%EA%A0%A3%EA%A0%8D%EA%A0%86%EA%A0%87.jpg',
+  },
 ];
 
 export default function Team() {
