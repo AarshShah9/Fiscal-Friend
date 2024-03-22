@@ -14,7 +14,6 @@ import Budget from './views/Budget';
 
 function App() {
   axios.defaults.withCredentials = true;
-  const navigate = useNavigate();
 
   return (
     <div className="App">

@@ -9,9 +9,10 @@ import { BudgetContext } from '../views/Budget';
 interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  type: 'expenses' | 'incomes';
+  type: "expenses" | "incomes" | undefined;
   incomes: any[];
   expenses: any[];
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type incomeForm = {
@@ -29,16 +30,8 @@ type expenseForm = {
   category: string;
 };
 
-const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
-  isOpen,
-  onClose,
-  type,
-  incomes,
-  expenses,
-}) => {
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
-
-  const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
+const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen, onClose, type, incomes, expenses, setRefreshRequired }) => {
+  const { register, handleSubmit, watch } = useForm<expenseForm | incomeForm>({
     defaultValues: {
       name: 'New',
       amount: 0,
@@ -47,6 +40,10 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
       category: 'Other',
     },
   });
+
+  const [budget, setBudget] = useContext(BudgetContext);
+
+  const recurring = watch('recurring');
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent propagation of click event to parent elements
@@ -60,6 +57,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
         .post(`${URL}/expense/create`, expenseFormData)
         .then((res) => {
           expenses.push(res.data.expense);
+          setRefreshRequired(true);
           onClose();
 
           const newbudget = { ...budget };
@@ -89,6 +87,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
         .post(`${URL}/income/create`, incomeFormData)
         .then((res) => {
           incomes.push(res.data.income);
+          setRefreshRequired(true);
           onClose();
 
           const newbudget = { ...budget };
@@ -195,22 +194,25 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
                               </select>
                             </div>
                           </div>
-                          <div className="sm:col-span-3">
-                            <label
-                              htmlFor="Date"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
-                              Date
-                            </label>
-                            <div className="mt-2">
-                              <input
-                                id="date"
-                                type="date"
-                                autoComplete="date"
-                                {...register('date')}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-                              />
+                          {recurring === 'One-time' && (
+                            <div className="sm:col-span-3">
+                              <label
+                                htmlFor="Date"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
+                                Date
+                              </label>
+                              <div className="mt-2">
+                                <input
+                                  id="date"
+                                  type="date"
+                                  autoComplete="date"
+                                  {...register('date')}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                                />
+                              </div>
                             </div>
+                          )}
                             {type === 'expenses' && (
                               <div className="sm:col-span-3">
                                 <label
@@ -246,7 +248,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
                       </div>
                     </div>
                   </div>
-                </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"

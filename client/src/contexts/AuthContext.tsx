@@ -17,6 +17,7 @@ interface AuthContextType {
   signup: SubmitHandler<SignupData>;
   logout: () => void;
   isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   user?: User;
 }
 
@@ -120,7 +121,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, login, signup, logout, isLoading, user }}
+      value={{
+        isAuthenticated,
+        login,
+        signup,
+        logout,
+        isLoading,
+        user,
+        setIsLoading,
+      }}
     >
       {children}
     </AuthContext.Provider>

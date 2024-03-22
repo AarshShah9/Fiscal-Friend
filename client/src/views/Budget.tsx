@@ -90,12 +90,13 @@ export default function Budget() {
     },
   } as IBudget);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarType, setSidebarType] = useState<'expenses' | 'incomes'>(
+  const [sidebarType, setSidebarType] = useState<'expenses' | 'incomes' | undefined>(
     'expenses'
   ); // Track which type of sidebar to open
+  const [refresh, setRefresh] = useState(false);
 
-  const toggleSidebar = (type?: 'expenses' | 'incomes') => {
-    setSidebarType(type || 'expenses');
+  const toggleSidebar = (type?: "expenses" | "incomes" | undefined) => {
+    setSidebarType(type);
     setSidebarOpen(!sidebarOpen);
   };
 
@@ -137,15 +138,11 @@ export default function Budget() {
           </button>
         </div>
         {/* Pass sidebarType to Sidebar component */}
-        <Sidebar
-          isOpen={sidebarOpen}
-          toggleSidebar={toggleSidebar}
-          type={sidebarType}
-        />
+        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} type={sidebarType} setRefreshRequired={setRefresh} />
       </div>
       <StatsBoxes />
       <div className="min-h-10"></div>
-      <TransactionsTable />
+      <TransactionsTable refreshRequired={refresh} setRefreshRequired={setRefresh}/>
     </BudgetContext.Provider>
   );
 }

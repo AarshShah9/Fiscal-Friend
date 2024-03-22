@@ -1,129 +1,51 @@
-import { Fragment } from 'react'
-import { ArrowDownCircleIcon, ArrowPathIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
+import { Fragment, useEffect, useState } from 'react'
+import { ArrowDownCircleIcon, ArrowUpCircleIcon } from '@heroicons/react/20/solid'
+import { URL } from '../utils/constants'
+import axios from 'axios'
+import { set } from 'react-hook-form';
 
-const statuses = {
-  'Paid': 'text-green-700 bg-green-50 ring-green-600/20',
-  'Withdraw': 'text-gray-600 bg-gray-50 ring-gray-500/10',
-  'Overdue': 'text-red-700 bg-red-50 ring-red-600/10',
-}
-const days = [
-  {
-    date: 'Today',
-    dateTime: '2023-03-22',
-    transactions: [
-      {
-        id: 1,
-        invoiceNumber: '00012',
-        href: '#',
-        amount: '$7,600.00 USD',
-        tax: '$500.00',
-        status: 'Paid',
-        client: 'Reform',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 2,
-        invoiceNumber: '00011',
-        href: '#',
-        amount: '$10,000.00 USD',
-        status: 'Withdraw',
-        client: 'Tom Cook',
-        description: 'Salary',
-        icon: ArrowDownCircleIcon,
-      },
-      {
-        id: 3,
-        invoiceNumber: '00009',
-        href: '#',
-        amount: '$2,000.00 USD',
-        tax: '$130.00',
-        status: 'Overdue',
-        client: 'Tuple',
-        description: 'Logo design',
-        icon: ArrowPathIcon,
-      },
-    ],
-  },
-  {
-    date: 'Yesterday',
-    dateTime: '2023-03-21',
-    transactions: [
-      {
-        id: 4,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 5,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 6,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 7,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 8,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-      {
-        id: 9,
-        invoiceNumber: '00010',
-        href: '#',
-        amount: '$14,000.00 USD',
-        tax: '$900.00',
-        status: 'Paid',
-        client: 'SavvyCal',
-        description: 'Website redesign',
-        icon: ArrowUpCircleIcon,
-      },
-    ],
-  },
-]
+interface TransactionTableProps {
+  refreshRequired: boolean;
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function TransactionsTable() {
+interface ITransaction {
+  id: string,
+  name: string,
+  date: Date | undefined,
+  amount: number,
+  category: string | null,
+  icon: 'in' | 'out',
+  recurring: string,
+}
+
+interface IFormattedTransactions {
+  date: string,
+  transactions: ITransaction[],
+}
+
+export default function TransactionsTable({ refreshRequired, setRefreshRequired }: TransactionTableProps) {
+  const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
+  const [days, setDays] = useState<IFormattedTransactions[]>([]);
+
+  useEffect(() => {
+    if (refreshRequired || !dataFetched) {
+      axios.post(`${URL}/transaction/get`)
+        .then(res => {
+          setDays(res.data.formattedTransactions);
+          setDataFetched(true);
+          setRefreshRequired(false);
+        })
+        .catch(error => console.error('Error fetching transactions:', error));
+    }
+  }, [dataFetched, refreshRequired, setRefreshRequired]);
+
+  const currentDate = new Date();
+
   return (
     <div>
       <h2 className="max-w-2xl text-base font-semibold leading-6 text-gray-900 lg:mx-0 lg:max-w-none">
@@ -141,11 +63,11 @@ export default function TransactionsTable() {
                 </tr>
               </thead>
               <tbody>
-                {days.map((day) => (
-                  <Fragment key={day.dateTime}>
+                {days.length > 0 && days.map((day) => (
+                  <Fragment key={day.date}>
                     <tr className="text-sm leading-6 text-gray-900">
                       <th scope="colgroup" colSpan={3} className="relative isolate py-2 font-semibold">
-                        <time dateTime={day.dateTime}>{day.date}</time>
+                        <div >{day.date === currentDate.toISOString().slice(0, 10) ? "Today" : day.date}</div>
                         <div className="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50" />
                         <div className="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50" />
                       </th>
@@ -154,48 +76,31 @@ export default function TransactionsTable() {
                       <tr key={transaction.id}>
                         <td className="relative py-5 pr-6">
                           <div className="flex gap-x-6">
-                            <transaction.icon
-                              className="hidden h-6 w-5 flex-none text-gray-400 sm:block"
-                              aria-hidden="true"
-                            />
+                            {transaction.icon === 'in' ? (
+                              <ArrowUpCircleIcon className="hidden h-6 w-5 flex-none text-green-400 sm:block" aria-hidden="true" />
+                            ) : (
+                              <ArrowDownCircleIcon className="hidden h-6 w-5 flex-none text-red-400 sm:block" aria-hidden="true" />
+                            )}
                             <div className="flex-auto">
                               <div className="flex items-start gap-x-3">
                                 <div className="text-sm font-medium leading-6 text-gray-900">{transaction.amount}</div>
-                                <div
-                                  className={classNames(
-                                    statuses[transaction.status as keyof typeof statuses],
-                                    'rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset'
-                                  )}
-                                >
-                                  {transaction.status}
-                                </div>
                               </div>
-                              {transaction.tax ? (
-                                <div className="mt-1 text-xs leading-5 text-gray-500">{transaction.tax} tax</div>
-                              ) : null}
                             </div>
                           </div>
                           <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
                           <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                         </td>
                         <td className="hidden py-5 pr-6 sm:table-cell">
-                          <div className="text-sm leading-6 text-gray-900">{transaction.client}</div>
-                          <div className="mt-1 text-xs leading-5 text-gray-500">{transaction.description}</div>
+                          <div className="text-sm leading-6 text-gray-900">{transaction.name}</div>
+                          <div className="mt-1 text-xs leading-5 text-gray-500">{transaction.category}</div>
                         </td>
                         <td className="py-5 text-right">
                           <div className="flex justify-end">
-                            <a
-                              href={transaction.href}
-                              className="text-sm font-medium leading-6 text-emerald-600 hover:text-emerald-500"
+                            <div
+                              className="text-sm font-medium leading-6 text-emerald-600"
                             >
-                              View<span className="hidden sm:inline"> transaction</span>
-                              <span className="sr-only">
-                                , invoice #{transaction.invoiceNumber}, {transaction.client}
-                              </span>
-                            </a>
-                          </div>
-                          <div className="mt-1 text-xs leading-5 text-gray-500">
-                            Invoice <span className="text-gray-900">#{transaction.invoiceNumber}</span>
+                              {transaction.recurring === 'One-time' ? "Does not recur" : "Recurs " + transaction.recurring}
+                            </div>
                           </div>
                         </td>
                       </tr>
