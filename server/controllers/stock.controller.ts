@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '../../.env' });
 import { Request, Response } from 'express';
 import { User, Stock } from '../models';
+import {StockIndexData} from "./StockIndexData";
 
 // Format of data required by front-end graphs
 interface StockData {
@@ -19,23 +20,25 @@ export const getStockData = (req: Request, res: Response) => {
   }
   const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${req.body.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
 
+  const dataList = StockIndexData.getData();
+  return res.status(200).json({dataList});
   // Fetech with promises to catch errors or failed request
-  fetch(url)
-    .then((res) => res.json())
-    .then((data: any) => {
-      // Call to method to format data for front-end
-      const dataList: StockData[] = formatStockDataList(data);
-
-      // Extracts the meta data from API response
-      const metaData = data['Meta Data'];
-      res.status(200).json({ metaData, dataList });
-    })
-    .catch((err) => {
-      console.log(err);
-      res
-        .status(500)
-        .json({ success: false, message: 'Error fetching stock data' });
-    });
+  // fetch(url)
+  //   .then((res) => res.json())
+  //   .then((data: any) => {
+  //     // Call to method to format data for front-end
+  //     const dataList: StockData[] = formatStockDataList(data);
+  //
+  //     // Extracts the meta data from API response
+  //     const metaData = data['Meta Data'];
+  //     res.status(200).json({ metaData, dataList });
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res
+  //       .status(500)
+  //       .json({ success: false, message: 'Error fetching stock data' });
+  //   });
 };
 
 // Method formats the data from the API response to be used in front-end graphs

@@ -11,12 +11,13 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Savings from './views/Savings';
 import Layout from './components/layout';
 import Budget from './views/Budget';
+import Stocks from './views/Stocks';
 
 function App() {
   axios.defaults.withCredentials = true;
 
   return (
-    <div className="App">
+    <div className="App h-full">
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -28,6 +29,7 @@ function App() {
               <Route path="/dashboard/" element={<Main />} />
               <Route path="/dashboard/budget" element={<Budget />} />
               <Route path="/dashboard/savings" element={<Savings />} />
+              <Route path="/dashboard/stocks" element={<Stocks />} />
             </Route>
           </Route>
         </Routes>
