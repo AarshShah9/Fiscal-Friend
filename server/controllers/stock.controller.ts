@@ -80,6 +80,8 @@ export const saveSymbol = async (req: Request, res: Response) => {
     const newStock = new Stock({
       user: req.body.user,
       symbol: req.body.symbol,
+      boughtPrice: 0,
+      quantity: 0,
     });
 
     await newStock.save();
@@ -93,7 +95,7 @@ export const saveSymbol = async (req: Request, res: Response) => {
   }
 };
 
-// Method to retrieve user favourites
+// Method to retrieve user favourites/bought stocks
 export const getSavedStocks = async (req: Request, res: Response) => {
   if (!req.body.user) {
     return res
@@ -146,15 +148,45 @@ export const requestUserFavorites = async (req: Request, res: Response) => {
       stockDataList.push(...formattedDataList);
     }
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: 'Requested user favorites from API',
-        data: stockDataList,
-      });
+    return res.status(200).json({
+      success: true,
+      message: 'Requested user favorites from API',
+      data: stockDataList,
+    });
   } catch (error) {
     console.error('Error requesting user favorites:', error);
     return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// Method to save users bought stocks
+export const saveBoughtStock = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+  if (!req.body.symbol || !req.body.price || !req.body.quantity) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  try {
+    const newStock = new Stock({
+      user: req.body.user,
+      symbol: req.body.symbol,
+      boughtPrice: req.body.price,
+      quantity: req.body.quantity,
+    });
+
+    await newStock.save();
+    return res
+      .status(201)
+      .json({ success: true, message: 'Stock saved', stock: newStock });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error', error });
   }
 };
