@@ -36,11 +36,18 @@ export const register = async (req: Request, res: Response) => {
 
     const token = createSecretToken(newUser._id);
 
-    return res.status(201).cookie('token', token, { httpOnly: false }).json({
-      success: true,
-      message: 'User created successfully',
-      user: newUser,
-    });
+    return res
+      .status(201)
+      .cookie('token', token, {
+        httpOnly: false,
+        sameSite: 'none',
+        secure: true,
+      })
+      .json({
+        success: true,
+        message: 'User created successfully',
+        user: newUser,
+      });
   } catch (error) {
     console.error('Failed to create user:', error);
     return res.status(400).json({ error: 'Failed to create user' });
@@ -80,10 +87,17 @@ export const login = async (req: Request, res: Response) => {
 
       // Send token as cookie
       try {
-        res.status(201).cookie('token', token, { httpOnly: false }).json({
-          success: true,
-          message: 'Login successful',
-        });
+        res
+          .status(201)
+          .cookie('token', token, {
+            httpOnly: false,
+            sameSite: 'none',
+            secure: true,
+          })
+          .json({
+            success: true,
+            message: 'Login successful',
+          });
       } catch (error) {
         console.log('Error sending token as cookie', error);
         res
@@ -133,12 +147,10 @@ export const updateMe = async (req: Request, res: Response) => {
     }
 
     if (!req.body.email || !req.body.firstName || !req.body.lastName) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: 'Missing email, first name or last name',
-        });
+      return res.status(400).json({
+        success: false,
+        message: 'Missing email, first name or last name',
+      });
     }
 
     // if the password is not provided, then we don't want to update the password
