@@ -4,6 +4,8 @@ import { Stock } from '../models';
 const testStock = {
   _id: null,
   symbol: 'IBM',
+  boughtPrice: 100,
+  quantity: 10,
 };
 
 export const stockTests = (agent: request.Agent) => {
@@ -20,7 +22,13 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('Invalid request body');
     });
-    it('should create a new income', async () => {
+    it('Should return an error if symbol, price, or quantity missing', async () => {
+      const res = await agent.post('/stock/saveBought').send({});
+      expect(res.statusCode).toEqual(400);
+      expect(res.body.success).toEqual(false);
+      expect(res.body.message).toEqual('Invalid request body');
+    });
+    it('should create a new stock', async () => {
       const res = await agent.post('/stock/save').send(testStock);
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
@@ -28,12 +36,22 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.stock.name).toEqual('IBM');
       testStock._id = res.body.stock._id;
     });
+    it('should store new bought stock', async () => {
+      const res = await agent.post('/stock/saveBought').send(testStock);
+      expect(res.statusCode).toEqual(201);
+      expect(res.body.success).toEqual(true);
+      expect(res.body.message).toEqual('Stock saved');
+      expect(res.body.stock.symbol).toEqual('IBM');
+      expect(res.body.stock.boughtPrice).toEqual(100);
+      expect(res.body.stock.quantity).toEqual(10);
+      testStock._id = res.body.stock._id;
+    });
     it('Should get saved stock symbols', async () => {
-      const res = await agent.post('/stock/save').send({});
+      const res = await agent.post('/stock/get').send({});
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
     });
-    it('Should get remove stock symbol', async () => {
+    it('Should remove stock symbol', async () => {
       const res = await agent.post('/stock/remove').send({});
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
