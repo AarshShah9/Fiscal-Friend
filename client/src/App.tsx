@@ -11,6 +11,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Savings from './views/Savings';
 import Layout from './components/layout';
 import Budget from './views/Budget';
+import Testimonials from './views/Testimonials';
+import AboutUs from './views/AboutUs';
+import Team from './views/Team';
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -19,6 +22,9 @@ function App() {
     <div className="App">
       <AuthProvider>
         <Routes>
+          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/team" element={<Team />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<LandingPage />} />
