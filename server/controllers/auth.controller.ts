@@ -3,6 +3,12 @@ import { Request, Response } from 'express';
 import { createSecretToken } from '../utils/secretToken';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+import { env } from '../env';
+
+let sameSiteOption: any = false;
+if (env.NODE_ENV === 'production') {
+  sameSiteOption = 'none';
+}
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -40,8 +46,8 @@ export const register = async (req: Request, res: Response) => {
       .status(201)
       .cookie('token', token, {
         httpOnly: false,
-        sameSite: 'none',
-        secure: true,
+        sameSite: sameSiteOption,
+        secure: env.NODE_ENV === 'production',
       })
       .json({
         success: true,
@@ -87,12 +93,13 @@ export const login = async (req: Request, res: Response) => {
 
       // Send token as cookie
       try {
+        
         res
           .status(201)
           .cookie('token', token, {
             httpOnly: false,
-            sameSite: 'none',
-            secure: true,
+            sameSite: sameSiteOption,
+            secure: env.NODE_ENV === 'production',
           })
           .json({
             success: true,
