@@ -9,16 +9,16 @@ const getChartOptions = (budget: IBudget) => {
   const moneyOut = budget.expenses.total;
 
   return {
-    colors: ['#1A56DB', '#FDBA8C'],
+    colors: ['#34D399', '#FF0000'],
     series: [
       {
         name: 'money in',
-        color: '#1A56DB',
+        color: '#34D399',
         data: [{x: '', y: moneyIn}],
       },
       {
         name: 'money out',
-        color: '#FDBA8C',
+        color: '#FF0000',
         data: [{x: '', y: moneyOut}],
       },
     ],
