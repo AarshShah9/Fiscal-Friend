@@ -27,6 +27,7 @@ app.use(
       'http://localhost:3000',
       'http://localhost',
       'https://fiscal-friend.vercel.app',
+      'https://fiscal-friend-git-aarsh-fix-aws-aarshshah9.vercel.app',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
