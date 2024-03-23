@@ -23,7 +23,6 @@ type MortgageProps = {
 const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [fetchedData, setFetchedData] = useState<MortgageForm | null>(null);
-  const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
 
   const { register, handleSubmit } = useForm<MortgageForm>({
     defaultValues: {
@@ -90,7 +89,6 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     }
 
     fetchData();
-    setShowMortgageCalculation(true);
   };
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
