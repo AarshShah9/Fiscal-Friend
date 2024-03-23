@@ -1,8 +1,7 @@
 import ApexCharts from 'apexcharts';
-import { useContext, useEffect } from 'react';
-import { LoansContext } from '../views/Savings';
+import { useContext, useEffect, useState } from 'react';
 
-const loanOptions = (loanAccount: LoanAccountType) => {
+const loansOptions = (loanAccount: LoanAccountType) => {
   return {
     chart: {
       height: 450,
@@ -40,26 +39,42 @@ type LoanAccountType = {
   mortgage: number;
 };
 
-const LoansSummary: React.FC = () => {
-  const loanAccount = useContext(LoansContext) as LoanAccountType;
+const LoansSummary: React.FC<LoanAccountType> = ({ loc, mortgage }) => {
+  const [loansAccount, setLoansAccount] = useState({
+    loc: loc,
+    mortgage: mortgage,
+  });
+
+  if (loansAccount.loc !== loc || loansAccount.mortgage !== mortgage) {
+    setLoansAccount({
+      loc: loc,
+      mortgage: mortgage,
+    });
+  }
 
   useEffect(() => {
-    const loanElement = document.getElementById('bar-chart-loans');
+    const loansElement = document.getElementById('bar-chart-loans');
 
-    if (loanElement && typeof ApexCharts !== 'undefined') {
-      if (loanElement.children.length === 0) {
+    if (loansElement && typeof ApexCharts !== 'undefined') {
+      if (loansElement.children.length === 0) {
         const loansChart = new ApexCharts(
-          loanElement,
-          loanOptions(loanAccount)
+          loansElement,
+          loansOptions(loansAccount)
+        );
+        loansChart.render();
+      } else {
+        loansElement.removeChild(loansElement.children[0]);
+        const loansChart = new ApexCharts(
+          loansElement,
+          loansOptions(loansAccount)
         );
         loansChart.render();
       }
     }
-  }, []);
+  }, [loansAccount]);
   var loaningStats = [
-    { name: 'Line of Credit', stat: '$' + loanAccount.loc },
-    { name: 'Mortgage', stat: '$' + loanAccount.mortgage },
-    // { name: 'RESP', stat: '$' + loanAccount.resp },
+    { name: 'Line of Credit', stat: '$' + loansAccount.loc },
+    { name: 'Mortgage', stat: '$' + loansAccount.mortgage },
   ];
 
   return (

@@ -5,22 +5,6 @@ import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
 import MortgageCalculation from '../components/MortgageCalculation';
 
-const testSavings: SavingAccountType = {
-  chequing: 100,
-  savings: 2000,
-  resp: 2500,
-};
-
-const testLoans: LoanAccountType = {
-  loc: 3000,
-  mortgage: 20000,
-};
-
-export const SavingsContext =
-  React.createContext<SavingAccountType>(testSavings);
-
-export const LoansContext = React.createContext<LoanAccountType>(testLoans);
-
 type SavingAccountType = {
   chequing: number;
   savings: number;
@@ -47,7 +31,6 @@ const Savings: React.FC = () => {
   });
 
   const [isContinueClick, setIsContinueClick] = useState(false);
-  const [isSubmit, setIsSubmit] = useState(false);
   const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
 
@@ -122,8 +105,6 @@ const Savings: React.FC = () => {
     }
     fetchData();
     setIsContinueClick(true);
-    setIsSubmit((current) => !current);
-    // window.scrollTo({ top: 800, behavior: 'smooth' });
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -301,12 +282,15 @@ const Savings: React.FC = () => {
         </button>
       </form>
 
-      <SavingsContext.Provider value={testSavings}>
-        <SavingsSummary />
-      </SavingsContext.Provider>
-      <LoansContext.Provider value={testLoans}>
-        <LoansSummary />
-      </LoansContext.Provider>
+      <SavingsSummary
+        chequing={fetchedData?.savingAccount.chequing || 0}
+        savings={fetchedData?.savingAccount.savings || 0}
+        resp={fetchedData?.savingAccount.resp || 0}
+      />
+      <LoansSummary
+        loc={fetchedData?.loanAccount.loc || 0}
+        mortgage={fetchedData?.loanAccount.mortgage || 0}
+      />
     </div>
   );
 };
