@@ -26,13 +26,37 @@ export const createMortgage = async (req: Request, res: Response) => {
   const mortgagePeriod = req.body.period;
   const mortgageFrequency = req.body.frequency;
 
-  const numberPayments = mortgagePeriod * 12;
-  const mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
-  const mortgageEPR = (1 + mortgageEAR) ** (1 / 12) - 1;
-  const interestPayment = mortgageAmount * mortgageEPR;
-  const monthly =
-    mortgageAmount /
-    ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+  let numberPayments = 0;
+  let mortgageEAR = 0;
+  let mortgageEPR = 0;
+  let interestPayment = 0;
+  let monthly = 0;
+
+  if (mortgageFrequency === 'Monthly (12x per year)') {
+    numberPayments = mortgagePeriod * 12;
+    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 12) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    monthly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+  } else if (mortgageFrequency === 'Semi-Monthly (24x per year)') {
+    numberPayments = mortgagePeriod * 24;
+    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    monthly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+  } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
+    numberPayments = mortgagePeriod * 26;
+    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    monthly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+  }
 
   const firstPayment = monthly - interestPayment;
 
