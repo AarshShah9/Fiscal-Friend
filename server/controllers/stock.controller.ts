@@ -6,7 +6,7 @@ import fakeStockData from './stocks.fake';
 
 // Format of data required by front-end graphs
 interface StockData {
-  Date: Date;
+  Date: Date | string;
   Open: number;
   High: number;
   Low: number;
@@ -28,7 +28,7 @@ export const getStockData = (req: Request, res: Response) => {
     .then((data: any) => {
       // Call to method to format data for front-end
       let dataList: StockData[] = formatStockDataList(data);
-      if (dataList.length === 0) dataList = formatStockDataList(fakeStockData);
+      if (dataList.length === 0) dataList = fakeStockData;
 
       // Extracts the meta data from API response
       const metaData = data['Meta Data'];
