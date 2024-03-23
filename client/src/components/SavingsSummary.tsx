@@ -1,6 +1,5 @@
 import ApexCharts from 'apexcharts';
-import { useContext, useEffect } from 'react';
-import { SavingsContext } from '../views/Savings';
+import { useContext, useEffect, useState } from 'react';
 
 const savingOptions = (savingAccount: SavingAccountType) => {
   return {
@@ -48,28 +47,54 @@ type SavingAccountType = {
   resp: number;
 };
 
-const SavingsSummary: React.FC = () => {
-  const savingAccount = useContext(SavingsContext) as SavingAccountType;
+const SavingsSummary: React.FC<SavingAccountType> = ({
+  chequing,
+  savings,
+  resp,
+}) => {
+  const [savingsAccount, setSavingsAccount] = useState({
+    chequing: chequing,
+    savings: savings,
+    resp: resp,
+  });
+
+  if (
+    savingsAccount.chequing !== chequing ||
+    savingsAccount.savings !== savings ||
+    savingsAccount.resp !== resp
+  ) {
+    setSavingsAccount({
+      chequing: chequing,
+      savings: savings,
+      resp: resp,
+    });
+  }
 
   useEffect(() => {
     const savingsElement = document.getElementById('bar-chart-savings');
-
     if (savingsElement && typeof ApexCharts !== 'undefined') {
       // Check if the chart already exists
       if (savingsElement.children.length === 0) {
         const savingsChart = new ApexCharts(
           savingsElement,
-          savingOptions(savingAccount)
+          savingOptions(savingsAccount)
+        );
+        savingsChart.render();
+      } else {
+        savingsElement.removeChild(savingsElement.children[0]);
+        const savingsChart = new ApexCharts(
+          savingsElement,
+          savingOptions(savingsAccount)
         );
         savingsChart.render();
       }
     }
-  }, []);
+  }, [savingsAccount]);
 
   var savingStats = [
-    { name: 'Chequings', stat: '$' + savingAccount.chequing },
-    { name: 'Savings', stat: '$' + savingAccount.savings },
-    { name: 'RESP', stat: '$' + savingAccount.resp },
+    { name: 'Chequings', stat: '$' + savingsAccount.chequing },
+    { name: 'Savings', stat: '$' + savingsAccount.savings },
+    { name: 'RESP', stat: '$' + savingsAccount.resp },
   ];
 
   return (
