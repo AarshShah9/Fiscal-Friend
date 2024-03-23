@@ -114,7 +114,9 @@ const Savings: React.FC = () => {
     setIsSubmit((current) => !current);
   };
 
-  const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
@@ -254,14 +256,26 @@ const Savings: React.FC = () => {
             >
               Principal Line of Credit
             </label>
-            <input
-              type="text"
+            <select
               name="loc"
-              value={formValues.loc}
-              onChange={handleFormInput}
+              value={formValues.mortgage}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                handleFormInput(e)
+              }
               className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
-            />
+            >
+              <option value="0">$0</option>
+              <option value="5000">$5,000</option>
+              <option value="10000">$10,000</option>
+              <option value="15000">$15,000</option>
+              <option value="20000">$20,000</option>
+              <option value="25000">$25,000</option>
+              <option value="30000">$30,000</option>
+              <option value="35000">$35,000</option>
+              <option value="40000">$40,000</option>
+              <option value="45000">$45,000</option>
+              <option value="50000">$50,000</option>
+            </select>
           </div>
           <div className="pb-8">
             <label
@@ -270,14 +284,36 @@ const Savings: React.FC = () => {
             >
               Principal Mortgage
             </label>
-            <input
-              type="text"
+            <select
               name="mortgage"
               value={formValues.mortgage}
-              onChange={handleFormInput}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                handleFormInput(e)
+              }
               className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
-            />
+            >
+              <option value="0">$0</option>
+              <option value="50000">$50,000</option>
+              <option value="100000">$100,000</option>
+              <option value="150000">$150,000</option>
+              <option value="200000">$200,000</option>
+              <option value="250000">$250,000</option>
+              <option value="300000">$300,000</option>
+              <option value="350000">$350,000</option>
+              <option value="400000">$400,000</option>
+              <option value="450000">$450,000</option>
+              <option value="500000">$500,000</option>
+              <option value="550000">$550,000</option>
+              <option value="600000">$600,000</option>
+              <option value="650000">$650,000</option>
+              <option value="700000">$700,000</option>
+              <option value="750000">$750,000</option>
+              <option value="800000">$800,000</option>
+              <option value="850000">$850,000</option>
+              <option value="900000">$900,000</option>
+              <option value="950000">$950,000</option>
+              <option value="1000000">$1,000,000</option>
+            </select>
           </div>
         </div>
         <button
