@@ -9,6 +9,14 @@ const testIncome1 = {
     recurring: 'One-time',
 };
 
+const testIncome2 = {
+    _id: null,
+    name: 'Test income 2',
+    amount: 2000,
+    date: '2021-01-02',
+    recurring: 'Weekly',
+};
+
 
 export const incomeTests = (agent: request.Agent) => {
     beforeAll(async () => {
@@ -38,7 +46,7 @@ export const incomeTests = (agent: request.Agent) => {
             expect(res.body.success).toEqual(false);
             expect(res.body.message).toEqual('Invalid request body');
         });
-        it('Should return an error if date is missing', async () => {
+        it('Should return an error if date is missing and recurring is One-Time', async () => {
             const res = await agent.post('/income/create').send({
                 name: testIncome1.name,
                 amount: testIncome1.amount,
@@ -68,6 +76,17 @@ export const incomeTests = (agent: request.Agent) => {
             expect(res.body.income.date).toEqual('2021-01-01T00:00:00.000Z');
             expect(res.body.income.recurring).toEqual('One-time');
             testIncome1._id = res.body.income._id;
+        });
+        it("Doesnt require a date if recurring is not 'One-time'", async () => {
+            const res = await agent.post('/income/create').send(testIncome2);
+            expect(res.statusCode).toEqual(201);
+            expect(res.body.success).toEqual(true);
+            expect(res.body.message).toEqual('Income created');
+            expect(res.body.income.name).toEqual('Test income 2');
+            expect(res.body.income.amount).toEqual(2000);
+            expect(res.body.income.date).toEqual('2021-01-02T00:00:00.000Z');
+            expect(res.body.income.recurring).toEqual('Weekly');
+            testIncome2._id = res.body.income._id;
         });
         it('should get incomes', async () => {
             const res = await agent.post('/income/get').send();

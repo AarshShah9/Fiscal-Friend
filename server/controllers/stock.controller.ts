@@ -1,8 +1,12 @@
 require('dotenv').config({ path: '../../.env' });
 import { Request, Response } from 'express';
+import { User, Stock } from '../models';
+// import { StockIndexData } from './StockIndexData';
+import fakeStockData from './stocks.fake';
 
+// Format of data required by front-end graphs
 interface StockData {
-  Date: Date;
+  Date: Date | string;
   Open: number;
   High: number;
   Low: number;
@@ -10,18 +14,25 @@ interface StockData {
   Volume: number;
 }
 
+// Method makes request to Alpha Vantage API to request for monthly data for a searched symbol
 export const getStockData = (req: Request, res: Response) => {
   if (!req.body.symbol) {
     return res.status(400).json({ success: false, message: 'Missing symbol' });
   }
   const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${req.body.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
 
+  // const dataList = StockIndexData.getData();
+  // Fetech with promises to catch errors or failed request
   fetch(url)
     .then((res) => res.json())
     .then((data: any) => {
-      const dataList: StockData[] = formatStockDataList(data);
+      // Call to method to format data for front-end
+      let dataList: StockData[] = formatStockDataList(data);
+      if (dataList.length === 0) dataList = fakeStockData;
+
+      // Extracts the meta data from API response
       const metaData = data['Meta Data'];
-      res.status(200).json({metaData, dataList});
+      res.status(200).json({ metaData, dataList });
     })
     .catch((err) => {
       console.log(err);
@@ -31,7 +42,7 @@ export const getStockData = (req: Request, res: Response) => {
     });
 };
 
-
+// Method formats the data from the API response to be used in front-end graphs
 const formatStockDataList = (data: any): StockData[] => {
   const monthlyTimeSeries = data['Monthly Time Series'];
 
@@ -54,4 +65,98 @@ const formatStockDataList = (data: any): StockData[] => {
 
   return stockDataList;
 };
-// export default {getStockData}
+
+// Method to save user favourite symbol
+export const saveSymbol = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  if (!req.body.symbol) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  try {
+    const newStock = new Stock({
+      user: req.body.user,
+      symbol: req.body.symbol,
+    });
+
+    await newStock.save();
+    return res
+      .status(201)
+      .json({ success: true, message: 'Stock saved', stock: newStock });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error', error });
+  }
+};
+
+// Method to retrieve user favourites
+export const getSavedStocks = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  const stocks = await Stock.find({ user: req.body.user });
+
+  return res.status(201).json({ success: true, stocks });
+};
+
+// Method to remove a stock from favourites
+export const removeStock = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    await Stock.findByIdAndDelete(req.body.id);
+    return res.status(201).json({ success: true, message: 'Stock removed' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+// Method to request user favorites from the stock API
+export const requestUserFavorites = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    const stocks = await Stock.find({ user: req.body.user });
+    const stockDataList: StockData[] = [];
+
+    // Iterate through each stock and make API request
+    for (const stock of stocks) {
+      const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${stock.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      // Format data and add it to the list
+      const formattedDataList: StockData[] = formatStockDataList(data);
+      stockDataList.push(...formattedDataList);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Requested user favorites from API',
+      data: stockDataList,
+    });
+  } catch (error) {
+    console.error('Error requesting user favorites:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

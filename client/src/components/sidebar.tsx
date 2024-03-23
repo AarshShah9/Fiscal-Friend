@@ -12,7 +12,8 @@ import CreateTransactionModal from './CreateTransactionModal';
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
-  type: "expenses" | "incomes";
+  type: "expenses" | "incomes" | undefined;
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface IIncome {
@@ -34,21 +35,21 @@ interface IExpense {
   category: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefreshRequired }) => {
   const title = type === "expenses" ? "Manage Expenses" : "Manage Incomes";
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactionType, setCreateType] = useState<"expenses" | "incomes">("expenses");
+  const [transactionType, setCreateType] = useState<"expenses" | "incomes" | undefined>(undefined);
   const [expenses, setExpenses] = useState<IExpense[]>([]);
   const [incomes, setIncomes] = useState<IIncome[]>([]);
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
 
   useEffect(() => {
     if (isOpen && !dataFetched) {
-      axios.post(`${URL}/expense/get`, { type: 'expenses' })
+      axios.post(`${URL}/expense/get`)
         .then(res => setExpenses(res.data.expenses)) // Extract the data from the response object
         .catch(error => console.error('Error fetching expenses:', error));
 
-      axios.post(`${URL}/income/get`, { type: 'incomes' })
+      axios.post(`${URL}/income/get`)
         .then(res => setIncomes(res.data.incomes))
         .catch(error => console.error('Error fetching incomes:', error));
 
@@ -56,7 +57,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
     }
   }, [isOpen, dataFetched]); // Fetch data whenever isOpen changes and dataFetched is false
 
-  const openModal = (type: "expenses" | "incomes") => {
+  useEffect(() => {
+    setRefreshRequired(true);
+  }, [expenses, incomes]);
+
+  const openModal = (type: "expenses" | "incomes" | undefined) => {
     setCreateType(type);
     setIsModalOpen(true);
   };
@@ -92,6 +97,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type }) => {
           type={transactionType}
           incomes={incomes}
           expenses={expenses}
+          setRefreshRequired={setRefreshRequired}
         />
         <Transition.Child
           as={Fragment}

@@ -7,9 +7,10 @@ import { URL } from '../utils/constants';
 interface CreateTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  type: 'expenses' | 'incomes';
+  type: 'expenses' | 'incomes' | undefined;
   incomes: any[];
   expenses: any[];
+  setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type incomeForm = {
@@ -33,8 +34,9 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
   type,
   incomes,
   expenses,
+  setRefreshRequired,
 }) => {
-  const { register, handleSubmit } = useForm<expenseForm | incomeForm>({
+  const { register, handleSubmit, watch } = useForm<expenseForm | incomeForm>({
     defaultValues: {
       name: 'New',
       amount: 0,
@@ -43,6 +45,8 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
       category: 'Other',
     },
   });
+
+  const recurring = watch('recurring');
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation(); // Prevent propagation of click event to parent elements
@@ -54,12 +58,14 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
       const expenseFormData: expenseForm = data as expenseForm;
       axios.post(`${URL}/expense/create`, expenseFormData).then((res) => {
         expenses.push(res.data.expense);
+        setRefreshRequired(true);
         onClose();
       });
     } else {
       const incomeFormData: incomeForm = data as incomeForm;
       axios.post(`${URL}/income/create`, incomeFormData).then((res) => {
         incomes.push(res.data.income);
+        setRefreshRequired(true);
         onClose();
       });
     }
@@ -159,53 +165,55 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({
                               </select>
                             </div>
                           </div>
-                          <div className="sm:col-span-3">
-                            <label
-                              htmlFor="Date"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
-                              Date
-                            </label>
-                            <div className="mt-2">
-                              <input
-                                id="date"
-                                type="date"
-                                autoComplete="date"
-                                {...register('date')}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-                              />
-                            </div>
-                            {type === 'expenses' && (
-                              <div className="sm:col-span-3">
-                                <label
-                                  htmlFor="Category"
-                                  className="block text-sm font-medium leading-6 text-gray-900"
-                                >
-                                  Category
-                                </label>
-                                <div className="mt-2">
-                                  <select
-                                    id="category"
-                                    {...register('category')}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-                                  >
-                                    <option value="Food">Food</option>
-                                    <option value="Utilities">Utilities</option>
-                                    <option value="Rent">Rent</option>
-                                    <option value="Transportation">
-                                      Transportation
-                                    </option>
-                                    <option value="Insurance">Insurance</option>
-                                    <option value="Wellness">Wellness</option>
-                                    <option value="Entertainment">
-                                      Entertainment
-                                    </option>
-                                    <option value="Other">Other</option>
-                                  </select>
-                                </div>
+                          {recurring === 'One-time' && (
+                            <div className="sm:col-span-3">
+                              <label
+                                htmlFor="Date"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
+                                Date
+                              </label>
+                              <div className="mt-2">
+                                <input
+                                  id="date"
+                                  type="date"
+                                  autoComplete="date"
+                                  {...register('date')}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                                />
                               </div>
-                            )}
-                          </div>
+                            </div>
+                          )}
+                          {type === 'expenses' && (
+                            <div className="sm:col-span-3">
+                              <label
+                                htmlFor="Category"
+                                className="block text-sm font-medium leading-6 text-gray-900"
+                              >
+                                Category
+                              </label>
+                              <div className="mt-2">
+                                <select
+                                  id="category"
+                                  {...register('category')}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                                >
+                                  <option value="Food">Food</option>
+                                  <option value="Utilities">Utilities</option>
+                                  <option value="Rent">Rent</option>
+                                  <option value="Transportation">
+                                    Transportation
+                                  </option>
+                                  <option value="Insurance">Insurance</option>
+                                  <option value="Wellness">Wellness</option>
+                                  <option value="Entertainment">
+                                    Entertainment
+                                  </option>
+                                  <option value="Other">Other</option>
+                                </select>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
