@@ -111,8 +111,10 @@ export default function PieChart() {
     // Iterate over each key-value pair in the expense object
     Object.entries(budget.expenses.itemized).forEach(
       ([itemName, itemValue]) => {
-        expenseNames.push(itemName);
-        expenseValues.push(itemValue as number);
+        if (itemValue !== 0) {
+          expenseNames.push(itemName);
+          expenseValues.push(itemValue as number);
+        }
       }
     );
 
