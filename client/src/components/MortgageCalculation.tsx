@@ -46,7 +46,6 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
       },
     };
     try {
-      // const mortgageFormData: MortgageForm = data as MortgageForm;
       const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
       onClose();
       console.log(res.data);
