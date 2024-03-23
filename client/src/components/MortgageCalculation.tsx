@@ -48,7 +48,6 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     try {
       const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
       onClose();
-      console.log(res.data);
     } catch (e) {
       console.error('Error: ', e);
     }
