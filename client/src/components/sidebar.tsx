@@ -6,7 +6,6 @@ import { URL } from '../utils/constants';
 import axios from 'axios';
 import ExpenseCard from './ExpenseCard';
 import IncomeCard from './IncomeCard';
-import { BudgetContext } from '../views/Budget';
 import { IBudget } from '../views/Budget';
 
 import CreateTransactionModal from './CreateTransactionModal';
@@ -14,9 +13,9 @@ import CreateTransactionModal from './CreateTransactionModal';
 interface SidebarProps {
   isOpen: boolean;
   toggleSidebar: () => void;
-  type: "expenses" | "incomes" | undefined;
+  type: 'expenses' | 'incomes' | undefined;
   setRefreshRequired: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 interface IIncome {
   _id: string;
@@ -25,7 +24,7 @@ interface IIncome {
   amount: number;
   date: Date;
   recurring: string;
-};
+}
 
 interface IExpense {
   _id: string;
@@ -37,24 +36,32 @@ interface IExpense {
   category: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefreshRequired }) => {
-  const title = type === "expenses" ? "Manage Expenses" : "Manage Incomes";
+const Sidebar: React.FC<SidebarProps> = ({
+  isOpen,
+  toggleSidebar,
+  type,
+  setRefreshRequired,
+}) => {
+  const title = type === 'expenses' ? 'Manage Expenses' : 'Manage Incomes';
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactionType, setCreateType] = useState<"expenses" | "incomes" | undefined>(undefined);
+  const [transactionType, setCreateType] = useState<
+    'expenses' | 'incomes' | undefined
+  >(undefined);
   const [expenses, setExpenses] = useState<IExpense[]>([]);
   const [incomes, setIncomes] = useState<IIncome[]>([]);
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
 
   useEffect(() => {
     if (isOpen && !dataFetched) {
-      axios.post(`${URL}/expense/get`)
-        .then(res => setExpenses(res.data.expenses)) // Extract the data from the response object
-        .catch(error => console.error('Error fetching expenses:', error));
+      axios
+        .post(`${URL}/expense/get`)
+        .then((res) => setExpenses(res.data.expenses)) // Extract the data from the response object
+        .catch((error) => console.error('Error fetching expenses:', error));
 
-      axios.post(`${URL}/income/get`)
-        .then(res => setIncomes(res.data.incomes))
-        .catch(error => console.error('Error fetching incomes:', error));
+      axios
+        .post(`${URL}/income/get`)
+        .then((res) => setIncomes(res.data.incomes))
+        .catch((error) => console.error('Error fetching incomes:', error));
 
       setDataFetched(true); // Update the flag
     }
@@ -64,7 +71,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefre
     setRefreshRequired(true);
   }, [expenses, incomes]);
 
-  const openModal = (type: "expenses" | "incomes" | undefined) => {
+  const openModal = (type: 'expenses' | 'incomes' | undefined) => {
     setCreateType(type);
     setIsModalOpen(true);
   };
@@ -74,36 +81,36 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefre
   };
 
   const deleteExpense = (id: string) => {
-    axios.post(`${URL}/expense/remove`, { expense: id })
-      .then(res => {
+    axios
+      .post(`${URL}/expense/remove`, { expense: id })
+      .then((res) => {
         console.log('Expense deleted:', res.data);
-        setExpenses(expenses.filter(expense => expense._id !== id));
+        setExpenses(expenses.filter((expense) => expense._id !== id));
       })
-      .catch(error => console.error('Error removing expense:', error));
-  }
+      .catch((error) => console.error('Error removing expense:', error));
+  };
 
   const deleteIncome = (id: string) => {
-    axios.post(`${URL}/income/remove`, { income: id })
-      .then(res => {
+    axios
+      .post(`${URL}/income/remove`, { income: id })
+      .then((res) => {
         console.log('Income removed:', res.data);
-        setIncomes(incomes.filter(income => income._id !== id));
+        setIncomes(incomes.filter((income) => income._id !== id));
       })
-      .catch(error => console.error('Error removing income:', error));
-  }
+      .catch((error) => console.error('Error removing income:', error));
+  };
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={toggleSidebar}>
-        <BudgetContext.Provider value={[budget, setBudget]}>
-          <CreateTransactionModal // Render the CreateTransactionModal component
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            type={transactionType}
-            incomes={incomes}
-            expenses={expenses}
-            setRefreshRequired={setRefreshRequired}
+        <CreateTransactionModal // Render the CreateTransactionModal component
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          type={transactionType}
+          incomes={incomes}
+          expenses={expenses}
+          setRefreshRequired={setRefreshRequired}
         />
-        </BudgetContext.Provider>
         <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
@@ -159,41 +166,41 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar, type, setRefre
                           className="relative inline-flex items-center rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
                           onClick={() => openModal(type)}
                         >
-                          Create new {type === "expenses" ? "expense" : "income"}
+                          Create new{' '}
+                          {type === 'expenses' ? 'expense' : 'income'}
                         </button>
                       </Dialog.Title>
                     </div>
                     <div className="border-b border-gray-200 bg-white px-4 py-3 sm:px-6">
-                      <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
-                      </div>
+                      <div className="-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap"></div>
                     </div>
                     <div className="ml-2 mt-2 mr-2">
-                          {/* Display expenses */}
-                          {type === 'expenses' && (
-                            <div>
-                              {expenses.map((expense) => (
-                                <ExpenseCard
-                                  key={expense._id}
-                                  expense={expense}
-                                  onDelete={() => deleteExpense(expense._id)}
-                                />
-                              ))}
-                            </div>
-                          )} 
-                          
-                          {/* Display incomes */}
-                          {type === 'incomes' && (
-                            <div>
-                              {incomes.map((income) => (
-                                <IncomeCard
-                                  key={income._id}
-                                  income={income}
-                                  onDelete={() => deleteIncome(income._id)}
-                                />
-                              ))}
-                            </div>
-                          )}
+                      {/* Display expenses */}
+                      {type === 'expenses' && (
+                        <div>
+                          {expenses.map((expense) => (
+                            <ExpenseCard
+                              key={expense._id}
+                              expense={expense}
+                              onDelete={() => deleteExpense(expense._id)}
+                            />
+                          ))}
                         </div>
+                      )}
+
+                      {/* Display incomes */}
+                      {type === 'incomes' && (
+                        <div>
+                          {incomes.map((income) => (
+                            <IncomeCard
+                              key={income._id}
+                              income={income}
+                              onDelete={() => deleteIncome(income._id)}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

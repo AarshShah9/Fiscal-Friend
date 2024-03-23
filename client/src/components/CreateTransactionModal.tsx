@@ -3,8 +3,6 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { URL } from '../utils/constants';
-import { IBudget } from '../views/Budget';
-import { BudgetContext } from '../views/Budget';
 
 interface CreateTransactionModalProps {
   isOpen: boolean;
@@ -41,8 +39,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
     },
   });
 
-  const [budget, setBudget] = useContext(BudgetContext);
-
   const recurring = watch('recurring');
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,26 +55,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
           expenses.push(res.data.expense);
           setRefreshRequired(true);
           onClose();
-
-          const newbudget = { ...budget };
-          newbudget.expenses.total =
-            Number(newbudget.expenses.total) + Number(expenseFormData.amount);
-
-          // loop through the itemized expenses and add the new expense to the correct category
-          Object.entries(newbudget.expenses.itemized).forEach(
-            ([key, value]) => {
-              if (
-                key.toLocaleLowerCase() ===
-                expenseFormData.category.toLowerCase()
-              ) {
-                newbudget.expenses.itemized[
-                  key as keyof typeof newbudget.expenses.itemized
-                ] = Number(value) + Number(expenseFormData.amount);
-              }
-            }
-          );
-
-          setBudget(newbudget);
         })
         .catch((err) => console.error('Error adding expense:', err));
     } else {
@@ -89,11 +65,6 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
           incomes.push(res.data.income);
           setRefreshRequired(true);
           onClose();
-
-          const newbudget = { ...budget };
-          newbudget.income =
-            Number(newbudget.income) + Number(incomeFormData.amount);
-          setBudget(newbudget);
         })
         .catch((err) => console.error('Error adding income:', err));
     }

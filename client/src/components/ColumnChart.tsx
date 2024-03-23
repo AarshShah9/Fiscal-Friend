@@ -1,7 +1,10 @@
 import ApexCharts from 'apexcharts';
 import { useContext, useEffect } from 'react';
-import { BudgetContext } from '../views/Budget';
 import { IBudget } from '../views/Budget';
+
+interface ColumnChartProps {
+  budget: IBudget;
+};
 
 const getChartOptions = (budget: IBudget) => {
   
@@ -92,8 +95,7 @@ const getChartOptions = (budget: IBudget) => {
   };
 };
 
-export default function BarChart() {
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
+export default function BarChart({ budget }: ColumnChartProps) {
 
   useEffect(() => {
     const chartElement = document.getElementById('bar-chart');

@@ -1,38 +1,10 @@
-import { useContext } from "react";
-import { BudgetContext } from '../views/Budget';
+import { IBudget } from "../views/Budget";
 
-interface IBudget {
-  income: Number;
-  expenses: {
-      total: Number;
-      itemized: {
-          food: Number;
-          housing: Number;
-          transportation: Number;
-          insurance: Number;
-          wellness: Number;
-          entertainment: Number;
-          other: Number;
-          mortgage?: Number;
-          creditCard?: Number;
-      };
-  };
-  recommendedBudget: {
-      food: Number;
-      housing: Number;
-      transportation: Number;
-      insurance: Number;
-      wellness: Number;
-      entertainment: Number;
-      other: Number;
-      mortgage?: Number;
-      creditCard?: Number;
-  };
+interface StatsBoxesProps {
+  budget: IBudget;
 };
 
-export default function StatsBoxes() {
-
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
+export default function StatsBoxes({ budget }: StatsBoxesProps) {
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];

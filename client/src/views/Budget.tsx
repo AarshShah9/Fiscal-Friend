@@ -37,33 +37,6 @@ export interface IBudget {
   };
 }
 
-const defaultBudget = {
-  income: 0,
-  expenses: {
-    total: 0,
-    itemized: {
-      food: 0,
-      housing: 0,
-      transportation: 0,
-      insurance: 0,
-      wellness: 0,
-      entertainment: 0,
-      other: 0,
-    },
-  },
-  recommendedBudget: {
-    food: 0,
-    housing: 0,
-    transportation: 0,
-    insurance: 0,
-    wellness: 0,
-    entertainment: 0,
-    other: 0,
-  },
-} as IBudget;
-
-export const BudgetContext = React.createContext<[IBudget, Function]>([defaultBudget, () => {}]);
-
 export default function Budget() {
   const [budget, setBudget] = useState<IBudget>({
     income: 0,
@@ -90,34 +63,40 @@ export default function Budget() {
     },
   } as IBudget);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarType, setSidebarType] = useState<'expenses' | 'incomes' | undefined>(
-    'expenses'
-  ); // Track which type of sidebar to open
+  const [sidebarType, setSidebarType] = useState<
+    'expenses' | 'incomes' | undefined
+  >('expenses'); // Track which type of sidebar to open
   const [refresh, setRefresh] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
 
-  const toggleSidebar = (type?: "expenses" | "incomes" | undefined) => {
+  const toggleSidebar = (type?: 'expenses' | 'incomes' | undefined) => {
     setSidebarType(type);
     setSidebarOpen(!sidebarOpen);
   };
 
   useEffect(() => {
-    axios.post(`${URL}/budget/budget`).then((res) => {
-      setBudget(res.data.budget);
-    });
-  }, []);
+    if (refresh || !dataFetched) {
+      axios
+        .post(`${URL}/budget/budget`)
+        .then((res) => {
+          setBudget(res.data.budget);
+          setRefresh(false);
+        })
+        .catch((error) => console.error('Error fetching budget:', error));
+    }
+  }, [dataFetched, refresh, setRefresh]);
 
   return (
-    <BudgetContext.Provider value={[budget, setBudget]}>
+    <>
       <div className="flex flex-col min-h-screen justify-around">
         <div className="h-3/5 grow">
-          <PieChart />
+          <PieChart budget={budget} />
         </div>
 
         <div className="flex flex-row grow">
-            <ColumnChart />
-            <BarChart />
+          <ColumnChart budget={budget} />
+          <BarChart budget={budget} />
         </div>
-
 
         <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
           {/* Pass respective type as argument */}
@@ -135,11 +114,19 @@ export default function Budget() {
           </button>
         </div>
         {/* Pass sidebarType to Sidebar component */}
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} type={sidebarType} setRefreshRequired={setRefresh} />
+        <Sidebar
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          type={sidebarType}
+          setRefreshRequired={setRefresh}
+        />
       </div>
-      <StatsBoxes />
+      <StatsBoxes budget={budget} />
       <div className="min-h-10"></div>
-      <TransactionsTable refreshRequired={refresh} setRefreshRequired={setRefresh}/>
-    </BudgetContext.Provider>
+      <TransactionsTable
+        refreshRequired={refresh}
+        setRefreshRequired={setRefresh}
+      />
+    </>
   );
 }

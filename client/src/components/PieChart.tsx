@@ -1,7 +1,10 @@
 import ApexCharts from 'apexcharts';
 import { useContext, useEffect } from 'react';
-import { BudgetContext } from '../views/Budget';
 import { IBudget } from '../views/Budget';
+
+interface PieChartProps {
+  budget: IBudget;
+};
 
 const getChartOptions = (
   expensesValues: number[],
@@ -54,7 +57,7 @@ const getChartOptions = (
               fontSize: 30,
               offsetY: -20,
               formatter: function (value: any) {
-                return value;
+                return '$' + value;
               },
             },
           },
@@ -80,7 +83,7 @@ const getChartOptions = (
     yaxis: {
       labels: {
         formatter: function (value: any) {
-          return value;
+          return '$' + value;
         },
       },
     },
@@ -100,8 +103,7 @@ const getChartOptions = (
   };
 };
 
-export default function PieChart() {
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
+export default function PieChart({ budget }: PieChartProps) {
 
   var expenseNames = [] as string[];
   var expenseValues = [] as number[];

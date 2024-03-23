@@ -1,7 +1,10 @@
 import ApexCharts from 'apexcharts';
 import { useContext, useEffect } from 'react';
-import { BudgetContext } from '../views/Budget';
 import { IBudget } from '../views/Budget';
+
+interface BarChartProps {
+  budget: IBudget;
+};
 
 const getChartOptions = (current: object, recommended: object) => {
   const currentData = Object.entries(current).map(([key, value]) => ({
@@ -12,8 +15,6 @@ const getChartOptions = (current: object, recommended: object) => {
     x: key,
     y: value,
   }));
-  console.log(currentData);
-  console.log(recommendedData);
 
   return {
     colors: ['#1A56DB', '#FDBA8C'],
@@ -106,8 +107,7 @@ const getChartOptions = (current: object, recommended: object) => {
   };
 };
 
-export default function ColumnChart() {
-  const [budget, setBudget] = useContext(BudgetContext) as [IBudget, Function];
+export default function ColumnChart({ budget }: BarChartProps) {
 
   useEffect(() => {
     const chartElement = document.getElementById('column-chart');
