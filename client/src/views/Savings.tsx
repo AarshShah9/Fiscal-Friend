@@ -116,9 +116,9 @@ const Savings: React.FC = () => {
     };
 
     if (fetchedData) {
-      updateSavings();
+      await updateSavings();
     } else {
-      postSavings();
+      await postSavings();
     }
     fetchData();
     setIsContinueClick(true);
