@@ -123,7 +123,6 @@ const Savings: React.FC = () => {
     fetchData();
     setIsContinueClick(true);
     setIsSubmit((current) => !current);
-    // window.scrollTo({ top: 800, behavior: 'smooth' });
   };
 
   const handleFormInput = (e: React.ChangeEvent<HTMLInputElement>) => {
