@@ -4,17 +4,21 @@ import { IBudget } from '../views/Budget';
 
 interface BarChartProps {
   budget: IBudget;
-};
+}
 
 const getChartOptions = (current: object, recommended: object) => {
-  const currentData = Object.entries(current).map(([key, value]) => ({
-    x: key,
-    y: value,
-  }));
   const recommendedData = Object.entries(recommended).map(([key, value]) => ({
     x: key,
     y: value,
   }));
+  const currentData: { x: string; y: number }[] = Object.entries(
+    current
+  ).reduce((acc: { x: string; y: number }[], [key, value]) => {
+    if (recommended.hasOwnProperty(key)) {
+      acc.push({ x: key, y: value });
+    }
+    return acc;
+  }, []);
 
   return {
     colors: ['#1A56DB', '#FDBA8C'],
@@ -37,7 +41,7 @@ const getChartOptions = (current: object, recommended: object) => {
         show: false,
       },
       width: '100%',
-      height: '100%'
+      height: '100%',
     },
     plotOptions: {
       bar: {
@@ -108,7 +112,6 @@ const getChartOptions = (current: object, recommended: object) => {
 };
 
 export default function ColumnChart({ budget }: BarChartProps) {
-
   useEffect(() => {
     const chartElement = document.getElementById('column-chart');
 
@@ -129,5 +132,7 @@ export default function ColumnChart({ budget }: BarChartProps) {
     }
   }, [budget]);
 
-  return <div className="py-6 flex justify-center w-3/5" id="column-chart"></div>;
+  return (
+    <div className="py-6 flex justify-center w-3/5" id="column-chart"></div>
+  );
 }

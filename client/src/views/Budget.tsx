@@ -11,29 +11,30 @@ import BarChart from '../components/BarChart';
 export interface IBudget {
   income: Number;
   expenses: {
-    total: Number;
-    itemized: {
+      total: Number;
+      itemized: {
+          food: Number;
+          rent?: Number;
+          utilities: Number;
+          transportation: Number;
+          insurance: Number;
+          wellness: Number;
+          entertainment: Number;
+          other: Number;
+          mortgage?: Number;
+          creditCard?: Number;
+          savings?: Number;
+      };
+  };
+  recommendedBudget: {
       food: Number;
-      housing: Number;
+      utilities: Number;
       transportation: Number;
       insurance: Number;
       wellness: Number;
       entertainment: Number;
       other: Number;
-      mortgage?: Number;
-      creditCard?: Number;
-    };
-  };
-  recommendedBudget: {
-    food: Number;
-    housing: Number;
-    transportation: Number;
-    insurance: Number;
-    wellness: Number;
-    entertainment: Number;
-    other: Number;
-    mortgage?: Number;
-    creditCard?: Number;
+      savings?: Number;
   };
 }
 
@@ -44,7 +45,7 @@ export default function Budget() {
       total: 0,
       itemized: {
         food: 0,
-        housing: 0,
+        utilities: 0,
         transportation: 0,
         insurance: 0,
         wellness: 0,
@@ -54,7 +55,7 @@ export default function Budget() {
     },
     recommendedBudget: {
       food: 0,
-      housing: 0,
+      utilities: 0,
       transportation: 0,
       insurance: 0,
       wellness: 0,
@@ -62,10 +63,12 @@ export default function Budget() {
       other: 0,
     },
   } as IBudget);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState<
     'expenses' | 'incomes' | undefined
   >('expenses'); // Track which type of sidebar to open
+
   const [refresh, setRefresh] = useState(false);
   const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
 
