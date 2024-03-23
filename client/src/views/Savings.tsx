@@ -87,39 +87,28 @@ const Savings: React.FC = () => {
       mortgage: parseFloat(parseFloat(formValues.mortgage).toFixed(2)) || 0,
     };
 
-    const postSavings = async () => {
+    const saveSavingsData = async () => {
       try {
-        const res = await axios.post(`${URL}/savings/create`, {
+        const requestData = {
           chequing: updateSavingAccount.chequing,
           savings: updateSavingAccount.savings,
           resp: updateSavingAccount.resp,
           loc: updateLoanAccount.loc,
           mortgage: updateLoanAccount.mortgage,
-        });
+        };
+
+        if (fetchedData) {
+          await axios.put(`${URL}/savings/update`, requestData);
+        } else {
+          await axios.post(`${URL}/savings/create`, requestData);
+        }
       } catch (e) {
-        console.error('Error posting: ', e);
+        console.error('Error saving data:', e);
       }
     };
 
-    const updateSavings = async () => {
-      try {
-        const res = await axios.put(`${URL}/savings/update`, {
-          chequing: updateSavingAccount.chequing,
-          savings: updateSavingAccount.savings,
-          resp: updateSavingAccount.resp,
-          loc: updateLoanAccount.loc,
-          mortgage: updateLoanAccount.mortgage,
-        });
-      } catch (e) {
-        console.error('Error posting: ', e);
-      }
-    };
+    await saveSavingsData();
 
-    if (fetchedData) {
-      await updateSavings();
-    } else {
-      await postSavings();
-    }
     fetchData();
     setIsContinueClick(true);
     setIsSubmit((current) => !current);
