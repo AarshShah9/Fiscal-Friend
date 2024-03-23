@@ -27,7 +27,7 @@ export default function Layout() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const location = useLocation();
   const navigation = [
@@ -213,31 +213,7 @@ export default function Layout() {
             />
 
             <div className="flex flex-1 gap-x-4 justify-end self-stretch lg:gap-x-6">
-              {/* <form className="relative flex flex-1" action="#" method="GET">
-                <label htmlFor="search-field" className="sr-only">
-                  Search
-                </label>
-                <MagnifyingGlassIcon
-                  className="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-                <input
-                  id="search-field"
-                  className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                  placeholder="Search..."
-                  type="search"
-                  name="search"
-                />
-              </form> */}
               <div className="flex items-center gap-x-4 lg:gap-x-6">
-                <button
-                  type="button"
-                  className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-                >
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
                 {/* Separator */}
                 <div
                   className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
@@ -303,25 +279,9 @@ export default function Layout() {
           {/*<main className="xl:pl-12">*/}
           {/*  <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">*/}
               <Outlet />
-              {/* Main area */}
-              {/* <div className="mb-6">
-                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
-                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
-              </div>
-              <div className="mb-6">
-                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Debts:</label>
-                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
-              </div>
-              <div className="mb-6">
-                <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Savings:</label>
-                <input type="text" id="default-input" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></input>
-              </div> */}
             </div>
           </main>
         </div>
-
-        {/* <aside className="fixed bottom-0 left-20 top-16 hidden w-96 overflow-y-auto border-r border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block">
-        </aside> */}
       </div>
     </>
   );
