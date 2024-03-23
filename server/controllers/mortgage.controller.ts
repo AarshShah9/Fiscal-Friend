@@ -25,16 +25,15 @@ export const createMortgage = async (req: Request, res: Response) => {
   const mortgageAPR = req.body.apr / 100;
   const mortgagePeriod = req.body.period;
   const mortgageFrequency = req.body.frequency;
+  const mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
 
   let numberPayments = 0;
-  let mortgageEAR = 0;
   let mortgageEPR = 0;
   let interestPayment = 0;
   let monthly = 0;
 
   if (mortgageFrequency === 'Monthly (12x per year)') {
     numberPayments = mortgagePeriod * 12;
-    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 12) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
     monthly =
@@ -42,20 +41,20 @@ export const createMortgage = async (req: Request, res: Response) => {
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
   } else if (mortgageFrequency === 'Semi-Monthly (24x per year)') {
     numberPayments = mortgagePeriod * 24;
-    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    monthly =
+    let semiMonthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+    monthly = semiMonthly * (24 / 12);
   } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
     numberPayments = mortgagePeriod * 26;
-    mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    monthly =
+    let biWeekly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+    monthly = biWeekly * (26 / 12);
   }
 
   const firstPayment = monthly - interestPayment;
@@ -104,4 +103,89 @@ export const getMortgage = async (req: Request, res: Response) => {
   const savings = await Mortgage.find({ user: req.body.user });
 
   return res.status(201).json({ success: true, savings });
+};
+
+export const updateMortgage = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  const user = await User.findById(req.body.user);
+
+  if (!user) {
+    return res.status(400).json({ success: false, message: 'User not found' });
+  }
+
+  if (!req.body.mortgage || !req.body.frequency) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  const mortgageAmount = req.body.amount;
+  const mortgageAPR = req.body.apr / 100;
+  const mortgagePeriod = req.body.period;
+  const mortgageFrequency = req.body.frequency;
+  const mortgageEAR = (1 + mortgageAPR / 2) ** 2 - 1;
+
+  let numberPayments = 0;
+  let mortgageEPR = 0;
+  let interestPayment = 0;
+  let monthly = 0;
+
+  if (mortgageFrequency === 'Monthly (12x per year)') {
+    numberPayments = mortgagePeriod * 12;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 12) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    monthly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+  } else if (mortgageFrequency === 'Semi-Monthly (24x per year)') {
+    numberPayments = mortgagePeriod * 24;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    let semiMonthly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+    monthly = semiMonthly * (24 / 12);
+  } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
+    numberPayments = mortgagePeriod * 26;
+    mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
+    interestPayment = mortgageAmount * mortgageEPR;
+    let biWeekly =
+      mortgageAmount /
+      ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
+    monthly = biWeekly * (26 / 12);
+  }
+
+  const firstPayment = monthly - interestPayment;
+
+  try {
+    const updateMortgage = await Mortgage.findByIdAndUpdate(
+      user.Mortgages[0],
+      {
+        $set: {
+          'mortgage.amount': req.body.amount,
+          'mortgage.apr': req.body.apr,
+          'mortgage.period': req.body.period,
+          'payments.epr': (mortgageEPR * 100).toFixed(2),
+          'payments.interestPayment': interestPayment.toFixed(2),
+          'payments.firstPayment': firstPayment.toFixed(2),
+          'payments.monthlyPayment': monthly.toFixed(2),
+          frequency: req.body.frequency,
+        },
+      },
+      { new: true, useFindAndModify: false }
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: 'Mortgage updated',
+      mortgage: updateMortgage,
+    });
+  } catch (e) {
+    return res.status(500).json({ success: false, message: 'Server error', e });
+  }
 };

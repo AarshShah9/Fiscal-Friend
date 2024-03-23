@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
@@ -22,6 +22,7 @@ type MortgageProps = {
 
 const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [fetchedData, setFetchedData] = useState<MortgageForm | null>(null);
 
   const { register, handleSubmit } = useForm<MortgageForm>({
     defaultValues: {
@@ -36,6 +37,25 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     },
   });
 
+  const fetchData = async () => {
+    try {
+      const res = await axios.get(`${URL}/mortgage/get`);
+      console.log('Data: ', res.data.savings[0]);
+      if (res.data.savings && res.data.savings.length > 0) {
+        setFetchedData(res.data.savings[0]);
+      } else {
+        setFetchedData(null);
+      }
+    } catch (e) {
+      console.error('Error fetching data: ', e);
+      setFetchedData(null);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const onSubmit = async (data: MortgageForm) => {
     const mortgageData = {
       ...data,
@@ -45,12 +65,30 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
         period: Number(data.period),
       },
     };
-    try {
-      const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
-      onClose();
-    } catch (e) {
-      console.error('Error: ', e);
+    const postMortgage = async () => {
+      try {
+        const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
+        onClose();
+      } catch (e) {
+        console.error('Error: ', e);
+      }
+    };
+    const updateMortgage = async () => {
+      try {
+        const res = await axios.put(`${URL}/mortgage/update`, mortgageData);
+        onClose();
+      } catch (e) {
+        console.error('Error: ', e);
+      }
+    };
+
+    if (fetchedData) {
+      await updateMortgage();
+    } else {
+      await postMortgage();
     }
+
+    fetchData();
   };
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
