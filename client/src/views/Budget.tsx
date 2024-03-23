@@ -108,19 +108,16 @@ export default function Budget() {
 
   return (
     <BudgetContext.Provider value={[budget, setBudget]}>
-      <div className="flex flex-row flex-wrap-reverse">
-        {/* First Column: Pie Chart */}
-        <div className="grow">
+      <div className="flex flex-col min-h-screen justify-around">
+        <div className="h-3/5 grow">
           <PieChart />
         </div>
-        {/* Second Column: Column Chart */}
-        <div className="grow">
-          <ColumnChart />
+
+        <div className="flex flex-row grow">
+            <ColumnChart />
+            <BarChart />
         </div>
-        {/* Third Column: Bar Chart */}
-        <div className="grow">
-          <BarChart />
-        </div>
+
 
         <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
           {/* Pass respective type as argument */}

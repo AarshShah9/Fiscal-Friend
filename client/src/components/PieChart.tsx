@@ -12,6 +12,7 @@ const getChartOptions = (
     series: expensesValues,
     chart: {
       type: 'donut',
+      width: '40%'
     },
     theme: {
       monochrome: {

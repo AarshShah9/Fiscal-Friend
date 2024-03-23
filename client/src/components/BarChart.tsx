@@ -35,6 +35,8 @@ const getChartOptions = (current: object, recommended: object) => {
       toolbar: {
         show: false,
       },
+      width: '100%',
+      height: '100%'
     },
     plotOptions: {
       bar: {
@@ -127,5 +129,5 @@ export default function ColumnChart() {
     }
   }, [budget]);
 
-  return <div className="py-6 flex justify-center" id="column-chart"></div>;
+  return <div className="py-6 flex justify-center w-3/5" id="column-chart"></div>;
 }

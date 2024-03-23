@@ -28,6 +28,8 @@ const getChartOptions = (budget: IBudget) => {
       toolbar: {
         show: false,
       },
+      width: '100%',
+      height: '100%'
     },
     plotOptions: {
       bar: {
@@ -113,5 +115,5 @@ export default function BarChart() {
     }
   }, [budget]);
 
-  return <div className="py-6 flex justify-center" id="bar-chart"></div>;
+  return <div className="py-6 flex justify-center w-2/5" id="bar-chart"></div>;
 }
