@@ -98,7 +98,7 @@ const SavingsSummary: React.FC<SavingAccountType> = ({
   ];
 
   return (
-    <div className="flex-col items-center justify-center pt-80">
+    <div className="flex-col items-center justify-center pt-6">
       <h3 className="text-base font-semibold leading-6 text-gray-900">
         Saving Account
       </h3>
