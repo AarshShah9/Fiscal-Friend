@@ -13,6 +13,7 @@ import expenseRoutes from './routes/expense.routes';
 import incomeRoutes from './routes/income.routes';
 import stockRoutes from './routes/stock.routes';
 import transactionRoutes from './routes/transaction.routes';
+import mortgageRoutes from './routes/mortgage.routes';
 
 const app: Application = express();
 
@@ -50,6 +51,7 @@ app.use('/expense', expenseRoutes);
 app.use('/income', incomeRoutes);
 app.use('/stock', stockRoutes);
 app.use('/transaction', transactionRoutes);
+app.use('/mortgage', mortgageRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   console.error(error);

@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 import Login from './views/Login';
 import Signup from './views/Signup';
 import LandingPage from './views/LandingPage';
@@ -8,7 +8,7 @@ import axios from 'axios';
 import Main from './views/Main';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Savings from './views/Savings';
+import Accounts from './views/Accounts';
 import Layout from './components/layout';
 import Budget from './views/Budget';
 import Stocks from './views/Stocks';
@@ -34,7 +34,7 @@ function App() {
             <Route element={<Layout />} path="/dashboard">
               <Route path="/dashboard/" element={<Main />} />
               <Route path="/dashboard/budget" element={<Budget />} />
-              <Route path="/dashboard/savings" element={<Savings />} />
+              <Route path="/dashboard/accounts" element={<Accounts />} />
               <Route path="/dashboard/stocks" element={<Stocks />} />
             </Route>
           </Route>
