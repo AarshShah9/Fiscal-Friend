@@ -23,7 +23,6 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
 
     const currentDate = new Date();
     const lastMonth = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
-    console.log('Last month: ', lastMonth);
 
     try {
         // Get one-time expenses and incomes from the last month 

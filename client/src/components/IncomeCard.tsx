@@ -4,13 +4,13 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import React, { useState } from 'react';
 
 interface IIncome {
-  _id: string;
-  user: string;
-  name: string;
-  amount: number;
-  date: Date;
-  recurring: string;
-}
+    _id: string;
+    user: string;
+    name: string;
+    amount: number;
+    date: Date;
+    recurring: string;
+  };
 
 interface IncomeCardProps {
   income: IIncome;
@@ -48,7 +48,7 @@ const IncomeCard: React.FC<IncomeCardProps> = ({ income, onDelete }) => {
           <div className="text-base font-medium ">
             {showDetails && (
               <div>
-                <p>Date: {formattedDate.toLocaleDateString()}</p>
+                {income.date && (<p>Date: {new Date(income.date).toLocaleDateString()}</p>)}
                 <p>Recurring: {income.recurring}</p>
               </div>
             )}

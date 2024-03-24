@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useEffect } from 'react';
@@ -6,6 +6,7 @@ import { URL } from '../utils/constants';
 import axios from 'axios';
 import ExpenseCard from './ExpenseCard';
 import IncomeCard from './IncomeCard';
+import { IBudget } from '../views/Budget';
 
 import CreateTransactionModal from './CreateTransactionModal';
 

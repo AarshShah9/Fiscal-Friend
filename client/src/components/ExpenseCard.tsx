@@ -24,7 +24,6 @@ const ExpenseCard: React.FC<ExpenseCardProps> = ({ expense, onDelete }) => {
     setShowDetails(!showDetails);
   };
 
-  const formattedDate = new Date(expense.date);
 
   return (
     <div className="bg-emerald-500 rounded-lg p-4 shadow-md mb-4 overflow-hidden text-white">
@@ -49,7 +48,7 @@ const ExpenseCard: React.FC<ExpenseCardProps> = ({ expense, onDelete }) => {
           <div className="text-base font-medium ">
             {showDetails && (
               <div>
-                <p>Date: {formattedDate.toLocaleDateString()}</p>
+                {expense.date && (<p>Date: {new Date(expense.date).toLocaleDateString()}</p>)}
                 <p>Recurring: {expense.recurring}</p>
                 <p>Category: {expense.category}</p>
               </div>
