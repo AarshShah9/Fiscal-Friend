@@ -108,3 +108,31 @@ export const updateSavings = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: 'Server error', e });
   }
 };
+
+export const getAllSavings = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  const user = await User.findById(req.body.user);
+
+  if (!user) {
+    return res.status(400).json({ success: false, message: 'User not found' });
+  }
+  let savings = await SavingsModel.find({ user: req.body.user });
+  let amounts = savings.map((s) => {
+    return (
+      (s.savingAccount.chequing as number) +
+      (s.savingAccount.savings as number) +
+      (s.savingAccount.resp as number)
+    );
+  });
+  const netWorth = amounts.reduce((a, b) => a + b, 0);
+
+  return res.status(201).json({
+    success: true,
+    netWorth: netWorth,
+  });
+};
