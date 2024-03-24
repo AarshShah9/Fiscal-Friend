@@ -16,7 +16,7 @@ interface IBudget {
             other: Number;
             mortgage?: Number;
             creditCard?: Number;
-            savings?: Number;
+            savings: Number;
         };
     };
     recommendedBudget: {
@@ -27,7 +27,7 @@ interface IBudget {
         wellness: Number;
         entertainment: Number;
         other: Number;
-        savings?: Number;
+        savings: Number;
     };
 };
 
@@ -91,6 +91,7 @@ export const getBudget = async (req: Request, res: Response) => {
            insurance: 0,
            wellness: 0,
            entertainment: 0,
+           savings: 0,
            other: 0,
        };
 
@@ -145,6 +146,9 @@ export const getBudget = async (req: Request, res: Response) => {
                 case 'Entertainment':
                     itemizedExpenses.entertainment += amount;
                     break;
+                case 'Savings':
+                    itemizedExpenses.savings += amount;
+                    break;
                 case 'Other':
                     itemizedExpenses.other += amount;
                     break;
@@ -156,16 +160,30 @@ export const getBudget = async (req: Request, res: Response) => {
         if (itemizedExpenses.rent > 0) {
             flexibleIncome -= itemizedExpenses.rent;
         }
-        const recommendedBudget = {
-            food: parseFloat((flexibleIncome * 0.15).toFixed(2)),
-            utilities: parseFloat((flexibleIncome * 0.15).toFixed(2)),
-            transportation: parseFloat((flexibleIncome * 0.10).toFixed(2)),
-            insurance: parseFloat((flexibleIncome * 0.05).toFixed(2)),
-            wellness: parseFloat((flexibleIncome * 0.05).toFixed(2)),
-            entertainment: parseFloat((flexibleIncome * 0.06).toFixed(2)),
-            other: parseFloat((flexibleIncome * 0.06).toFixed(2)),
-            savings: parseFloat((flexibleIncome * 0.4).toFixed(2)),
-        };
+        let recommendedBudget;
+        if (flexibleIncome <= 0) {
+            recommendedBudget = {
+                food: 0,
+                utilities: 0,
+                transportation: 0,
+                insurance: 0,
+                wellness: 0,
+                entertainment: 0,
+                other: 0,
+                savings: 0,
+            };
+        } else {
+            recommendedBudget = {
+                food: parseFloat((flexibleIncome * 0.15).toFixed(2)),
+                utilities: parseFloat((flexibleIncome * 0.15).toFixed(2)),
+                transportation: parseFloat((flexibleIncome * 0.10).toFixed(2)),
+                insurance: parseFloat((flexibleIncome * 0.05).toFixed(2)),
+                wellness: parseFloat((flexibleIncome * 0.05).toFixed(2)),
+                entertainment: parseFloat((flexibleIncome * 0.06).toFixed(2)),
+                other: parseFloat((flexibleIncome * 0.06).toFixed(2)),
+                savings: parseFloat((flexibleIncome * 0.4).toFixed(2)),
+            };
+        }
 
         const budget: IBudget = {
             income: totalIncome,

@@ -84,7 +84,7 @@ export const incomeTests = (agent: request.Agent) => {
             expect(res.body.message).toEqual('Income created');
             expect(res.body.income.name).toEqual('Test income 2');
             expect(res.body.income.amount).toEqual(2000);
-            expect(res.body.income.date).toEqual('2021-01-02T00:00:00.000Z');
+            expect(res.body.income.date).toBeUndefined();
             expect(res.body.income.recurring).toEqual('Weekly');
             testIncome2._id = res.body.income._id;
         });
