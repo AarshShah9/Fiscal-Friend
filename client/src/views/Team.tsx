@@ -5,6 +5,12 @@ const people = [
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg',
   },
+  {
+    name: 'Zachariah Blair',
+    role: 'Senior Interface Design Specialist',
+    imageUrl:
+      'https://i1.sndcdn.com/avatars-000912318250-q1a0w6-t240x240.jpg',
+  }
 ];
 
 export default function Team() {
