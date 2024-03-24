@@ -1,5 +1,5 @@
 import { User } from '../models';
-import { Mortgage } from '../models/Mortgage';
+import Mortgage from '../models/Mortgage';
 import { Request, Response } from 'express';
 
 export const createMortgage = async (req: Request, res: Response) => {

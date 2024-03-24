@@ -43,7 +43,6 @@ const mortgageSchema: Schema<IMortgage> = new Schema({
   },
 });
 
-export const Mortgage: Model<IMortgage> = model<IMortgage>(
-  'Mortgage',
-  mortgageSchema
-);
+const Mortgage: Model<IMortgage> = model<IMortgage>('Mortgage', mortgageSchema);
+
+export default Mortgage;
