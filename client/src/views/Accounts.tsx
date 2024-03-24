@@ -127,14 +127,24 @@ const Accounts: React.FC = () => {
           {showMortgageCalculation && (
             <MortgageCalculation
               amount={fetchedData?.loanAccount.mortgage || 0}
-              onClose={(data?: MortgageInfo) => {
+              onShow={(data?: MortgageInfo) => {
                 setShowMortgageCalculation(false);
                 setShowMortgageInfo(true);
                 setMortgageInfo(data);
               }}
+              onClose={() => {
+                setShowMortgageCalculation(false);
+              }}
             />
           )}
-          {showMortgageInfo && <MortgageInformation info={mortgageInfo} />}
+          {showMortgageInfo && (
+            <MortgageInformation
+              info={mortgageInfo}
+              onClose={() => {
+                setShowMortgageInfo(false);
+              }}
+            />
+          )}
         </div>
         <h1 className="text-5xl pb-2">Accounts</h1>
         <p className={'py-4'}>

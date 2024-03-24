@@ -18,10 +18,15 @@ type MortgageForm = {
 
 type MortgageProps = {
   amount: number;
-  onClose: (data?: MortgageInfo) => void;
+  onShow: (data?: MortgageInfo) => void;
+  onClose: () => void;
 };
 
-const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
+const MortgageCalculation: React.FC<MortgageProps> = ({
+  amount,
+  onClose,
+  onShow,
+}) => {
   const [isOpen, setIsOpen] = useState(true);
   const [fetchedData, setFetchedData] = useState<MortgageForm | null>(null);
 
@@ -68,7 +73,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     const postMortgage = async () => {
       try {
         const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
-        onClose(res.data.mortgage);
+        onShow(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
@@ -76,7 +81,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     const updateMortgage = async () => {
       try {
         const res = await axios.put(`${URL}/mortgage/update`, mortgageData);
-        onClose(res.data.mortgage);
+        onShow(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
@@ -99,7 +104,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   return (
     <div>
       <Transition.Root show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={() => onClose()}>
+        <Dialog as="div" className="relative z-50" onClose={onClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

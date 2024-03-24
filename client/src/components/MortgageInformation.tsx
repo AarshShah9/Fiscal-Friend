@@ -21,6 +21,7 @@ export type MortgageInfo = {
 
 type MortgageInfoProps = {
   info?: MortgageInfo;
+  onClose: () => void;
 };
 
 const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
@@ -30,6 +31,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
   console.log(props, 'props');
   const handleClose = () => {
     setIsOpen(false);
+    props?.onClose();
   };
 
   return (
