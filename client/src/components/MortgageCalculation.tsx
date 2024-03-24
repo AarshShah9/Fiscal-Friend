@@ -3,6 +3,7 @@ import axios from 'axios';
 import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
+import { MortgageInfo } from './MortgageInformation';
 
 type MortgageForm = {
   amount: number;
@@ -17,7 +18,7 @@ type MortgageForm = {
 
 type MortgageProps = {
   amount: number;
-  onClose: () => void;
+  onClose: (data?: MortgageInfo) => void;
 };
 
 const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
@@ -40,7 +41,6 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   const fetchData = async () => {
     try {
       const res = await axios.get(`${URL}/mortgage/get`);
-      console.log('Data: ', res.data.savings[0]);
       if (res.data.savings && res.data.savings.length > 0) {
         setFetchedData(res.data.savings[0]);
       } else {
@@ -68,7 +68,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     const postMortgage = async () => {
       try {
         const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
-        onClose();
+        onClose(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
@@ -76,7 +76,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
     const updateMortgage = async () => {
       try {
         const res = await axios.put(`${URL}/mortgage/update`, mortgageData);
-        onClose();
+        onClose(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
@@ -99,7 +99,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({ amount, onClose }) => {
   return (
     <div>
       <Transition.Root show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Dialog as="div" className="relative z-50" onClose={() => onClose()}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

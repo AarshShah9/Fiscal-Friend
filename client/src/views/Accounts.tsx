@@ -6,6 +6,9 @@ import { URL } from '../utils/constants';
 import MortgageCalculation from '../components/MortgageCalculation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import MortgageInformation, {
+  MortgageInfo,
+} from '../components/MortgageInformation';
 
 type SavingAccountType = {
   chequing: number;
@@ -51,6 +54,9 @@ const Accounts: React.FC = () => {
   });
 
   const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
+  const [showMortgageInfo, setShowMortgageInfo] = useState(false);
+  const [mortgageInfo, setMortgageInfo] = useState<MortgageInfo>();
+
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -96,14 +102,14 @@ const Accounts: React.FC = () => {
     setIsLoading(false);
   }, [isLoading]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const isMortgageCalculatorDisabled =
     fetchedData?.loanAccount.mortgage === 0 ||
     isLoading ||
     fetchedData?.loanAccount.mortgage === undefined;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
@@ -121,9 +127,14 @@ const Accounts: React.FC = () => {
           {showMortgageCalculation && (
             <MortgageCalculation
               amount={fetchedData?.loanAccount.mortgage || 0}
-              onClose={() => setShowMortgageCalculation(false)}
+              onClose={(data?: MortgageInfo) => {
+                setShowMortgageCalculation(false);
+                setShowMortgageInfo(true);
+                setMortgageInfo(data);
+              }}
             />
           )}
+          {showMortgageInfo && <MortgageInformation info={mortgageInfo} />}
         </div>
         <h1 className="text-5xl pb-2">Accounts</h1>
         <p className={'py-4'}>
