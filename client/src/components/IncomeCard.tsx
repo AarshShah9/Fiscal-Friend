@@ -39,7 +39,7 @@ const IncomeCard: React.FC<IncomeCardProps> = ({ income, onDelete }) => {
             <div className="text-base font-medium ">
               {showDetails && (
                 <div>
-                  <p>Date: {formattedDate.toLocaleDateString()}</p>
+                  {income.date && (<p>Date: {new Date(income.date).toLocaleDateString()}</p>)}
                   <p>Recurring: {income.recurring}</p>
                 </div>
               )}

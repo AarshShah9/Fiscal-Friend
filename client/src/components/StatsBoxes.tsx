@@ -25,13 +25,6 @@ export default function StatsBoxes({ budget }: StatsBoxesProps) {
 
   return (
     <div>
-      <h3 className="text-base font-semibold leading-6 text-gray-900">
-        {new Date().toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        })}
-      </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {stats.map((item) => (
           <div

@@ -93,6 +93,13 @@ export default function Budget() {
     <>
       <div className="flex flex-col h-screen justify-around">
         <div className="h-2/5">
+        <h3 className="text-lg font-semibold leading-6 text-gray-900">
+          Your projected budget for 
+          {" " + new Date().toLocaleDateString('en-US', {
+            month: 'long',
+            year: 'numeric',
+          })}
+        </h3>
           <PieChart budget={budget} />
         </div>
 
