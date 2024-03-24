@@ -209,6 +209,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                                     <option value="Entertainment">
                                       Entertainment
                                     </option>
+                                    <option value="Savings">Savings</option>
                                     <option value="Other">Other</option>
                                   </select>
                                 </div>

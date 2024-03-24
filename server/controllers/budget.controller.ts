@@ -16,7 +16,7 @@ interface IBudget {
             other: Number;
             mortgage?: Number;
             creditCard?: Number;
-            savings?: Number;
+            savings: Number;
         };
     };
     recommendedBudget: {
@@ -27,7 +27,7 @@ interface IBudget {
         wellness: Number;
         entertainment: Number;
         other: Number;
-        savings?: Number;
+        savings: Number;
     };
 };
 
@@ -91,6 +91,7 @@ export const getBudget = async (req: Request, res: Response) => {
            insurance: 0,
            wellness: 0,
            entertainment: 0,
+           savings: 0,
            other: 0,
        };
 
@@ -144,6 +145,9 @@ export const getBudget = async (req: Request, res: Response) => {
                     break;
                 case 'Entertainment':
                     itemizedExpenses.entertainment += amount;
+                    break;
+                case 'Savings':
+                    itemizedExpenses.savings += amount;
                     break;
                 case 'Other':
                     itemizedExpenses.other += amount;
