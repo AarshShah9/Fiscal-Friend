@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 import { BudgetContext } from '../views/Budget';
 
 type ExpenseItem = { [key: string]: number };
@@ -12,7 +12,6 @@ type Budget = {
 };
 
 export default function StatsBoxes() {
-
   const budget = useContext(BudgetContext) as Budget;
 
   var expenseNames = [] as string[];
@@ -29,7 +28,7 @@ export default function StatsBoxes() {
   var stats = [
     { name: 'Income', stat: '$' + budget.income },
     { name: 'Spent', stat: '$' + budget.expenses.total },
-    { name: 'Remaining', stat: '$' + (budget.income - budget.expenses.total)},
+    { name: 'Remaining', stat: '$' + (budget.income - budget.expenses.total) },
   ];
 
   return (

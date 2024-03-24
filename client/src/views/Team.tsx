@@ -8,9 +8,8 @@ const people = [
   {
     name: 'Zachariah Blair',
     role: 'Senior Interface Design Specialist',
-    imageUrl:
-      'https://i1.sndcdn.com/avatars-000912318250-q1a0w6-t240x240.jpg',
-  }
+    imageUrl: 'https://i1.sndcdn.com/avatars-000912318250-q1a0w6-t240x240.jpg',
+  },
 ];
 
 export default function Team() {

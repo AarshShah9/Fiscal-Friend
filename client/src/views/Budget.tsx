@@ -18,21 +18,28 @@ const budget: IBudget = {
   income: 3000,
   expenses: {
     total: 1600,
-    itemized: [{ 'rent': 1000 }, { 'food': 400 }, { 'gas': 100}, { 'entertainment': 100 }],
+    itemized: [
+      { rent: 1000 },
+      { food: 400 },
+      { gas: 100 },
+      { entertainment: 100 },
+    ],
   },
 };
 
 export const BudgetContext = React.createContext<IBudget>(budget);
 
 export default function Budget() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [sidebarType, setSidebarType] = useState<"expenses" | "incomes" | undefined>(undefined); // Track which type of sidebar to open
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarType, setSidebarType] = useState<
+    'expenses' | 'incomes' | undefined
+  >(undefined); // Track which type of sidebar to open
   const [refresh, setRefresh] = useState(false);
 
-  const toggleSidebar = (type?: "expenses" | "incomes" | undefined) => {
+  const toggleSidebar = (type?: 'expenses' | 'incomes' | undefined) => {
     setSidebarType(type);
     setSidebarOpen(!sidebarOpen);
-  }
+  };
 
   return (
     <BudgetContext.Provider value={budget}>
@@ -43,19 +50,33 @@ export default function Budget() {
         </div>
         <div className="flex flex-col justify-start justify-items-center">
           {/* Pass respective type as argument */}
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4" onClick={() => toggleSidebar("expenses")}>
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4"
+            onClick={() => toggleSidebar('expenses')}
+          >
             Manage Expenses
           </button>
-          <button className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full" onClick={() => toggleSidebar("incomes")}>
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full"
+            onClick={() => toggleSidebar('incomes')}
+          >
             Manage Incomes
           </button>
         </div>
         {/* Pass sidebarType to Sidebar component */}
-        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} type={sidebarType} setRefreshRequired={setRefresh} />
+        <Sidebar
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          type={sidebarType}
+          setRefreshRequired={setRefresh}
+        />
       </div>
       <StatsBoxes />
       <div className="min-h-10"></div>
-      <TransactionsTable refreshRequired={refresh} setRefreshRequired={setRefresh}/>
+      <TransactionsTable
+        refreshRequired={refresh}
+        setRefreshRequired={setRefresh}
+      />
     </BudgetContext.Provider>
   );
 }

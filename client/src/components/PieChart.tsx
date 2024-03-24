@@ -24,12 +24,12 @@ const getChartOptions = (
       type: 'donut',
     },
     theme: {
-        monochrome: {
-            enabled: true,
-            color: '#10b981',
-            shadeTo: 'dark',
-            shadeIntensity: 0.65
-        },
+      monochrome: {
+        enabled: true,
+        color: '#10b981',
+        shadeTo: 'dark',
+        shadeIntensity: 0.65,
+      },
     },
     stroke: {
       colors: ['transparent'],
