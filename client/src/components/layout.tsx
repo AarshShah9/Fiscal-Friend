@@ -38,10 +38,10 @@ export default function Layout() {
       current: location.pathname === '/dashboard',
     },
     {
-      name: 'Savings',
-      onClick: () => navigate('/dashboard/savings'),
+      name: 'Accounts',
+      onClick: () => navigate('/dashboard/accounts'),
       icon: BanknotesIcon,
-      current: location.pathname === '/dashboard/savings',
+      current: location.pathname === '/dashboard/accounts',
     },
     {
       name: 'Stocks',
@@ -274,10 +274,13 @@ export default function Layout() {
             </div>
           </div>
 
-          <main className="xl:pl-12 w-full" style={{height:"calc(100% - 4rem)"}}>
+          <main
+            className="xl:pl-12 w-full"
+            style={{ height: 'calc(100% - 4rem)' }}
+          >
             <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6 w-full h-full">
-          {/*<main className="xl:pl-12">*/}
-          {/*  <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">*/}
+              {/*<main className="xl:pl-12">*/}
+              {/*  <div className="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">*/}
               <Outlet />
             </div>
           </main>
