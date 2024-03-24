@@ -91,12 +91,12 @@ export default function Budget() {
 
   return (
     <>
-      <div className="flex flex-col min-h-screen justify-around">
-        <div className="h-3/5 grow">
+      <div className="flex flex-col h-screen justify-around">
+        <div className="h-2/5">
           <PieChart budget={budget} />
         </div>
 
-        <div className="flex flex-row grow">
+        <div className="flex flex-row h-3/5">
           <ColumnChart budget={budget} />
           <BarChart budget={budget} />
         </div>
