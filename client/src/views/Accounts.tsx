@@ -26,13 +26,13 @@ type UserAccountType = {
   loanAccount: LoanAccountType;
 };
 
-const schema = z.object({
-  chequing: z.number().nonnegative(),
-  savings: z.number().nonnegative(),
-  resp: z.number().nonnegative(),
-  loc: z.number().nonnegative().optional(),
-  mortgage: z.number().nonnegative().optional(),
-});
+// const schema = z.object({
+//   chequing: z.number().nonnegative(),
+//   savings: z.number().nonnegative(),
+//   resp: z.number().nonnegative(),
+//   loc: z.number().nonnegative().optional(),
+//   mortgage: z.number().nonnegative().optional(),
+// });
 
 type Accounts = {
   chequing: number;
@@ -55,11 +55,11 @@ const Accounts: React.FC = () => {
   const handleSubmitData = async (data: any) => {
     try {
       const requestData = {
-        chequing: parseFloat(data.chequing),
-        savings: parseFloat(data.savings),
-        resp: parseFloat(data.resp),
-        loc: parseFloat(data.loc),
-        mortgage: parseFloat(data.mortgage),
+        chequing: parseFloat(data.chequing).toFixed(2),
+        savings: parseFloat(data.savings).toFixed(2),
+        resp: parseFloat(data.resp).toFixed(2),
+        loc: parseFloat(data.loc).toFixed(2),
+        mortgage: parseFloat(data.mortgage).toFixed(2),
       };
       setIsLoading(true);
       if (fetchedData) {
@@ -67,7 +67,7 @@ const Accounts: React.FC = () => {
       } else {
         await axios.post(`${URL}/savings/create`, requestData);
       }
-      reset();
+      // reset();
     } catch (e) {
       window.alert('Error saving data');
       console.error('Error saving data:', e);
@@ -97,7 +97,8 @@ const Accounts: React.FC = () => {
   const isMortgageCalculatorDisabled =
     fetchedData?.loanAccount.mortgage === 0 ||
     isLoading ||
-    fetchedData?.loanAccount.mortgage === undefined;
+    fetchedData?.loanAccount.mortgage === undefined ||
+    fetchedData?.loanAccount.mortgage === null;
 
   if (isLoading) {
     return <div>Loading...</div>;
