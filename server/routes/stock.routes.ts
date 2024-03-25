@@ -7,6 +7,7 @@ import {
   requestUserFavorites,
   saveBoughtStock,
   saveSymbol,
+  updateStockQuantity,
 } from '../controllers/stock.controller';
 import { checkAuth } from '../middleware/checkAuth';
 
@@ -19,5 +20,6 @@ router.post('/get', checkAuth, getSavedStocks);
 router.post('/getSymbol', checkAuth, getSavedBySymbol);
 router.post('/remove', checkAuth, removeStock);
 router.post('/searchFavourites', checkAuth, requestUserFavorites);
+router.post('/update', checkAuth, updateStockQuantity);
 
 export default router;

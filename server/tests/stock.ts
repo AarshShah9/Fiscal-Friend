@@ -43,6 +43,11 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.stock.symbol).toEqual('IBM');
       testStock._id = res.body.stock._id;
     });
+    it('should return error because stock is already saved', async () => {
+      const res = await agent.post('/stock/save').send(testStock);
+      expect(res.statusCode).toEqual(500);
+      expect(res.body.success).toEqual(false);
+    });
     it('should store new bought stock', async () => {
       const res = await agent.post('/stock/saveBought').send(testStock2);
       expect(res.statusCode).toEqual(201);
@@ -51,6 +56,18 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.stock.symbol).toEqual('AAPL');
       expect(res.body.stock.boughtPrice).toEqual(200);
       expect(res.body.stock.quantity).toEqual(5);
+      testStock._id = res.body.stock._id;
+    });
+    it('should update the quantity value of a saved stock', async () => {
+      const res = await agent
+        .post('/stock/update')
+        .send({ symbol: 'AAPL', quantity: 7 });
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.success).toEqual(true);
+      expect(res.body.message).toEqual('Stock updated');
+      expect(res.body.stock.symbol).toEqual('AAPL');
+      expect(res.body.stock.boughtPrice).toEqual(200);
+      expect(res.body.stock.quantity).toEqual(7);
       testStock._id = res.body.stock._id;
     });
     it('Should get saved stock symbols', async () => {
@@ -68,19 +85,24 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.success).toEqual(true);
       expect(res.body.message).toEqual('Stock removed');
     });
-    // it('Should get saved symbols and search them', async () => {
-    //   const res = await agent.post('/stock/searchFavourites').send({});
-    //   expect(res.statusCode).toEqual(200);
-    //   expect(res.body.success).toEqual(true);
-    //   expect(res.body.message).toEqual('Requested user favorites from API');
-    // });
+    it('Should get saved symbols and search them', async () => {
+      const res = await agent.post('/stock/searchFavourites').send({});
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.success).toEqual(true);
+      expect(res.body.message).toEqual('Requested user favorites from API');
+    });
     it('Should return a single specific stock', async () => {
       const res = await agent.post('/stock/getSymbol').send({ symbol: 'AAPL' });
       expect(res.statusCode).toEqual(200);
       expect(res.body.success).toEqual(true);
       expect(res.body.stock.symbol).toEqual('AAPL');
       expect(res.body.stock.boughtPrice).toEqual(200);
-      expect(res.body.stock.quantity).toEqual(5);
+      expect(res.body.stock.quantity).toEqual(7);
+    });
+    it('Should return stock does not exist', async () => {
+      const res = await agent.post('/stock/getSymbol').send({ symbol: 'PPP' });
+      expect(res.statusCode).toEqual(404);
+      expect(res.body.success).toEqual(false);
     });
   });
 };
