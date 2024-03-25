@@ -4,7 +4,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { SignupData, useAuth } from '../contexts/AuthContext';
 
 export default function Signup() {
-  const { register, handleSubmit, setError, clearErrors, formState: { errors } } = useForm<SignupData>();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<SignupData>();
   const { signup, isLoading, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -18,7 +24,7 @@ export default function Signup() {
     if (data.password !== data.confirmPassword) {
       setError('confirmPassword', {
         type: 'validate',
-        message: 'Passwords do not match'
+        message: 'Passwords do not match',
       });
       return;
     }
@@ -33,7 +39,7 @@ export default function Signup() {
           <Link to="/">
             <img
               className="mx-auto h-20 w-auto"
-              src="/images/logo.png"
+              src="/images/logo.svg"
               alt="Fiscal-Friend logo"
             />
           </Link>
@@ -48,7 +54,10 @@ export default function Signup() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="firstName"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 First Name
               </label>
               <div className="mt-2">
@@ -64,7 +73,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="lastName"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Last Name
               </label>
               <div className="mt-2">
@@ -80,7 +92,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Email address
               </label>
               <div className="mt-2">
@@ -96,7 +111,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Password
               </label>
               <div className="mt-2">
@@ -112,7 +130,10 @@ export default function Signup() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Confirm Password
               </label>
               <div className="mt-2">
@@ -125,7 +146,9 @@ export default function Signup() {
                   className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-500 sm:text-sm sm:leading-6 ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 />
                 {errors.confirmPassword && (
-                  <p className="text-sm text-red-500 mt-1">{errors.confirmPassword.message}</p>
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.confirmPassword.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -142,7 +165,10 @@ export default function Signup() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Already have an account?{' '}
-            <a href="/login" className="font-semibold leading-6 text-emerald-600 hover:text-emerald-500">
+            <a
+              href="/login"
+              className="font-semibold leading-6 text-emerald-600 hover:text-emerald-500"
+            >
               Sign in
             </a>
           </p>

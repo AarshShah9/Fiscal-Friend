@@ -6,7 +6,7 @@ interface IExpense extends Document {
   amount: number;
   date?: Date;
   recurring: 'One-time' | 'Weekly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
-  category: 'Food' | 'Utilities' | 'Rent' | 'Transportation' | 'Insurance' | 'Wellness' | 'Entertainment' | 'Other';
+  category: 'Food' | 'Utilities' | 'Rent' | 'Transportation' | 'Insurance' | 'Wellness' | 'Entertainment' | 'Savings' | 'Other';
 }
 
 const expenseSchema: Schema<IExpense> = new mongoose.Schema({
@@ -22,7 +22,7 @@ const expenseSchema: Schema<IExpense> = new mongoose.Schema({
   category: { 
     type: String, 
     required: true, 
-    enum: ['Food', 'Utilities', 'Rent', 'Transportation', 'Insurance', 'Wellness', 'Entertainment', 'Other']
+    enum: ['Food', 'Utilities', 'Rent', 'Transportation', 'Insurance', 'Wellness', 'Entertainment', 'Savings', 'Other']
   },
 });
 
