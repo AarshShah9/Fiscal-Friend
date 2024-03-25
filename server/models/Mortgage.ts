@@ -11,7 +11,7 @@ export interface IMortgage extends Document {
     epr: number;
     interestPayment: number;
     firstPayment: number;
-    monthlyPayment: number;
+    payment: number;
   };
   frequency:
     | 'Bi-Weekly (every 2 weeks)'
@@ -30,7 +30,7 @@ const mortgageSchema: Schema<IMortgage> = new Schema({
     epr: { type: Number, required: false },
     interestPayment: { type: Number, required: false },
     firstPayment: { type: Number, required: false },
-    monthlyPayment: { type: Number, required: false },
+    payment: { type: Number, required: false },
   },
   frequency: {
     type: String,

@@ -43,18 +43,16 @@ export const createMortgage = async (req: Request, res: Response) => {
     numberPayments = mortgagePeriod * 24;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let semiMonthly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = semiMonthly * (24 / 12);
   } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
     numberPayments = mortgagePeriod * 26;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let biWeekly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = biWeekly * (26 / 12);
   }
 
   const firstPayment = monthly - interestPayment;
@@ -70,7 +68,7 @@ export const createMortgage = async (req: Request, res: Response) => {
       epr: (mortgageEPR * 100).toFixed(2),
       interestPayment: interestPayment.toFixed(2),
       firstPayment: firstPayment.toFixed(2),
-      monthlyPayment: monthly.toFixed(2),
+      payment: monthly.toFixed(2),
     },
     frequency: req.body.frequency,
   });
@@ -146,18 +144,16 @@ export const updateMortgage = async (req: Request, res: Response) => {
     numberPayments = mortgagePeriod * 24;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let semiMonthly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = semiMonthly * (24 / 12);
   } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
     numberPayments = mortgagePeriod * 26;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let biWeekly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = biWeekly * (26 / 12);
   }
 
   const firstPayment = monthly - interestPayment;
@@ -173,7 +169,7 @@ export const updateMortgage = async (req: Request, res: Response) => {
           'payments.epr': (mortgageEPR * 100).toFixed(2),
           'payments.interestPayment': interestPayment.toFixed(2),
           'payments.firstPayment': firstPayment.toFixed(2),
-          'payments.monthlyPayment': monthly.toFixed(2),
+          'payments.payment': monthly.toFixed(2),
           frequency: req.body.frequency,
         },
       },

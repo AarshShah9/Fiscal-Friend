@@ -12,7 +12,7 @@ type MortgageForm = {
   epr: number;
   interestPayment: number;
   firstPayment: number;
-  monthlyPayment: number;
+  payment: number;
   frequency: string;
 };
 
@@ -38,7 +38,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({
       epr: 0,
       interestPayment: 0,
       firstPayment: 0,
-      monthlyPayment: 0,
+      payment: 0,
       frequency: 'Bi-Weekly (every 2 weeks)',
     },
   });

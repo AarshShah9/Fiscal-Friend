@@ -14,7 +14,7 @@ export type MortgageInfo = {
     epr: number;
     interestPayment: number;
     firstPayment: number;
-    monthlyPayment: number;
+    payment: number;
   };
   frequency: string;
 };
@@ -119,8 +119,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                                 Interest Payment:{' '}
                                 {props?.info?.payments.interestPayment}
                                 {'\n'}
-                                Monthly Payment:{' '}
-                                {props?.info?.payments.monthlyPayment}
+                                Monthly Payment: {props?.info?.payments.payment}
                                 {'\n'}
                               </p>
                             </div>
