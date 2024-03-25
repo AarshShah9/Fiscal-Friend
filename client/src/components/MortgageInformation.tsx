@@ -130,6 +130,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                                 <br />
                                 Effective Percentage Rate:{' '}
                                 {props?.info?.payments.epr}
+                                {'%'}
                                 <br />
                                 First Payment:{' $'}
                                 {props?.info?.payments.firstPayment.toLocaleString(
