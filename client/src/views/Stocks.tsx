@@ -60,13 +60,16 @@ export default function FinancialChartStockIndexChart(props: any) {
         </button>
       </form>
       <div className="container sample">
-        <div className="container">
+        <div
+          className="container rounded-lg bg-[#DCDCDC]/50 p-4"
+          
+        >
           <IgrFinancialChart
             width="100%"
             height="100%"
             isToolbarVisible={false}
             chartType="Candle"
-            chartTitle="S&P 500"
+            chartTitle={symbol}
             titleAlignment="Left"
             titleLeftMargin="25"
             titleTopMargin="10"
