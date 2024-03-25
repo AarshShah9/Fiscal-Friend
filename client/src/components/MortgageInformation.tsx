@@ -93,12 +93,20 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                Amount: {props?.info?.mortgage.amount}
-                                {'\n'}
-                                Apr: {props?.info?.mortgage.apr}
-                                {'\n'}
+                                Amount:{' $'}
+                                {props?.info?.mortgage.amount.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Annual Percentage Rate (APR):{' '}
+                                {props?.info?.mortgage.apr}
+                                {'%'}
+                                <br />
                                 Period: {props?.info?.mortgage.period} Years
-                                {'\n'}
                               </p>
                             </div>
                           </div>
@@ -111,16 +119,35 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                Aepr: {props?.info?.payments.epr}
-                                {'\n'}
-                                First Payment:{''}
-                                {props?.info?.payments.firstPayment}
-                                {'\n'}
-                                Interest Payment:{' '}
-                                {props?.info?.payments.interestPayment}
-                                {'\n'}
-                                Monthly Payment: {props?.info?.payments.payment}
-                                {'\n'}
+                                Monthly Payment:{' $'}
+                                {props?.info?.payments.payment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Effective Percentage Rate:{' '}
+                                {props?.info?.payments.epr}
+                                <br />
+                                First Payment:{' $'}
+                                {props?.info?.payments.firstPayment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Interest Payment:{' $'}
+                                {props?.info?.payments.interestPayment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
                               </p>
                             </div>
                           </div>
