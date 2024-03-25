@@ -166,7 +166,7 @@ export const saveBoughtStock = async (req: Request, res: Response) => {
       .status(400)
       .json({ success: false, message: 'User not authenticated' });
   }
-  if (!req.body.symbol || !req.body.price || !req.body.quantity) {
+  if (!req.body.symbol || !req.body.boughtPrice || !req.body.quantity) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -176,7 +176,7 @@ export const saveBoughtStock = async (req: Request, res: Response) => {
     const newStock = new Stock({
       user: req.body.user,
       symbol: req.body.symbol,
-      boughtPrice: req.body.price,
+      boughtPrice: req.body.boughtPrice,
       quantity: req.body.quantity,
     });
 
