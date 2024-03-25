@@ -43,15 +43,7 @@ type Accounts = {
 };
 
 const Accounts: React.FC = () => {
-  const { register, handleSubmit, reset, formState } = useForm<Accounts>({
-    defaultValues: {
-      chequing: 0,
-      savings: 0,
-      resp: 0,
-      loc: 0,
-      mortgage: 0,
-    },
-  });
+  const { register, handleSubmit, reset, formState } = useForm<Accounts>();
 
   const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [showMortgageInfo, setShowMortgageInfo] = useState(false);
@@ -168,7 +160,7 @@ const Accounts: React.FC = () => {
               type="number"
               {...register('chequing')}
               className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
+              placeholder="$0.00"
             />
             {formState.errors.chequing && (
               <span className="text-red-500">This field is required</span>
@@ -185,7 +177,7 @@ const Accounts: React.FC = () => {
               type="number"
               {...register('savings')}
               className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
+              placeholder="$0.00"
             />
             {formState.errors.savings && (
               <span className="text-red-500">This field is required</span>
@@ -202,7 +194,7 @@ const Accounts: React.FC = () => {
               type="number"
               {...register('resp')}
               className="block rounded-md border-gray-300 shadow-sm"
-              placeholder="0.00"
+              placeholder="$0.00"
             />
             {formState.errors.resp && (
               <span className="text-red-500">This field is required</span>
@@ -222,6 +214,7 @@ const Accounts: React.FC = () => {
               className="block rounded-md border-gray-300 shadow-sm"
               {...register('loc')}
               type="number"
+              placeholder="$0.00"
             />
           </div>
           <div className="pb-8">
@@ -235,6 +228,7 @@ const Accounts: React.FC = () => {
               className="block rounded-md border-gray-300 shadow-sm"
               {...register('mortgage')}
               type="number"
+              placeholder="$0.00"
             />
           </div>
         </div>
