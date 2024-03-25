@@ -57,9 +57,9 @@ const Accounts: React.FC = () => {
       const requestData = {
         chequing: parseFloat(data.chequing).toFixed(2),
         savings: parseFloat(data.savings).toFixed(2),
-        resp: parseFloat(data.resp).toFixed(2),
-        loc: parseFloat(data.loc).toFixed(2),
-        mortgage: parseFloat(data.mortgage).toFixed(2),
+        resp: data.resp ? parseFloat(data.resp).toFixed(2) : 0,
+        loc: data.loc ? parseFloat(data.loc).toFixed(2) : 0,
+        mortgage: data.mortgage ? parseFloat(data.mortgage).toFixed(2) : 0,
       };
       setIsLoading(true);
       if (fetchedData) {
