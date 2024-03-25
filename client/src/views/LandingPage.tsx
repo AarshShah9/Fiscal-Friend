@@ -8,7 +8,7 @@ export default function LandingPage() {
       <div className="h-dvh bg-gradient-to-br from-emerald-300 flex flex-col items-center">
         <div className="h-24 w-full px-9 flex items-center justify-between">
           <div className="h-full py-3.5 items-center flex justify-between">
-            <img src="/images/logo.png" alt="Fiscal logo" className="h-full" />
+            <img src="/images/logo.svg" alt="Fiscal logo" className="h-full" />
             <h1 className="text-4xl px-2 font-bold text-black">
               Fiscal Friend
             </h1>
@@ -51,7 +51,7 @@ export default function LandingPage() {
             </button>
           </div>
         </div>
-        <div className="flex w-full items-center justify-evenly">
+        <div className="flex w-full h-5/6 items-center justify-evenly">
           <div className="h-full flex flex-col justify-center text-center">
             <div>
               <h1 className="text-5xl mb-1 font-bold text-black">
@@ -68,9 +68,9 @@ export default function LandingPage() {
             </div>
             <div className="h-1/5"></div>
           </div>
-          <div className="h-5/6">
+          <div className="h-full">
             <img
-              src="/images/logo_w_text.png"
+              src="/images/logo_w_text.svg"
               alt="Fiscal logo"
               className="h-full"
             />

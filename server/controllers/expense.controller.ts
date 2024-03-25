@@ -14,6 +14,10 @@ export const createExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
 
+    if(req.body.recurring !== 'One-time') {
+        req.body.date = undefined;
+    }
+
     const newExpense = new Expense({
         user: req.body.user,
         name: req.body.name,

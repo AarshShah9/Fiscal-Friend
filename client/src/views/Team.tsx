@@ -11,6 +11,17 @@ const people = [
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/%EA%A0%81%EA%A0%9F%EA%A0%98_%EA%A0%9D%EA%A0%A3%EA%A0%8D%EA%A0%86%EA%A0%87.jpg/120px-%EA%A0%81%EA%A0%9F%EA%A0%98_%EA%A0%9D%EA%A0%A3%EA%A0%8D%EA%A0%86%EA%A0%87.jpg',
   },
+  {
+    name: 'Zachariah Blair',
+    role: 'Senior Interface Design Specialist',
+    imageUrl: 'https://i1.sndcdn.com/avatars-000912318250-q1a0w6-t240x240.jpg',
+  },
+  {
+    name: 'William Fraser',
+    role: 'Lead custodian',
+    imageUrl:
+      'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
+  },
 ];
 
 export default function Team() {

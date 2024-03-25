@@ -24,23 +24,31 @@ const ExpenseCard: React.FC<ExpenseCardProps> = ({ expense, onDelete }) => {
     setShowDetails(!showDetails);
   };
 
-  const formattedDate = new Date(expense.date);
 
   return (
     <div className="bg-emerald-500 rounded-lg p-4 shadow-md mb-4 overflow-hidden text-white">
       <div className="flex items-start">
-        <button onClick={toggleDetails} className="mr-4 mt-1 focus:outline-none">
-          <ChevronDownIcon className={`h-6 w-6 text-white hover:text-gray-500 transform transition-transform duration-300 ${showDetails ? 'rotate-180' : ''}`} />
+        <button
+          onClick={toggleDetails}
+          className="mr-4 mt-1 focus:outline-none"
+        >
+          <ChevronDownIcon
+            className={`h-6 w-6 text-white hover:text-gray-500 transform transition-transform duration-300 ${showDetails ? 'rotate-180' : ''}`}
+          />
         </button>
-        <div className={`flex-grow transition-all duration-300 overflow-hidden hover:overflow-auto h-auto`}>
+        <div
+          className={`flex-grow transition-all duration-300 overflow-hidden hover:overflow-auto h-auto`}
+        >
           <div className="flex flex-row justify-left items-center flex-wrap">
             <h2 className="text-lg font-semibold pr-4">{expense.name}</h2>
-            <h2 className="text-lg font-semibold text-gray-700">${expense.amount}</h2>
+            <h2 className="text-lg font-semibold text-gray-700">
+              ${expense.amount}
+            </h2>
           </div>
           <div className="text-base font-medium ">
             {showDetails && (
               <div>
-                <p>Date: {formattedDate.toLocaleDateString()}</p>
+                {expense.date && (<p>Date: {new Date(expense.date).toLocaleDateString()}</p>)}
                 <p>Recurring: {expense.recurring}</p>
                 <p>Category: {expense.category}</p>
               </div>
