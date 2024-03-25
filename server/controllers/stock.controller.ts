@@ -194,3 +194,34 @@ export const saveBoughtStock = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Server error', error });
   }
 };
+
+export const getSavedBySymbol = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+  if (!req.body.symbol) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  try {
+    const stock = await Stock.findOne({
+      user: req.body.user,
+      symbol: req.body.symbol,
+    });
+    if (stock) {
+      return res.status(200).json({ success: true, stock });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Stock does not exist' });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error', error });
+  }
+};
