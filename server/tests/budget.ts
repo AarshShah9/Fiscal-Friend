@@ -136,6 +136,7 @@ const expected: IBudget = {
             entertainment: 100,
             other: 200,
             rent: 0,
+            savings: 0,
         },
     },
     recommendedBudget: {
@@ -146,7 +147,7 @@ const expected: IBudget = {
         "savings": 3600, 
         "transportation": 900, 
         "utilities": 1350, 
-        "wellness": 450
+        "wellness": 450,
     },
 };
 
