@@ -92,9 +92,33 @@ const SavingsSummary: React.FC<SavingAccountType> = ({
   }, [savingsAccount]);
 
   var savingStats = [
-    { name: 'Chequings', stat: '$' + savingsAccount.chequing },
-    { name: 'Savings', stat: '$' + savingsAccount.savings },
-    { name: 'RESP', stat: '$' + savingsAccount.resp },
+    {
+      name: 'Chequings',
+      stat:
+        '$' +
+        savingsAccount.chequing.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
+    {
+      name: 'Savings',
+      stat:
+        '$' +
+        savingsAccount.savings.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
+    {
+      name: 'RESP',
+      stat:
+        '$' +
+        savingsAccount.resp.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
   ];
 
   return (

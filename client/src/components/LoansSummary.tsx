@@ -73,8 +73,24 @@ const LoansSummary: React.FC<LoanAccountType> = ({ loc, mortgage }) => {
     }
   }, [loansAccount]);
   var loaningStats = [
-    { name: 'Line of Credit', stat: '$' + loansAccount.loc },
-    { name: 'Mortgage', stat: '$' + loansAccount.mortgage },
+    {
+      name: 'Line of Credit',
+      stat:
+        '$' +
+        loansAccount.loc.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
+    {
+      name: 'Mortgage',
+      stat:
+        '$' +
+        loansAccount.mortgage.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
   ];
 
   return (
