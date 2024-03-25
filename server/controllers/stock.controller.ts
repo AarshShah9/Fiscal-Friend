@@ -225,3 +225,35 @@ export const getSavedBySymbol = async (req: Request, res: Response) => {
       .json({ success: false, message: 'Server error', error });
   }
 };
+
+export const updateStockQuantity = async (req: Request, res: Response) => {
+  const { user, symbol, quantity } = req.body;
+
+  if (!user || !symbol || !quantity) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'Invalid request body' });
+  }
+
+  try {
+    const stock = await Stock.findOne({ user, symbol });
+
+    if (!stock) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Stock not found' });
+    }
+
+    stock.quantity = quantity;
+
+    const updatedStock = await stock.save();
+
+    return res
+      .status(200)
+      .json({ success: true, message: 'Stock updated', stock: updatedStock });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error', error });
+  }
+};
