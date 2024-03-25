@@ -165,6 +165,7 @@ export const requestUserFavorites = async (req: Request, res: Response) => {
 
 // Method to save users bought stocks
 export const saveBoughtStock = async (req: Request, res: Response) => {
+  console.log('Request body:', req.body);
   if (!req.body.user) {
     return res
       .status(400)
@@ -189,6 +190,7 @@ export const saveBoughtStock = async (req: Request, res: Response) => {
       .status(201)
       .json({ success: true, message: 'Stock saved', stock: newStock });
   } catch (error) {
+    console.error('Error saving stock:', error); // Log the error
     return res
       .status(500)
       .json({ success: false, message: 'Server error', error });

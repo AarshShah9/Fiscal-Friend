@@ -8,6 +8,13 @@ const testStock = {
   quantity: 10,
 };
 
+const testStock2 = {
+  _id: null,
+  symbol: 'AAPL',
+  boughtPrice: 200,
+  quantity: 5,
+};
+
 export const stockTests = (agent: request.Agent) => {
   beforeAll(async () => {
     await Stock.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
@@ -37,13 +44,13 @@ export const stockTests = (agent: request.Agent) => {
       testStock._id = res.body.stock._id;
     });
     it('should store new bought stock', async () => {
-      const res = await agent.post('/stock/saveBought').send(testStock);
-      // expect(res.statusCode).toEqual(201);
-      // expect(res.body.success).toEqual(true);
+      const res = await agent.post('/stock/saveBought').send(testStock2);
+      expect(res.statusCode).toEqual(201);
+      expect(res.body.success).toEqual(true);
       expect(res.body.message).toEqual('Stock saved');
-      expect(res.body.stock.symbol).toEqual('IBM');
-      expect(res.body.stock.boughtPrice).toEqual(100);
-      expect(res.body.stock.quantity).toEqual(10);
+      expect(res.body.stock.symbol).toEqual('AAPL');
+      expect(res.body.stock.boughtPrice).toEqual(200);
+      expect(res.body.stock.quantity).toEqual(5);
       testStock._id = res.body.stock._id;
     });
     it('Should get saved stock symbols', async () => {
@@ -52,14 +59,14 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.success).toEqual(true);
       expect(res.body.stocks.length).toBeGreaterThan(0);
       expect(res.body.stocks[0].symbol).toEqual('IBM');
-      expect(res.body.stocks[0].boughtPrice).toEqual(100);
-      expect(res.body.stocks[0].quantity).toEqual(10);
+      expect(res.body.stocks[0].boughtPrice).toEqual(0); // regardless of what is set for test should return default 0
+      expect(res.body.stocks[0].quantity).toEqual(0); // same as above
     });
     it('Should remove stock symbol', async () => {
       const res = await agent.post('/stock/remove').send({});
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
-      expect(res.body.success).toEqual('Stock removed');
+      expect(res.body.message).toEqual('Stock removed');
     });
     // it('Should get saved symbols and search them', async () => {
     //   const res = await agent.post('/stock/searchFavourites').send({});
