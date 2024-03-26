@@ -20,6 +20,7 @@ export default function FinancialChartStockIndexChart(props: any) {
   const [data, setData] = useState({ metaData: {}, dataList: [] });
   const [faves, setFaves] = useState<String[]>([]);
   const [symbol, setSymbol] = useState<String>('');
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = (e: any) => {
     axios
@@ -37,6 +38,8 @@ export default function FinancialChartStockIndexChart(props: any) {
     axios
       .post(`${URL}/stock/remove`, { stock: item })
       .catch((err) => console.log(err));
+
+    setLoading(!loading);
   };
 
   const handleSave = (e: any) => {
@@ -44,6 +47,8 @@ export default function FinancialChartStockIndexChart(props: any) {
     axios
       .post(`${URL}/stock/save`, { symbol: symbol.toUpperCase() || '' })
       .catch((err) => console.log(err));
+
+    setLoading(!loading);
   };
 
   const getFave = (favSymbol: any) => {
@@ -64,9 +69,13 @@ export default function FinancialChartStockIndexChart(props: any) {
       .post(`${URL}/stock/get`)
       .then((res) => {
         setFaves(res.data.stocks);
+        setLoading(false);
       })
-      .catch((err) => console.log(err));
-  }, []);
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  }, [loading]);
 
   return (
     <>
@@ -107,10 +116,11 @@ export default function FinancialChartStockIndexChart(props: any) {
                 <span
                   key={key}
                   data-dismissible="chip"
-                  onClick={() => getFave(item)}
                   className="cursor-pointer relative grid select-none items-center whitespace-nowrap rounded-lg bg-gray-900 py-1.5 px-3 font-sans text-xs font-bold uppercase text-white"
                 >
-                  <span className="mr-5">{item.symbol}</span>
+                  <span className="mr-5" onClick={() => getFave(item)}>
+                    {item.symbol}
+                  </span>
                   <button
                     data-dismissible-target="chip"
                     onClick={(e: any) => handleRemove(item)}
