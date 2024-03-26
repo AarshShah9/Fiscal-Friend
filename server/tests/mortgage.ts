@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { Mortgage } from '../models';
-import { createSecretToken } from '../utils/secretToken';
+import app from '../app';
 
 const testMortgage = {
   _id: null,
@@ -23,9 +23,7 @@ export const mortgageTests = (agent: request.Agent) => {
 
   describe('Mortgage Tests', () => {
     it('Should return 400 if user is not authenticated created', async () => {
-      agent.set('Cookie', '');
-
-      const res = await agent.post('/mortgage/create').send({
+      const res = await request(app).post('/mortgage/create').send({
         mortgage: testMortgage.mortgage,
         frequency: testMortgage.frequency,
       });
@@ -33,10 +31,6 @@ export const mortgageTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(400);
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('User not authenticated');
-
-      const TEST_USER_ID = '65e7b7d3b57aa86390016afb';
-      const token = createSecretToken(TEST_USER_ID);
-      agent.set('Cookie', `token=${token}`);
     });
 
     it('Should return 400 if required mortgage field are missing created', async () => {
@@ -60,23 +54,20 @@ export const mortgageTests = (agent: request.Agent) => {
     });
 
     it('Should create a new mortgage', async () => {
-      console.log('testMortgage', testMortgage);
       const res = await agent.post('/mortgage/create').send({
-        mortgage: {},
         amount: 100000,
         apr: 5,
         period: 30,
         frequency: 'Monthly (12x per year)',
       });
-      console.log(res.body);
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
+      expect(res.body.mortgage).toBeDefined();
+      expect(res.body.mortgage.mortgage.amount).toEqual(100000);
     });
 
     it('Should return 400 if user is not authenticated updated', async () => {
-      agent.set('Cookie', '');
-
-      const res = await agent.put('/mortgage/update').send({
+      const res = await request(app).put('/mortgage/update').send({
         mortgage: testMortgage.mortgage,
         frequency: testMortgage.frequency,
       });
@@ -84,10 +75,6 @@ export const mortgageTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(400);
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('User not authenticated');
-
-      const TEST_USER_ID = '65e7b7d3b57aa86390016afb';
-      const token = createSecretToken(TEST_USER_ID);
-      agent.set('Cookie', `token=${token}`);
     });
 
     it('Should return 400 if required mortgage field are missing updated', async () => {
@@ -112,7 +99,6 @@ export const mortgageTests = (agent: request.Agent) => {
 
     it('Should update mortgage', async () => {
       const res = await agent.put('/mortgage/update').send({
-        mortgage: {},
         amount: 100000,
         apr: 5,
         period: 30,
@@ -121,6 +107,7 @@ export const mortgageTests = (agent: request.Agent) => {
 
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
+      expect(res.body.mortgage).toBeDefined();
     });
   });
 };

@@ -15,7 +15,7 @@ export const createMortgage = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.mortgage || !req.body.frequency) {
+  if (!req.body.amount || !req.body.apr || !req.body.period || !req.body.frequency) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -98,9 +98,9 @@ export const getMortgage = async (req: Request, res: Response) => {
       .json({ success: false, message: 'User not authenticated' });
   }
 
-  const savings = await Mortgage.find({ user: req.body.user });
+  const mortgage = await Mortgage.findOne({ user: req.body.user });
 
-  return res.status(201).json({ success: true, savings });
+  return res.status(201).json({ success: true, mortgage });
 };
 
 export const updateMortgage = async (req: Request, res: Response) => {
@@ -116,7 +116,7 @@ export const updateMortgage = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.mortgage || !req.body.frequency) {
+  if (!req.body.amount || !req.body.apr || !req.body.period || !req.body.frequency) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -159,8 +159,8 @@ export const updateMortgage = async (req: Request, res: Response) => {
   const firstPayment = monthly - interestPayment;
 
   try {
-    const updateMortgage = await Mortgage.findByIdAndUpdate(
-      user.Mortgages[0],
+    const updateMortgage = await Mortgage.findOneAndUpdate(
+      { user: req.body.user },
       {
         $set: {
           'mortgage.amount': req.body.amount,

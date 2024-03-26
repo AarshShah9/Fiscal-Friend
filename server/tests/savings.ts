@@ -1,6 +1,6 @@
 import request from 'supertest';
+import app from '../app';
 import { SavingsModel } from '../models/SavingsModel';
-import { createSecretToken } from '../utils/secretToken';
 
 const testSavings1 = {
   _id: null,
@@ -87,7 +87,6 @@ export const savingsTests = (agent: request.Agent) => {
 
     it('Should update the savings account', async () => {
       const updatesTest = {
-        user: '65e7b7d3b57aa86390016afb',
         chequing: 1500,
         savings: 2500,
         resp: 3500,
@@ -102,23 +101,15 @@ export const savingsTests = (agent: request.Agent) => {
     });
 
     it('Should return error when the user ID is missing for update', async () => {
-      agent.set('Cookie', '');
-
-      const res = await agent.put('/savings/update').send(testSavings1);
+      const res = await request(app).put('/savings/update').send(testSavings1);
 
       expect(res.statusCode).toEqual(400);
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('User not authenticated');
-
-      const TEST_USER_ID = '65e7b7d3b57aa86390016afb';
-      const token = createSecretToken(TEST_USER_ID);
-      agent.set('Cookie', `token=${token}`);
     });
 
     it('Should return error when the user ID is missing for creating', async () => {
-      agent.set('Cookie', '');
-
-      const res = await agent.post('/savings/create').send({
+      const res = await request(app).post('/savings/create').send({
         chequing: testSavings1.savingAccount.chequing,
         savings: testSavings1.savingAccount.savings,
         resp: testSavings1.savingAccount.resp,
@@ -129,10 +120,6 @@ export const savingsTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(400);
       expect(res.body.success).toEqual(false);
       expect(res.body.message).toEqual('User not authenticated');
-
-      const TEST_USER_ID = '65e7b7d3b57aa86390016afb';
-      const token = createSecretToken(TEST_USER_ID);
-      agent.set('Cookie', `token=${token}`);
     });
   });
 };

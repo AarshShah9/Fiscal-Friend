@@ -96,7 +96,7 @@ const LoansSummary: React.FC<LoanAccountType> = ({ loc, mortgage }) => {
   return (
     <div className="flex-col items-center justify-center pt-28 pb-24">
       <h3 className="text-base font-semibold leading-6 text-gray-900">
-        Loans Account
+        Debts
       </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {loaningStats.map((item) => (

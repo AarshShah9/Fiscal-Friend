@@ -4,7 +4,8 @@ import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 
-export type MortgageInfo = {
+interface IMortgage{
+  user: string;
   mortgage: {
     amount: number;
     apr: number;
@@ -16,22 +17,26 @@ export type MortgageInfo = {
     firstPayment: number;
     payment: number;
   };
-  frequency: string;
-};
+  frequency:
+    | 'Bi-Weekly (every 2 weeks)'
+    | 'Semi-Monthly (24x per year)'
+    | 'Monthly (12x per year)';
+}
+
 
 type MortgageInfoProps = {
-  info?: MortgageInfo;
+  mortgage: IMortgage;
   onClose: () => void;
+  isOpen: boolean;
 };
 
-const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
-  props
-) => {
-  const [isOpen, setIsOpen] = useState(true);
-  console.log(props, 'props');
+const MortgageInformation: React.FC<MortgageInfoProps> = ({
+  mortgage,
+  isOpen,
+  onClose,
+}) => {
   const handleClose = () => {
-    setIsOpen(false);
-    props?.onClose();
+    onClose();
   };
 
   return (
@@ -80,7 +85,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                {props?.info?.frequency}
+                                {mortgage.frequency}
                               </p>
                             </div>
                           </div>
@@ -94,7 +99,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
                                 Amount:{' $'}
-                                {props?.info?.mortgage.amount.toLocaleString(
+                                {mortgage.mortgage.amount.toLocaleString(
                                   'en-US',
                                   {
                                     minimumFractionDigits: 2,
@@ -103,10 +108,10 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                                 )}
                                 <br />
                                 Annual Percentage Rate (APR):{' '}
-                                {props?.info?.mortgage.apr}
+                                {mortgage.mortgage.apr}
                                 {'%'}
                                 <br />
-                                Period: {props?.info?.mortgage.period} Years
+                                Period: {mortgage.mortgage.period} Years
                               </p>
                             </div>
                           </div>
@@ -119,8 +124,8 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                Monthly Payment:{' $'}
-                                {props?.info?.payments.payment.toLocaleString(
+                                Payment:{' $'}
+                                {mortgage.payments.payment.toLocaleString(
                                   'en-US',
                                   {
                                     minimumFractionDigits: 2,
@@ -129,11 +134,11 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                                 )}
                                 <br />
                                 Effective Percentage Rate:{' '}
-                                {props?.info?.payments.epr}
+                                {mortgage.payments.epr}
                                 {'%'}
                                 <br />
                                 First Payment:{' $'}
-                                {props?.info?.payments.firstPayment.toLocaleString(
+                                {mortgage.payments.firstPayment.toLocaleString(
                                   'en-US',
                                   {
                                     minimumFractionDigits: 2,
@@ -142,7 +147,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                                 )}
                                 <br />
                                 Interest Payment:{' $'}
-                                {props?.info?.payments.interestPayment.toLocaleString(
+                                {mortgage.payments.interestPayment.toLocaleString(
                                   'en-US',
                                   {
                                     minimumFractionDigits: 2,

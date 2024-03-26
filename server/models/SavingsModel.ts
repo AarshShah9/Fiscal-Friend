@@ -9,7 +9,6 @@ export interface ISavings extends Document {
   };
   loanAccount: {
     loc: Number;
-    mortgage: Number;
   };
 }
 
@@ -22,7 +21,6 @@ const SavingsSchema: Schema<ISavings> = new Schema({
   },
   loanAccount: {
     loc: { type: Number, required: false },
-    mortgage: { type: Number, required: false },
   },
 });
 

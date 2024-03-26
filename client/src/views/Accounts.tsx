@@ -5,10 +5,7 @@ import LoansSummary from '../components/LoansSummary';
 import { URL } from '../utils/constants';
 import MortgageCalculation from '../components/MortgageCalculation';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import MortgageInformation, {
-  MortgageInfo,
-} from '../components/MortgageInformation';
+import MortgageInformation from '../components/MortgageInformation';
 
 type SavingAccountType = {
   chequing: number;
@@ -26,13 +23,24 @@ type UserAccountType = {
   loanAccount: LoanAccountType;
 };
 
-// const schema = z.object({
-//   chequing: z.number().nonnegative(),
-//   savings: z.number().nonnegative(),
-//   resp: z.number().nonnegative(),
-//   loc: z.number().nonnegative().optional(),
-//   mortgage: z.number().nonnegative().optional(),
-// });
+interface IMortgage {
+  user: string;
+  mortgage: {
+    amount: number;
+    apr: number;
+    period: number;
+  };
+  payments: {
+    epr: number;
+    interestPayment: number;
+    firstPayment: number;
+    payment: number;
+  };
+  frequency:
+    | 'Bi-Weekly (every 2 weeks)'
+    | 'Semi-Monthly (24x per year)'
+    | 'Monthly (12x per year)';
+}
 
 type Accounts = {
   chequing: number;
@@ -43,14 +51,13 @@ type Accounts = {
 };
 
 const Accounts: React.FC = () => {
-  const { register, handleSubmit, reset, formState } = useForm<Accounts>();
+  const { register, handleSubmit, formState } = useForm<Accounts>();
 
-  const [showMortgageCalculation, setShowMortgageCalculation] = useState(false);
   const [showMortgageInfo, setShowMortgageInfo] = useState(false);
-  const [mortgageInfo, setMortgageInfo] = useState<MortgageInfo>();
-
+  const [isDataFetched, setIsDataFetched] = useState(false);  
   const [fetchedData, setFetchedData] = useState<UserAccountType | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [mortgage, setMortgage] = useState<IMortgage | null>(null);
 
   const handleSubmitData = async (data: any) => {
     try {
@@ -59,13 +66,13 @@ const Accounts: React.FC = () => {
         savings: parseFloat(data.savings).toFixed(2),
         resp: data.resp ? parseFloat(data.resp).toFixed(2) : 0,
         loc: data.loc ? parseFloat(data.loc).toFixed(2) : 0,
-        mortgage: data.mortgage ? parseFloat(data.mortgage).toFixed(2) : 0,
       };
-      setIsLoading(true);
       if (fetchedData) {
-        await axios.put(`${URL}/savings/update`, requestData);
+        await axios.put(`${URL}/savings/update`, requestData)
+        .then((res) => setFetchedData(res.data.savings));
       } else {
-        await axios.post(`${URL}/savings/create`, requestData);
+        await axios.post(`${URL}/savings/create`, requestData)
+        .then((res) => setFetchedData(res.data.savings));
       }
       // reset();
     } catch (e) {
@@ -76,69 +83,39 @@ const Accounts: React.FC = () => {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`${URL}/savings/get`);
-      if (res.data.savings && res.data.savings.length > 0) {
-        setFetchedData(res.data.savings[0]);
-      } else {
-        setFetchedData(null);
-      }
-    } catch (e) {
+      await axios.get(`${URL}/savings/get`)
+      .then((res) => {
+        if (res.data.savings) {
+          setFetchedData(res.data.savings);
+        } else {
+          setFetchedData(null);
+        }
+    });
+   } catch (e) {
       console.error('Error fetching data:', e);
       setFetchedData(null);
     }
+    try{
+      await axios.get(`${URL}/mortgage/get`)
+      .then((res) => {
+        setMortgage(res.data.mortgage)
+      });
+    } catch (e) {
+      console.error('Error fetching data:', e);
+      setMortgage(null);
+    }
+    setIsDataFetched(true);
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    if(!isDataFetched){
     fetchData();
-    setIsLoading(false);
-  }, [isLoading]);
-
-  const isMortgageCalculatorDisabled =
-    fetchedData?.loanAccount.mortgage === 0 ||
-    isLoading ||
-    fetchedData?.loanAccount.mortgage === undefined ||
-    fetchedData?.loanAccount.mortgage === null;
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+    }
+  },[isDataFetched]);
 
   return (
     <div>
       <div className="relative">
-        <div className="absolute top-0 right-0 mr-4 mt-4">
-          <button
-            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4 ${isMortgageCalculatorDisabled && 'opacity-50 cursor-not-allowed'}`}
-            onClick={() => {
-              setShowMortgageCalculation(true);
-            }}
-            disabled={isMortgageCalculatorDisabled}
-          >
-            Mortgage Calculator
-          </button>
-          {showMortgageCalculation && (
-            <MortgageCalculation
-              amount={fetchedData?.loanAccount.mortgage || 0}
-              onShow={(data?: MortgageInfo) => {
-                setShowMortgageCalculation(false);
-                setShowMortgageInfo(true);
-                setMortgageInfo(data);
-              }}
-              onClose={() => {
-                setShowMortgageCalculation(false);
-              }}
-            />
-          )}
-          {showMortgageInfo && (
-            <MortgageInformation
-              info={mortgageInfo}
-              onClose={() => {
-                setShowMortgageInfo(false);
-              }}
-            />
-          )}
-        </div>
         <h1 className="text-5xl pb-2">Accounts</h1>
         <p className={'py-4'}>
           To get started on tracking your accounts on Fiscal Friend, please
@@ -160,7 +137,8 @@ const Accounts: React.FC = () => {
             <input
               type="number"
               {...register('chequing')}
-              className="block rounded-md border-gray-300 shadow-sm"
+              className="block rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600"
+
               placeholder="$0.00"
             />
             {formState.errors.chequing && (
@@ -177,7 +155,7 @@ const Accounts: React.FC = () => {
             <input
               type="number"
               {...register('savings')}
-              className="block rounded-md border-gray-300 shadow-sm"
+              className="block rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600"
               placeholder="$0.00"
             />
             {formState.errors.savings && (
@@ -194,7 +172,7 @@ const Accounts: React.FC = () => {
             <input
               type="number"
               {...register('resp')}
-              className="block rounded-md border-gray-300 shadow-sm"
+              className="block rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600"
               placeholder="$0.00"
             />
             {formState.errors.resp && (
@@ -202,9 +180,9 @@ const Accounts: React.FC = () => {
             )}
           </div>
         </div>
-        <h2 className="text-3xl pb-2"> Loans</h2>
+        <h2 className="text-3xl pb-2">Credit Lines</h2>
         <div className="flex space-x-4">
-          <div className="pb-8">
+          <div className="pb-4">
             <label
               htmlFor="loc"
               className="block text-sm font-medium leading-6 text-gray-900"
@@ -212,22 +190,8 @@ const Accounts: React.FC = () => {
               Principal Line of Credit
             </label>
             <input
-              className="block rounded-md border-gray-300 shadow-sm"
+              className="block rounded-md border-0 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600"
               {...register('loc')}
-              type="number"
-              placeholder="$0.00"
-            />
-          </div>
-          <div className="pb-8">
-            <label
-              htmlFor="mortgage"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Principal Mortgage
-            </label>
-            <input
-              className="block rounded-md border-gray-300 shadow-sm"
-              {...register('mortgage')}
               type="number"
               placeholder="$0.00"
             />
@@ -235,12 +199,59 @@ const Accounts: React.FC = () => {
         </div>
         <button
           type="button"
-          className="flex w-50 justify-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex w-50 justify-center rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerals-600"
           onClick={handleSubmit(handleSubmitData)}
         >
           Submit
         </button>
       </form>
+      <div className="pt-8">
+      <h2 className="text-3xl pb-2">Mortgage</h2>
+            <label
+              htmlFor="mortgage"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Manage Your Mortgage
+            </label>
+            <button
+            type='button'
+            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-md mb-4`}
+            onClick={() => {
+              setIsModalOpen(true);
+            }}
+          >
+            {!mortgage ? 'Add a Mortgage' : 'Edit Mortgage'}
+          </button>
+            <MortgageCalculation
+              mortgage={mortgage}
+              setMortgage={setMortgage}
+              onClose={() => {
+                setIsModalOpen(false);
+              }}
+              isOpen={isModalOpen}
+              setShowMortgageInfo={setShowMortgageInfo}
+            />
+            {mortgage && (
+          <div>
+            <button
+            type='button'
+            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-md mb-4`}
+            onClick={() => {
+              setShowMortgageInfo(true);
+            }}
+          >
+            View Mortgage Information
+          </button>
+          <MortgageInformation
+            isOpen={showMortgageInfo}
+            mortgage={mortgage}
+            onClose={() => {
+              setShowMortgageInfo(false);
+            }}
+          />
+          </div>
+          )}
+          </div> 
       <SavingsSummary
         chequing={fetchedData?.savingAccount.chequing || 0}
         savings={fetchedData?.savingAccount.savings || 0}
@@ -248,7 +259,7 @@ const Accounts: React.FC = () => {
       />
       <LoansSummary
         loc={fetchedData?.loanAccount.loc || 0}
-        mortgage={fetchedData?.loanAccount.mortgage || 0}
+        mortgage={mortgage?.mortgage.amount || 0}
       />
     </div>
   );
