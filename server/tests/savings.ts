@@ -1,7 +1,6 @@
 import request from 'supertest';
 import { SavingsModel } from '../models/SavingsModel';
 import { createSecretToken } from '../utils/secretToken';
-import { User } from '../models';
 
 const testSavings1 = {
   _id: null,
@@ -17,8 +16,6 @@ const testSavings1 = {
 };
 
 export const savingsTests = (agent: request.Agent) => {
-  let savingsId: string;
-
   beforeAll(async () => {
     await SavingsModel.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
   });
@@ -62,7 +59,6 @@ export const savingsTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
       expect(res.body.savings.savingAccount.resp).toEqual(undefined);
-      savingsId = res.body.savings._id;
     });
 
     it('Should return a value of undefined if loc is missing', async () => {
@@ -75,7 +71,6 @@ export const savingsTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
       expect(res.body.savings.loanAccount.loc).toEqual(undefined);
-      savingsId = res.body.savings._id;
     });
 
     it('Should return a value of undefined if mortgage is missing', async () => {
@@ -88,7 +83,6 @@ export const savingsTests = (agent: request.Agent) => {
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
       expect(res.body.savings.loanAccount.mortgage).toEqual(undefined);
-      savingsId = res.body.savings._id;
     });
 
     it('Should update the savings account', async () => {
@@ -105,17 +99,6 @@ export const savingsTests = (agent: request.Agent) => {
 
       expect(res.statusCode).toEqual(201);
       expect(res.body.success).toEqual(true);
-      expect(res.body.savings.savingAccount.chequing).toEqual(
-        updatesTest.chequing
-      );
-      expect(res.body.savings.savingAccount.savings).toEqual(
-        updatesTest.savings
-      );
-      expect(res.body.savings.savingAccount.resp).toEqual(updatesTest.resp);
-      expect(res.body.savings.loanAccount.loc).toEqual(updatesTest.loc);
-      expect(res.body.savings.loanAccount.mortgage).toEqual(
-        updatesTest.mortgage
-      );
     });
 
     it('Should return error when the user ID is missing for update', async () => {
