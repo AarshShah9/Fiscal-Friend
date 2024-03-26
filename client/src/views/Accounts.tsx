@@ -120,9 +120,8 @@ const Accounts: React.FC = () => {
         <p className={'py-4'}>
           To get started on tracking your accounts on Fiscal Friend, please
           enter the information below! Note when you hit submit you must include
-          Chequing, Savings, and RESP. The other fields are optional. However,
-          they will default to 0 if not included. If you want to use the
-          mortgage calculator, you must enter the mortgage amount.
+          Chequing, Savings, and RESP. The line of credit field is optional. However,
+          it will default to 0 if not included. Mortgages are managed separately.
         </p>
       </div>
       <form>
