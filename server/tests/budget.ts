@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { Expense, Income } from '../models';
+import { Expense, Income, Mortgage } from '../models';
 
 interface IBudget {
     income: Number;
@@ -59,10 +59,18 @@ const recurringExpenseWeekly = {
 };
 
 const recurringExpenseBiWeekly = {
-    name: 'Test expense 4',
+    name: 'Test expense 9',
     user: '65e7b7d3b57aa86390016afb',
     amount: 200,
     recurring: 'Bi-Weekly',
+    category: 'Savings'
+};
+
+const recurringExpenseSemiMonthly = {
+    name: 'Test expense 4',
+    user: '65e7b7d3b57aa86390016afb',
+    amount: 200,
+    recurring: 'Semi-Monthly',
     category: 'Utilities',
 };
 
@@ -123,10 +131,26 @@ const recurringIncome = {
     recurring: 'Weekly',
 };
 
+const mortgage = {
+    user: '65e7b7d3b57aa86390016afb',
+    mortgage: {
+      amount: 200000,
+      apr: 4.5,
+      period: 30,
+    },
+    payments: {
+      epr: 0.00375,
+      interestPayment: 750,
+      firstPayment: 1000,
+      payment: 1500,
+    },
+    frequency: 'Monthly (12x per year)',
+};
+
 const expected: IBudget = {
     income: 9000,
     expenses: {
-        total: 2766.67,
+        total: 4700,
         itemized: {
             food: 1000,
             utilities: 400,
@@ -136,18 +160,19 @@ const expected: IBudget = {
             entertainment: 100,
             other: 200,
             rent: 0,
-            savings: 0,
+            savings: 433.33,
+            mortgage: 1500,
         },
     },
     recommendedBudget: {
-        "entertainment": 540, 
-        "food": 1350, 
-        "insurance": 450, 
-        "other": 540, 
-        "savings": 3600, 
-        "transportation": 900, 
-        "utilities": 1350, 
-        "wellness": 450,
+        "entertainment": 450,
+        "food": 1125,
+        "insurance": 375,
+        "other": 450,
+        "savings": 3000,
+        "transportation": 750,
+        "utilities": 1125,
+        "wellness": 375,
     },
 };
 
@@ -158,6 +183,7 @@ export const budgetTests = (agent: request.Agent) => {
         beforeAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
 
             // Create test expenses and incomes
             try {
@@ -165,6 +191,7 @@ export const budgetTests = (agent: request.Agent) => {
                 await Expense.create(oneTimeExpenseOld);
                 await Expense.create(recurringExpenseWeekly);
                 await Expense.create(recurringExpenseBiWeekly);
+                await Expense.create(recurringExpenseSemiMonthly);
                 await Expense.create(recurringExpenseMonthly);
                 await Expense.create(recurringExpenseQuarterly);
                 await Expense.create(recurringExpenseAnnually);
@@ -172,6 +199,7 @@ export const budgetTests = (agent: request.Agent) => {
                 await Income.create(oneTimeIncome);
                 await Income.create(oneTimeIncomeOld);
                 await Income.create(recurringIncome);
+                await Mortgage.create(mortgage);
             } catch (error) {
                 console.error('Failed to create test expenses and incomes:', error);
             }
@@ -180,6 +208,7 @@ export const budgetTests = (agent: request.Agent) => {
         afterAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
         });
 
         it('Should correctly return a budget', async () => {
