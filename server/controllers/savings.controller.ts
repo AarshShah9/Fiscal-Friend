@@ -102,7 +102,7 @@ export const updateSavings = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: 'Savings created',
-      expense: updateSavings,
+      savings: updateSavings,
     });
   } catch (e) {
     return res.status(500).json({ success: false, message: 'Server error', e });
@@ -135,4 +135,19 @@ export const getAllSavings = async (req: Request, res: Response) => {
     success: true,
     netWorth: netWorth,
   });
+};
+
+export const removeSavings = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    await SavingsModel.findByIdAndDelete(req.body.savings);
+    return res.status(201).json({ success: true, message: 'Savings removed' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
 };
