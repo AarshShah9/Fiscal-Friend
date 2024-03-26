@@ -14,6 +14,7 @@ import { transactionTests } from './transaction';
 import { budgetTests } from './budget';
 import { stockTests } from './stock';
 import { savingsTests } from './savings';
+import { mortgageTests } from './mortgage';
 
 let mongoClient: Connection;
 
@@ -47,6 +48,7 @@ describe('Fiscal Friend API Tests', () => {
   budgetTests(agent);
   stockTests(agent);
   savingsTests(agent);
+  mortgageTests(agent);
 });
 
 afterAll(async () => {
