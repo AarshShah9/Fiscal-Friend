@@ -22,6 +22,11 @@ const people = [
     imageUrl:
       'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
   },
+  {
+    name: 'Ken Liu',
+    role: 'Senior UI/UX Developer',
+    imageUrl: 'https://cdn2.vectorstock.com/i/1000x1000/54/16/potato-character-with-cute-face-and-simple-body-vector-38635416.jpg'
+  }
 ];
 
 export default function Team() {
