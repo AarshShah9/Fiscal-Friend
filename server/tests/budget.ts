@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { Expense, Income, Mortgage } from '../models';
+import app from '../app';
 
 interface IBudget {
     income: Number;
@@ -210,12 +211,19 @@ export const budgetTests = (agent: request.Agent) => {
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
         });
-
-        it('Should correctly return a budget', async () => {
-            const res = await agent.post('/budget/budget');
-            expect(res.statusCode).toBe(201);
-            expect(res.body.success).toBe(true);
-            expect(res.body.budget).toEqual(expected);
+        describe('Get Tests', () => {
+            it('Should return an error if user is not authenticated', async () => {
+                const res = await request(app).post('/budget/budget');
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.success).toEqual(false);
+                expect(res.body.message).toEqual('User not authenticated');
+            });
+            it('Should correctly return a budget', async () => {
+                const res = await agent.post('/budget/budget');
+                expect(res.statusCode).toBe(201);
+                expect(res.body.success).toBe(true);
+                expect(res.body.budget).toEqual(expected);
+            });
         });
     });
 };

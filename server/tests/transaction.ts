@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { Expense, Income, Mortgage } from '../models';
+import app from '../app';
 
 interface ITransaction {
     id: string,
@@ -112,28 +113,35 @@ export const transactionTests = (agent: request.Agent) => {
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
         });
-
-        it('Should correctly return all transactions for the current month', async () => {
-            const res = await agent.post('/transaction/get');
-            expect(res.statusCode).toEqual(201);
-            expect(res.body.success).toEqual(true);
-            const formattedTransactions: IFormattedTransactions[] = res.body.formattedTransactions;
-            expect(formattedTransactions.length).toBeGreaterThanOrEqual(1);
-            let names: string[] = [];
-            formattedTransactions.forEach((formattedTransaction) => {
-                formattedTransaction.transactions.forEach((transaction) => {
-                    names.push(transaction.name);
-                });
+        describe('Get Tests', () => {
+            it('Should return an error if user is not authenticated', async () => {
+                const res = await request(app).post('/transaction/get');
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.success).toEqual(false);
+                expect(res.body.message).toEqual('User not authenticated');
             });
-            const expectedLength = 3 + (2 * numWeeks);
-            expect(names.length).toBe(expectedLength);
-            expect(names).toContain(oneTimeExpense.name);
-            expect(names).toContain(oneTimeIncome.name);
-            expect(names).toContain(recurringExpense.name);
-            expect(names).toContain(recurringIncome.name);
-            expect(names).not.toContain(oneTimeExpenseOld.name);
-            expect(names).not.toContain(oneTimeIncomeOld.name);
-            expect(names).toContain('Mortgage Payment');
+            it('Should correctly return all transactions for the current month', async () => {
+                const res = await agent.post('/transaction/get');
+                expect(res.statusCode).toEqual(201);
+                expect(res.body.success).toEqual(true);
+                const formattedTransactions: IFormattedTransactions[] = res.body.formattedTransactions;
+                expect(formattedTransactions.length).toBeGreaterThanOrEqual(1);
+                let names: string[] = [];
+                formattedTransactions.forEach((formattedTransaction) => {
+                    formattedTransaction.transactions.forEach((transaction) => {
+                        names.push(transaction.name);
+                    });
+                });
+                const expectedLength = 3 + (2 * numWeeks);
+                expect(names.length).toBe(expectedLength);
+                expect(names).toContain(oneTimeExpense.name);
+                expect(names).toContain(oneTimeIncome.name);
+                expect(names).toContain(recurringExpense.name);
+                expect(names).toContain(recurringIncome.name);
+                expect(names).not.toContain(oneTimeExpenseOld.name);
+                expect(names).not.toContain(oneTimeIncomeOld.name);
+                expect(names).toContain('Mortgage Payment');
+            });
         });
     });
 };
