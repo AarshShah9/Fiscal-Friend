@@ -33,32 +33,28 @@ export default function FinancialChartStockIndexChart(props: any) {
       })
       .catch((err) => console.log(err));
   };
+  console.log(data.dataList);
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className={'flex flex-row w-full align-middle justify-items-center'}
-      >
-        <label htmlFor="stockSymbol text-bold">Enter Stock Symbol:</label>
-        <div className={'px-2'}></div>
-        <input
-          type="text"
-          id="stockSymbol"
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-          placeholder="e.g., VOO (S&P 500 ETF)"
-          required
-          className="block w-60 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
-        />
-        <div className={'px-2'}></div>
-        <button
-          type="submit"
-          className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full`}
-        >
-          Submit
-        </button>
-      </form>
       <div className="container sample">
+        <form onSubmit={handleSubmit} className={'flex items-center'}>
+          <label htmlFor="stockSymbol text-bold">Enter Stock Symbol:</label>
+          <input
+            type="text"
+            id="stockSymbol"
+            value={symbol}
+            onChange={(e) => setSymbol(e.target.value)}
+            placeholder="e.g., VOO (S&P 500 ETF)"
+            required
+            className="block w-60 rounded-md border-0 m-4 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+          />
+          <button
+            type="submit"
+            className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold  rounded-full py-2 px-4`}
+          >
+            Submit
+          </button>
+        </form>
         <div className="container rounded-lg bg-[#DCDCDC]/50 p-4">
           <IgrFinancialChart
             width="100%"
@@ -85,7 +81,11 @@ export default function FinancialChartStockIndexChart(props: any) {
             actualXAxisLabelTextColor="black"
             actualYAxisLabelTextColor="black"
             brushes={['#ff0000', '#00ff00']}
-            dataSource={data.dataList}
+            xAxisMode="time"
+            dataSource={data.dataList.map((item: StockItem) => ({
+              ...item,
+              Date: new Date(item.Date),
+            }))}
           />
         </div>
       </div>
