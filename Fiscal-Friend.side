@@ -90,6 +90,13 @@
     }, {
       "id": "0045d69b-1b13-461e-b9f8-f9be5d1c447d",
       "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "15d524b0-c480-45e3-8444-52948a69d818",
+      "comment": "",
       "command": "verifyText",
       "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1",
       "targets": [
