@@ -55,7 +55,7 @@ export const removeExpense = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'Invalid request body' });
     }
 
-    const expense = await Expense.findById(req.body.expense);
+    const expense = await Expense.findOne({ _id: req.body.expense, user: req.body.user });
 
     if (!expense) {
         return res.status(400).json({ success: false, message: 'Expense not found' });

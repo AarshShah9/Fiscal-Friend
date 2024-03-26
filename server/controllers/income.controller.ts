@@ -49,8 +49,14 @@ export const removeIncome = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: 'User not authenticated' });
     }
 
+    const income = await Income.findOne({ _id: req.body.id, user: req.body.user });
+
+    if (!income) {
+        return res.status(400).json({ success: false, message: 'Expense not found' });
+    }
+
     try {
-        await Income.findByIdAndDelete(req.body.income);
+        await Income.findByIdAndDelete(income._id);
         return res.status(201).json({ success: true, message: 'Income removed' });
     } catch (error) {
         return res.status(500).json({ success: false, message: 'Server error' });
