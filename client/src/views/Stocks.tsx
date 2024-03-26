@@ -33,7 +33,6 @@ export default function FinancialChartStockIndexChart(props: any) {
       })
       .catch((err) => console.log(err));
   };
-
   return (
     <>
       <form
@@ -54,16 +53,13 @@ export default function FinancialChartStockIndexChart(props: any) {
         <div className={'px-2'}></div>
         <button
           type="submit"
-          className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4`}
+          className={`bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full`}
         >
           Submit
         </button>
       </form>
       <div className="container sample">
-        <div
-          className="container rounded-lg bg-[#DCDCDC]/50 p-4"
-          
-        >
+        <div className="container rounded-lg bg-[#DCDCDC]/50 p-4">
           <IgrFinancialChart
             width="100%"
             height="100%"
