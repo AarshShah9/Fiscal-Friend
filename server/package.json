@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server.js",
   "scripts": {
     "test": "jest",
     "dev": "concurrently \"tsc --watch\" \"nodemon -q dist/server.js\"",
