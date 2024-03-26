@@ -46,9 +46,9 @@ describe('Fiscal Friend API Tests', () => {
   expenseTests(agent);
   transactionTests(agent);
   budgetTests(agent);
-  // stockTests(agent);
-  // savingsTests(agent);
-  // mortgageTests(agent);
+  stockTests(agent);
+  savingsTests(agent);
+  mortgageTests(agent);
 });
 
 afterAll(async () => {
