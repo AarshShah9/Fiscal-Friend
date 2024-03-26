@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { Expense, Income } from '../models';
+import { Expense, Income, Mortgage } from '../models';
 
 interface ITransaction {
     id: string,
@@ -66,6 +66,22 @@ const recurringIncome = {
     recurring: 'Weekly',
 };
 
+const mortgage = {
+    user: '65e7b7d3b57aa86390016afb',
+    mortgage: {
+      amount: 200000,
+      apr: 4.5,
+      period: 30,
+    },
+    payments: {
+      epr: 0.00375,
+      interestPayment: 750,
+      firstPayment: 1000,
+      payment: 1500,
+    },
+    frequency: 'Monthly (12x per year)',
+};
+
 const currentDate = new Date();
 const dayOfMonth = currentDate.getDate();
 const numWeeks = Math.floor(dayOfMonth / 7);
@@ -75,6 +91,7 @@ export const transactionTests = (agent: request.Agent) => {
         beforeAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
 
             // Create test expenses and incomes
             try {
@@ -84,6 +101,7 @@ export const transactionTests = (agent: request.Agent) => {
                 await Income.create(oneTimeIncome);
                 await Income.create(oneTimeIncomeOld);
                 await Income.create(recurringIncome);
+                await Mortgage.create(mortgage);
             } catch (error) {
                 console.error('Failed to create test expenses and incomes:', error);
             }
@@ -92,6 +110,7 @@ export const transactionTests = (agent: request.Agent) => {
         afterAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
         });
 
         it('Should correctly return all transactions for the current month', async () => {
@@ -106,7 +125,7 @@ export const transactionTests = (agent: request.Agent) => {
                     names.push(transaction.name);
                 });
             });
-            const expectedLength = 2 + (2 * numWeeks);
+            const expectedLength = 3 + (2 * numWeeks);
             expect(names.length).toBe(expectedLength);
             expect(names).toContain(oneTimeExpense.name);
             expect(names).toContain(oneTimeIncome.name);
@@ -114,6 +133,7 @@ export const transactionTests = (agent: request.Agent) => {
             expect(names).toContain(recurringIncome.name);
             expect(names).not.toContain(oneTimeExpenseOld.name);
             expect(names).not.toContain(oneTimeIncomeOld.name);
+            expect(names).toContain('Mortgage Payment');
         });
     });
 };
