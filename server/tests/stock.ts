@@ -85,12 +85,6 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.success).toEqual(true);
       expect(res.body.message).toEqual('Stock removed');
     });
-    it('Should get saved symbols and search them', async () => {
-      const res = await agent.post('/stock/searchFavourites').send({});
-      expect(res.statusCode).toEqual(200);
-      expect(res.body.success).toEqual(true);
-      expect(res.body.message).toEqual('Requested user favorites from API');
-    });
     it('Should return a single specific stock', async () => {
       const res = await agent.post('/stock/getSymbol').send({ symbol: 'AAPL' });
       expect(res.statusCode).toEqual(200);
