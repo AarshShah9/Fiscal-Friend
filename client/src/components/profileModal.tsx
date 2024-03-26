@@ -94,39 +94,12 @@ export default function ProfileModal({
                         <p className="mt-1 text-sm leading-6 text-gray-600">
                           This information is all confidential.
                         </p>
-
-                        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                          <div className="col-span-full">
-                            <label
-                              htmlFor="photo"
-                              className="block text-sm font-medium leading-6 text-gray-900"
-                            >
-                              Photo
-                            </label>
-                            <div className="mt-2 flex items-center gap-x-3">
-                              <UserCircleIcon
-                                className="h-12 w-12 text-gray-300"
-                                aria-hidden="true"
-                              />
-                              <button
-                                type="button"
-                                className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                              >
-                                Change
-                              </button>
-                            </div>
-                          </div>
-                        </div>
                       </div>
 
                       <div className="border-b border-gray-900/10 pb-12">
                         <h2 className="text-base font-semibold leading-7 text-gray-900">
                           Personal Information
                         </h2>
-                        <p className="mt-1 text-sm leading-6 text-gray-600">
-                          Use a permanent address where you can receive mail.
-                        </p>
-
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                           <div className="sm:col-span-3">
                             <label

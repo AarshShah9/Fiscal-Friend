@@ -19,7 +19,7 @@ export const getStockData = (req: Request, res: Response) => {
   if (!req.body.symbol) {
     return res.status(400).json({ success: false, message: 'Missing symbol' });
   }
-  const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=${req.body.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
+  const url: string = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${req.body.symbol}&apikey=${process.env.ALPHA_VANTAGE_KEY}`;
 
   // const dataList = StockIndexData.getData();
   // Fetech with promises to catch errors or failed request
@@ -29,7 +29,6 @@ export const getStockData = (req: Request, res: Response) => {
       // Call to method to format data for front-end
       let dataList: StockData[] = formatStockDataList(data);
       if (dataList.length === 0) dataList = fakeStockData;
-
       // Extracts the meta data from API response
       const metaData = data['Meta Data'];
       res.status(200).json({ metaData, dataList });
@@ -40,17 +39,18 @@ export const getStockData = (req: Request, res: Response) => {
         .status(500)
         .json({ success: false, message: 'Error fetching stock data' });
     });
+  console.log('poop');
 };
 
 // Method formats the data from the API response to be used in front-end graphs
 const formatStockDataList = (data: any): StockData[] => {
-  const monthlyTimeSeries = data['Monthly Time Series'];
+  const dailyTimeSeries = data['Daily Time Series'];
 
   const stockDataList: StockData[] = [];
 
-  for (const date in monthlyTimeSeries) {
-    if (monthlyTimeSeries.hasOwnProperty(date)) {
-      const monthlyData = monthlyTimeSeries[date];
+  for (const date in dailyTimeSeries) {
+    if (dailyTimeSeries.hasOwnProperty(date)) {
+      const monthlyData = dailyTimeSeries[date];
       const stockData: StockData = {
         Date: new Date(date),
         Open: parseFloat(monthlyData['1. open']),
@@ -79,7 +79,7 @@ export const saveSymbol = async (req: Request, res: Response) => {
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
   }
-
+  console.log(req.body);
   try {
     const newStock = new Stock({
       user: req.body.user,
@@ -88,11 +88,14 @@ export const saveSymbol = async (req: Request, res: Response) => {
       quantity: 0,
     });
 
+    console.log(newStock);
+
     await newStock.save();
     return res
       .status(201)
       .json({ success: true, message: 'Stock saved', stock: newStock });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ success: false, message: 'Server error', error });
@@ -120,8 +123,12 @@ export const removeStock = async (req: Request, res: Response) => {
       .json({ success: false, message: 'User not authenticated' });
   }
 
+  const stock = await Stock.findById(req.body.stock);
+  if (!stock) {
+    return res.status(400).json({ success: false, message: 'Stock not found' });
+  }
   try {
-    await Stock.findByIdAndDelete(req.body.id);
+    await Stock.findByIdAndDelete(stock._id);
     return res.status(201).json({ success: true, message: 'Stock removed' });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Server error' });
