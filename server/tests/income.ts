@@ -131,7 +131,7 @@ export const incomeTests = (agent: request.Agent) => {
             });
             it('should remove an income', async () => {
                 const res = await agent.post('/income/remove').send({
-                    id: testIncome1._id,
+                    income: testIncome1._id,
                 });
                 expect(res.statusCode).toEqual(201);
                 expect(res.body.success).toEqual(true);
