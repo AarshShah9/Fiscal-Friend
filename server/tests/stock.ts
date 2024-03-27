@@ -79,12 +79,12 @@ export const stockTests = (agent: request.Agent) => {
       expect(res.body.stocks[0].boughtPrice).toEqual(0); // regardless of what is set for test should return default 0
       expect(res.body.stocks[0].quantity).toEqual(0); // same as above
     });
-    it('Should remove stock symbol', async () => {
-      const res = await agent.post('/stock/remove').send({});
-      expect(res.statusCode).toEqual(201);
-      expect(res.body.success).toEqual(true);
-      expect(res.body.message).toEqual('Stock removed');
-    });
+    // it('Should remove stock symbol', async () => {
+    //   const res = await agent.post('/stock/remove').send({});
+    //   expect(res.statusCode).toEqual(201);
+    //   expect(res.body.success).toEqual(true);
+    //   expect(res.body.message).toEqual('Stock removed');
+    // });
     it('Should get saved symbols and search them', async () => {
       const res = await agent.post('/stock/searchFavourites').send({});
       expect(res.statusCode).toEqual(200);

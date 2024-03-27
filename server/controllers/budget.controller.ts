@@ -1,4 +1,4 @@
-import { CreditCard, Expense, Income, Mortgage, User } from '../models';
+import { Expense, Income, Mortgage, User } from '../models';
 import { Request, Response } from 'express';
 
 interface IBudget {

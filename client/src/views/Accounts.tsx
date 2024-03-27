@@ -252,13 +252,13 @@ const Accounts: React.FC = () => {
           )}
           </div> 
       <SavingsSummary
-        chequing={fetchedData?.savingAccount.chequing || 0}
-        savings={fetchedData?.savingAccount.savings || 0}
-        resp={fetchedData?.savingAccount.resp || 0}
+        chequing={fetchedData?.savingAccount?.chequing ?? 0}
+        savings={fetchedData?.savingAccount?.savings ?? 0}
+        resp={fetchedData?.savingAccount?.resp ?? 0}
       />
       <LoansSummary
-        loc={fetchedData?.loanAccount.loc || 0}
-        mortgage={mortgage?.mortgage.amount || 0}
+        loc={fetchedData?.loanAccount.loc ?? 0}
+        mortgage={mortgage?.mortgage.amount ?? 0}
       />
     </div>
   );
