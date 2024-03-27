@@ -76,11 +76,6 @@ export const createMortgage = async (req: Request, res: Response) => {
   try {
     const savedMortgage = await newMortgage.save();
 
-    await User.findByIdAndUpdate(
-      req.body.user,
-      { $push: { Mortgages: savedMortgage._id } },
-      { new: true, useFindAndModify: false }
-    );
     return res.status(201).json({
       success: true,
       message: 'Mortgage created',

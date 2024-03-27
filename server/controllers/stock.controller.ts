@@ -39,7 +39,6 @@ export const getStockData = (req: Request, res: Response) => {
         .status(500)
         .json({ success: false, message: 'Error fetching stock data' });
     });
-  console.log('poop');
 };
 
 // Method formats the data from the API response to be used in front-end graphs
@@ -79,7 +78,6 @@ export const saveSymbol = async (req: Request, res: Response) => {
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
   }
-  console.log(req.body);
   try {
     const newStock = new Stock({
       user: req.body.user,
@@ -87,8 +85,6 @@ export const saveSymbol = async (req: Request, res: Response) => {
       boughtPrice: 0,
       quantity: 0,
     });
-
-    console.log(newStock);
 
     await newStock.save();
     return res
