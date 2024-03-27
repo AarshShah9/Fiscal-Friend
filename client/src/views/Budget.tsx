@@ -9,134 +9,135 @@ import ColumnChart from '../components/ColumnChart';
 import BarChart from '../components/BarChart';
 
 export interface IBudget {
-    income: Number;
-    expenses: {
-        total: Number;
-        itemized: {
-            food: Number;
-            rent?: Number;
-            utilities: Number;
-            transportation: Number;
-            insurance: Number;
-            wellness: Number;
-            entertainment: Number;
-            other: Number;
-            mortgage?: Number;
-            creditCard?: Number;
-            savings?: Number;
-        };
+  income: Number;
+  expenses: {
+    total: Number;
+    itemized: {
+      food: Number;
+      rent?: Number;
+      utilities: Number;
+      transportation: Number;
+      insurance: Number;
+      wellness: Number;
+      entertainment: Number;
+      other: Number;
+      mortgage?: Number;
+      creditCard?: Number;
+      savings?: Number;
     };
-    recommendedBudget: {
-        food: Number;
-        utilities: Number;
-        transportation: Number;
-        insurance: Number;
-        wellness: Number;
-        entertainment: Number;
-        other: Number;
-        savings?: Number;
-    };
+  };
+  recommendedBudget: {
+    food: Number;
+    utilities: Number;
+    transportation: Number;
+    insurance: Number;
+    wellness: Number;
+    entertainment: Number;
+    other: Number;
+    savings?: Number;
+  };
 }
 
 export default function Budget() {
-    const [budget, setBudget] = useState<IBudget>({
-        income: 0,
-        expenses: {
-            total: 0,
-            itemized: {
-                food: 0,
-                utilities: 0,
-                transportation: 0,
-                insurance: 0,
-                wellness: 0,
-                entertainment: 0,
-                other: 0,
-            },
-        },
-        recommendedBudget: {
-            food: 0,
-            utilities: 0,
-            transportation: 0,
-            insurance: 0,
-            wellness: 0,
-            entertainment: 0,
-            other: 0,
-        },
-    } as IBudget);
+  const [budget, setBudget] = useState<IBudget>({
+    income: 0,
+    expenses: {
+      total: 0,
+      itemized: {
+        food: 0,
+        utilities: 0,
+        transportation: 0,
+        insurance: 0,
+        wellness: 0,
+        entertainment: 0,
+        other: 0,
+      },
+    },
+    recommendedBudget: {
+      food: 0,
+      utilities: 0,
+      transportation: 0,
+      insurance: 0,
+      wellness: 0,
+      entertainment: 0,
+      other: 0,
+    },
+  } as IBudget);
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [sidebarType, setSidebarType] = useState<
-        'expenses' | 'incomes' | undefined
-    >('expenses'); // Track which type of sidebar to open
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarType, setSidebarType] = useState<
+    'expenses' | 'incomes' | undefined
+  >('expenses'); // Track which type of sidebar to open
 
-    const [refresh, setRefresh] = useState(false);
-    const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
+  const [refresh, setRefresh] = useState(false);
+  const [dataFetched, setDataFetched] = useState(false); // Flag to track if data has been fetched
 
-    const toggleSidebar = (type?: 'expenses' | 'incomes' | undefined) => {
-        setSidebarType(type);
-        setSidebarOpen(!sidebarOpen);
-    };
+  const toggleSidebar = (type?: 'expenses' | 'incomes' | undefined) => {
+    setSidebarType(type);
+    setSidebarOpen(!sidebarOpen);
+  };
 
-    useEffect(() => {
-        if (refresh || !dataFetched) {
-            axios
-                .post(`${URL}/budget/budget`)
-                .then((res) => {
-                    setBudget(res.data.budget);
-                    setRefresh(false);
-                })
-                .catch((error) => console.error('Error fetching budget:', error));
-        }
-    }, [dataFetched, refresh, setRefresh]);
+  useEffect(() => {
+    if (refresh || !dataFetched) {
+      axios
+        .post(`${URL}/budget/budget`)
+        .then((res) => {
+          setBudget(res.data.budget);
+          setRefresh(false);
+        })
+        .catch((error) => console.error('Error fetching budget:', error));
+    }
+  }, [dataFetched, refresh, setRefresh]);
 
-    return (
-        <>
-            <div className="flex flex-col h-screen justify-around">
-                <div className="h-2/5">
-                    <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                        Your projected budget for
-                        {" " + new Date().toLocaleDateString('en-US', {
-                            month: 'long',
-                            year: 'numeric',
-                        })}
-                    </h3>
-                    <PieChart budget={budget} />
-                </div>
+  return (
+    <>
+      <div className="flex flex-col h-screen justify-around">
+        <div className="h-2/5">
+          <h3 className="text-lg font-semibold leading-6 text-gray-900">
+            Your projected budget for
+            {' ' +
+              new Date().toLocaleDateString('en-US', {
+                month: 'long',
+                year: 'numeric',
+              })}
+          </h3>
+          <PieChart budget={budget} />
+        </div>
 
-                <div className="flex flex-row h-3/5">
-                    <ColumnChart budget={budget} />
-                    <BarChart budget={budget} />
-                </div>
+        <div className="flex flex-row h-3/5">
+          <ColumnChart budget={budget} />
+          <BarChart budget={budget} />
+        </div>
 
-                <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
-                    {/* Pass respective type as argument */}
-                    <button
-                        className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4"
-                        onClick={() => toggleSidebar('expenses')}
-                    >
-                        Manage Expenses
-                    </button>
-                    <button
-                        className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full"
-                        onClick={() => toggleSidebar('incomes')}
-                    >
-                        Manage Incomes
-                    </button>
-                </div>
-                {/* Pass sidebarType to Sidebar component */}
-                <Sidebar
-                    isOpen={sidebarOpen}
-                    toggleSidebar={toggleSidebar}
-                    type={sidebarType}
-                    setRefreshRequired={setRefresh}
-                />
-            </div>
-            <StatsBoxes budget={budget} />
-            <div className="min-h-10"></div>
-            <TransactionsTable
-                refreshRequired={refresh}
-                setRefreshRequired={setRefresh}
-            />
-        </>
-    );
+        <div className="flex flex-col justify-start justify-items-center absolute right-4 top-20 px-4 py-4">
+          {/* Pass respective type as argument */}
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4"
+            onClick={() => toggleSidebar('expenses')}
+          >
+            Manage Expenses
+          </button>
+          <button
+            className="bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full"
+            onClick={() => toggleSidebar('incomes')}
+          >
+            Manage Incomes
+          </button>
+        </div>
+        {/* Pass sidebarType to Sidebar component */}
+        <Sidebar
+          isOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+          type={sidebarType}
+          setRefreshRequired={setRefresh}
+        />
+      </div>
+      <StatsBoxes budget={budget} />
+      <div className="min-h-10"></div>
+      <TransactionsTable
+        refreshRequired={refresh}
+        setRefreshRequired={setRefresh}
+      />
+    </>
+  );
 }
