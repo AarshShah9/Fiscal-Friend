@@ -1,0 +1,13 @@
+
+
+#favorite-div{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-content: space-between;
+}
+
+/*#favorite{*/
+/*    display: flex;*/
+/*}*/
+

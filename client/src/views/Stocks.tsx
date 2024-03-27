@@ -3,7 +3,7 @@ import { IgrFinancialChart } from 'igniteui-react-charts';
 import { IgrFinancialChartModule } from 'igniteui-react-charts';
 import axios from 'axios';
 import { URL } from '../utils/constants';
-
+import './stocks.css'
 IgrFinancialChartModule.register();
 
 interface StockItem {
@@ -25,13 +25,17 @@ export default function FinancialChartStockIndexChart(props: any) {
     axios
       .post(`${URL}/stock/search`, { symbol: value || '' })
       .then((res) => {
-        setSymbol(value);
+        setSymbol(value.toUpperCase());
         setData({
           metaData: res.data.metaData || {},
           dataList: res.data.dataList || [],
         });
       })
       .catch((err) => console.log(err));
+  };
+
+  const addFavorite = (e: any) => {
+
   };
 
   return (
@@ -59,14 +63,41 @@ export default function FinancialChartStockIndexChart(props: any) {
           Submit
         </button>
       </form>
+      {/*<button*/}
+      {/*  className={'bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4'}*/}
+      {/*  onClick={}*/}
+      {/*>*/}
+      {/*Favorite*/}
+      {/*</button>*/}
       <div className="container sample">
         <div className="container">
+          <div
+            id={"favorite-div"}
+            // style={{"textAlign": "left"}}
+          >
+              <h1
+                className="text-left align-middle"
+              >
+                {symbol}
+              </h1>
+              <div
+                className={'w-5'}
+              >
+
+              </div>
+              <button
+                id="favorite"
+                className={'bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-2 px-4 rounded-full mb-4'}
+              >
+                hello
+              </button>
+          </div>
           <IgrFinancialChart
             width="100%"
             height="100%"
             isToolbarVisible={false}
             chartType="Candle"
-            chartTitle="S&P 500"
+            // chartTitle={symbol}
             titleAlignment="Left"
             titleLeftMargin="25"
             titleTopMargin="10"
@@ -85,7 +116,6 @@ export default function FinancialChartStockIndexChart(props: any) {
             zoomSliderType="None"
             actualXAxisLabelTextColor="black"
             actualYAxisLabelTextColor="black"
-            brushes={['#ff0000', '#00ff00']}
             dataSource={data.dataList}
           />
         </div>

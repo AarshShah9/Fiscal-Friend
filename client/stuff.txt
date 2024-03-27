@@ -1,0 +1,34 @@
+
+Implicit Patterns
+
+Technologies, libraries, and frameworks use architectural
+ patterns inherently which are abstracted away from developers.
+
+Since we are using the MERN stack which has architectural patterns built-in to it
+ and which are abstracted away from developers.
+
+Here are a few that are found in our project:
+
+NodeJS is inherently an event driven
+
+MongoDB:
+
+The MERN stack has many inherent architecture patterns,
+ which we discuss in length in our final report.
+
+Since we are using the MERN stack which has many architectural patterns  to it.
+
+
+
+Often technologies, libraries, and frameworks such as the MERN stack use architectural
+ patterns which are built-in and abstracted away from developers.
+
+For example, NodeJS uses the Event-Driven Architecture pattern leveraging its asynchronous nature
+ and event-driven capabilities to create efficient and robust applications.
+
+The tools we used in our project have many inherent architecture patterns,
+ which we discuss in length in our final report.
+
+I will now be handing it over to Eadan who will showcase and discuss our sequence diagrams.
+
+
