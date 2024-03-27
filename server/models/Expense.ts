@@ -5,8 +5,24 @@ interface IExpense extends Document {
   name: string;
   amount: number;
   date?: Date;
-  recurring: 'One-time' | 'Weekly' | 'Semi-Monthly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
-  category: 'Food' | 'Utilities' | 'Rent' | 'Transportation' | 'Insurance' | 'Wellness' | 'Entertainment' | 'Savings' | 'Other';
+  recurring:
+    | 'One-time'
+    | 'Weekly'
+    | 'Semi-Monthly'
+    | 'Bi-Weekly'
+    | 'Monthly'
+    | 'Quarterly'
+    | 'Annually';
+  category:
+    | 'Food'
+    | 'Utilities'
+    | 'Rent'
+    | 'Transportation'
+    | 'Insurance'
+    | 'Wellness'
+    | 'Entertainment'
+    | 'Savings'
+    | 'Other';
 }
 
 const expenseSchema: Schema<IExpense> = new mongoose.Schema({
@@ -16,13 +32,31 @@ const expenseSchema: Schema<IExpense> = new mongoose.Schema({
   date: Date,
   recurring: {
     type: String,
-    enum: ['One-time', 'Weekly', 'Semi-Monthly', 'Bi-Weekly', 'Monthly', 'Quarterly', 'Annually'],
+    enum: [
+      'One-time',
+      'Weekly',
+      'Semi-Monthly',
+      'Bi-Weekly',
+      'Monthly',
+      'Quarterly',
+      'Annually',
+    ],
     required: true,
   },
-  category: { 
-    type: String, 
-    required: true, 
-    enum: ['Food', 'Utilities', 'Rent', 'Transportation', 'Insurance', 'Wellness', 'Entertainment', 'Savings', 'Other']
+  category: {
+    type: String,
+    required: true,
+    enum: [
+      'Food',
+      'Utilities',
+      'Rent',
+      'Transportation',
+      'Insurance',
+      'Wellness',
+      'Entertainment',
+      'Savings',
+      'Other',
+    ],
   },
 });
 
