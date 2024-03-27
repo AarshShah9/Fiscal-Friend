@@ -2,98 +2,104 @@ import React, { Fragment, useEffect, useState } from 'react';
 import axios from 'axios';
 import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
-import { useForm } from 'react-hook-form';
-import { MortgageInfo } from './MortgageInformation';
+import { set, useForm } from 'react-hook-form';
+
+interface IMortgage{
+  user: string;
+  mortgage: {
+    amount: number;
+    apr: number;
+    period: number;
+  };
+  payments: {
+    epr: number;
+    interestPayment: number;
+    firstPayment: number;
+    payment: number;
+  };
+  frequency:
+    | 'Bi-Weekly (every 2 weeks)'
+    | 'Semi-Monthly (24x per year)'
+    | 'Monthly (12x per year)';
+}
 
 type MortgageForm = {
   amount: number;
   apr: number;
   period: number;
-  epr: number;
-  interestPayment: number;
-  firstPayment: number;
-  monthlyPayment: number;
   frequency: string;
 };
 
 type MortgageProps = {
-  amount: number;
-  onShow: (data?: MortgageInfo) => void;
+  mortgage: IMortgage | null;
+  setMortgage: React.Dispatch<React.SetStateAction<IMortgage | null>>;
   onClose: () => void;
+  isOpen: boolean;
+  setShowMortgageInfo: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MortgageCalculation: React.FC<MortgageProps> = ({
-  amount,
+  mortgage,
+  setMortgage,
   onClose,
-  onShow,
+  isOpen,
+  setShowMortgageInfo,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [fetchedData, setFetchedData] = useState<MortgageForm | null>(null);
-
-  const { register, handleSubmit } = useForm<MortgageForm>({
+  // const [fetchedData, setFetchedData] = useState<MortgageForm | null>(null);
+  const { register, handleSubmit, setValue } = useForm<MortgageForm>({
     defaultValues: {
-      amount: amount,
-      apr: 5.0,
-      period: 20,
-      epr: 0,
-      interestPayment: 0,
-      firstPayment: 0,
-      monthlyPayment: 0,
-      frequency: 'Bi-Weekly (every 2 weeks)',
+      amount: mortgage?.mortgage.amount ?? 0,
+      apr: mortgage?.mortgage.apr ?? 0,
+      period: mortgage?.mortgage.period ?? 0,
+      frequency: mortgage?.frequency ?? 'Bi-Weekly (every 2 weeks)',
     },
   });
-
-  const fetchData = async () => {
-    try {
-      const res = await axios.get(`${URL}/mortgage/get`);
-      if (res.data.savings && res.data.savings.length > 0) {
-        setFetchedData(res.data.savings[0]);
-      } else {
-        setFetchedData(null);
-      }
-    } catch (e) {
-      console.error('Error fetching data: ', e);
-      setFetchedData(null);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (mortgage) {
+      // Set default values based on the mortgage prop
+      setValue('amount', mortgage.mortgage.amount);
+      setValue('apr', mortgage.mortgage.apr);
+      setValue('period', mortgage.mortgage.period);
+      setValue('frequency', mortgage.frequency);
+    }
+  }, [mortgage, setValue]);
 
   const onSubmit = async (data: MortgageForm) => {
     const mortgageData = {
       ...data,
-      mortgage: {
-        amount: data.amount,
-        apr: Number(data.apr),
-        period: Number(data.period),
-      },
     };
     const postMortgage = async () => {
       try {
-        const res = await axios.post(`${URL}/mortgage/create`, mortgageData);
-        onShow(res.data.mortgage);
+        await axios.post(`${URL}/mortgage/create`, mortgageData)
+        .then((res) => {
+          setMortgage(res.data.mortgage)
+          setShowMortgageInfo(true);
+        })
+        // onShow(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
     };
     const updateMortgage = async () => {
       try {
-        const res = await axios.put(`${URL}/mortgage/update`, mortgageData);
-        onShow(res.data.mortgage);
+        await axios.put(`${URL}/mortgage/update`, mortgageData)
+        .then((res) => {
+          setMortgage(res.data.mortgage);
+          setShowMortgageInfo(true);
+        })
+        // onShow(res.data.mortgage);
       } catch (e) {
         console.error('Error: ', e);
       }
     };
 
-    if (fetchedData) {
+    if (mortgage !== null) {
       await updateMortgage();
     } else {
       await postMortgage();
     }
 
-    fetchData();
+    onClose();
   };
 
   const handleClose = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -141,15 +147,18 @@ const MortgageCalculation: React.FC<MortgageProps> = ({
                           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-3">
                               <label
-                                htmlFor="amount"
+                                htmlFor="apr"
                                 className="block text-sm font-medium leading-6 text-gray-900"
                               >
                                 Principal ($)
                               </label>
                               <div className="mt-2">
-                                <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                  ${amount.toLocaleString()}
-                                </p>
+                                <input
+                                  type="number"
+                                  id="amount"
+                                  {...register('amount')}
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm sm:leading-6"
+                                />
                               </div>
                             </div>
 
@@ -223,7 +232,7 @@ const MortgageCalculation: React.FC<MortgageProps> = ({
                       className="inline-flex w-full justify-center rounded-md bg-emerald-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-400 sm:ml-3 sm:w-auto"
                       onClick={handleSubmit(onSubmit)}
                     >
-                      Calculate
+                      Submit
                     </button>
                     <button
                       type="button"

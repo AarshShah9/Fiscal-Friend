@@ -4,7 +4,8 @@ import { URL } from '../utils/constants';
 import { Dialog, Transition } from '@headlessui/react';
 import { useForm } from 'react-hook-form';
 
-export type MortgageInfo = {
+interface IMortgage{
+  user: string;
   mortgage: {
     amount: number;
     apr: number;
@@ -14,24 +15,28 @@ export type MortgageInfo = {
     epr: number;
     interestPayment: number;
     firstPayment: number;
-    monthlyPayment: number;
+    payment: number;
   };
-  frequency: string;
-};
+  frequency:
+    | 'Bi-Weekly (every 2 weeks)'
+    | 'Semi-Monthly (24x per year)'
+    | 'Monthly (12x per year)';
+}
+
 
 type MortgageInfoProps = {
-  info?: MortgageInfo;
+  mortgage: IMortgage;
   onClose: () => void;
+  isOpen: boolean;
 };
 
-const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
-  props
-) => {
-  const [isOpen, setIsOpen] = useState(true);
-  console.log(props, 'props');
+const MortgageInformation: React.FC<MortgageInfoProps> = ({
+  mortgage,
+  isOpen,
+  onClose,
+}) => {
   const handleClose = () => {
-    setIsOpen(false);
-    props?.onClose();
+    onClose();
   };
 
   return (
@@ -80,7 +85,7 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                {props?.info?.frequency}
+                                {mortgage.frequency}
                               </p>
                             </div>
                           </div>
@@ -93,12 +98,20 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                Amount: {props?.info?.mortgage.amount}
-                                {'\n'}
-                                Apr: {props?.info?.mortgage.apr}
-                                {'\n'}
-                                Period: {props?.info?.mortgage.period} Years
-                                {'\n'}
+                                Amount:{' $'}
+                                {mortgage.mortgage.amount.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Annual Percentage Rate (APR):{' '}
+                                {mortgage.mortgage.apr}
+                                {'%'}
+                                <br />
+                                Period: {mortgage.mortgage.period} Years
                               </p>
                             </div>
                           </div>
@@ -111,17 +124,36 @@ const MortgageInformation: React.FC<MortgageInfoProps | undefined> = (
                             </label>
                             <div className="mt-2">
                               <p className="block w-full rounded-md bg-gray-100 py-1.5 px-2 text-gray-900 shadow-sm sm:text-sm sm:leading-6">
-                                Aepr: {props?.info?.payments.epr}
-                                {'\n'}
-                                First Payment:{''}
-                                {props?.info?.payments.firstPayment}
-                                {'\n'}
-                                Interest Payment:{' '}
-                                {props?.info?.payments.interestPayment}
-                                {'\n'}
-                                Monthly Payment:{' '}
-                                {props?.info?.payments.monthlyPayment}
-                                {'\n'}
+                                Payment:{' $'}
+                                {mortgage.payments.payment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Effective Percentage Rate:{' '}
+                                {mortgage.payments.epr}
+                                {'%'}
+                                <br />
+                                First Payment:{' $'}
+                                {mortgage.payments.firstPayment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
+                                <br />
+                                Interest Payment:{' $'}
+                                {mortgage.payments.interestPayment.toLocaleString(
+                                  'en-US',
+                                  {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                  }
+                                )}
                               </p>
                             </div>
                           </div>

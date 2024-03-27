@@ -1,5 +1,6 @@
 import request from 'supertest';
-import { Expense, Income } from '../models';
+import { Expense, Income, Mortgage } from '../models';
+import app from '../app';
 
 interface ITransaction {
     id: string,
@@ -66,6 +67,22 @@ const recurringIncome = {
     recurring: 'Weekly',
 };
 
+const mortgage = {
+    user: '65e7b7d3b57aa86390016afb',
+    mortgage: {
+      amount: 200000,
+      apr: 4.5,
+      period: 30,
+    },
+    payments: {
+      epr: 0.00375,
+      interestPayment: 750,
+      firstPayment: 1000,
+      payment: 1500,
+    },
+    frequency: 'Monthly (12x per year)',
+};
+
 const currentDate = new Date();
 const dayOfMonth = currentDate.getDate();
 const numWeeks = Math.floor(dayOfMonth / 7);
@@ -75,6 +92,7 @@ export const transactionTests = (agent: request.Agent) => {
         beforeAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
 
             // Create test expenses and incomes
             try {
@@ -84,6 +102,7 @@ export const transactionTests = (agent: request.Agent) => {
                 await Income.create(oneTimeIncome);
                 await Income.create(oneTimeIncomeOld);
                 await Income.create(recurringIncome);
+                await Mortgage.create(mortgage);
             } catch (error) {
                 console.error('Failed to create test expenses and incomes:', error);
             }
@@ -92,28 +111,37 @@ export const transactionTests = (agent: request.Agent) => {
         afterAll(async () => {
             await Expense.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
             await Income.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
+            await Mortgage.deleteMany({ user: '65e7b7d3b57aa86390016afb' });
         });
-
-        it('Should correctly return all transactions for the current month', async () => {
-            const res = await agent.post('/transaction/get');
-            expect(res.statusCode).toEqual(201);
-            expect(res.body.success).toEqual(true);
-            const formattedTransactions: IFormattedTransactions[] = res.body.formattedTransactions;
-            expect(formattedTransactions.length).toBeGreaterThanOrEqual(1);
-            let names: string[] = [];
-            formattedTransactions.forEach((formattedTransaction) => {
-                formattedTransaction.transactions.forEach((transaction) => {
-                    names.push(transaction.name);
-                });
+        describe('Get Tests', () => {
+            it('Should return an error if user is not authenticated', async () => {
+                const res = await request(app).post('/transaction/get');
+                expect(res.statusCode).toEqual(400);
+                expect(res.body.success).toEqual(false);
+                expect(res.body.message).toEqual('User not authenticated');
             });
-            const expectedLength = 2 + (2 * numWeeks);
-            expect(names.length).toBe(expectedLength);
-            expect(names).toContain(oneTimeExpense.name);
-            expect(names).toContain(oneTimeIncome.name);
-            expect(names).toContain(recurringExpense.name);
-            expect(names).toContain(recurringIncome.name);
-            expect(names).not.toContain(oneTimeExpenseOld.name);
-            expect(names).not.toContain(oneTimeIncomeOld.name);
+            it('Should correctly return all transactions for the current month', async () => {
+                const res = await agent.post('/transaction/get');
+                expect(res.statusCode).toEqual(201);
+                expect(res.body.success).toEqual(true);
+                const formattedTransactions: IFormattedTransactions[] = res.body.formattedTransactions;
+                expect(formattedTransactions.length).toBeGreaterThanOrEqual(1);
+                let names: string[] = [];
+                formattedTransactions.forEach((formattedTransaction) => {
+                    formattedTransaction.transactions.forEach((transaction) => {
+                        names.push(transaction.name);
+                    });
+                });
+                const expectedLength = 3 + (2 * numWeeks);
+                expect(names.length).toBe(expectedLength);
+                expect(names).toContain(oneTimeExpense.name);
+                expect(names).toContain(oneTimeIncome.name);
+                expect(names).toContain(recurringExpense.name);
+                expect(names).toContain(recurringIncome.name);
+                expect(names).not.toContain(oneTimeExpenseOld.name);
+                expect(names).not.toContain(oneTimeIncomeOld.name);
+                expect(names).toContain('Mortgage Payment');
+            });
         });
     });
 };

@@ -15,7 +15,7 @@ export const createMortgage = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.mortgage || !req.body.frequency) {
+  if (!req.body.amount || !req.body.apr || !req.body.period || !req.body.frequency) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -43,18 +43,16 @@ export const createMortgage = async (req: Request, res: Response) => {
     numberPayments = mortgagePeriod * 24;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let semiMonthly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = semiMonthly * (24 / 12);
   } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
     numberPayments = mortgagePeriod * 26;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let biWeekly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = biWeekly * (26 / 12);
   }
 
   const firstPayment = monthly - interestPayment;
@@ -70,7 +68,7 @@ export const createMortgage = async (req: Request, res: Response) => {
       epr: (mortgageEPR * 100).toFixed(2),
       interestPayment: interestPayment.toFixed(2),
       firstPayment: firstPayment.toFixed(2),
-      monthlyPayment: monthly.toFixed(2),
+      payment: monthly.toFixed(2),
     },
     frequency: req.body.frequency,
   });
@@ -100,9 +98,9 @@ export const getMortgage = async (req: Request, res: Response) => {
       .json({ success: false, message: 'User not authenticated' });
   }
 
-  const savings = await Mortgage.find({ user: req.body.user });
+  const mortgage = await Mortgage.findOne({ user: req.body.user });
 
-  return res.status(201).json({ success: true, savings });
+  return res.status(201).json({ success: true, mortgage });
 };
 
 export const updateMortgage = async (req: Request, res: Response) => {
@@ -118,7 +116,7 @@ export const updateMortgage = async (req: Request, res: Response) => {
     return res.status(400).json({ success: false, message: 'User not found' });
   }
 
-  if (!req.body.mortgage || !req.body.frequency) {
+  if (!req.body.amount || !req.body.apr || !req.body.period || !req.body.frequency) {
     return res
       .status(400)
       .json({ success: false, message: 'Invalid request body' });
@@ -146,25 +144,23 @@ export const updateMortgage = async (req: Request, res: Response) => {
     numberPayments = mortgagePeriod * 24;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 24) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let semiMonthly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = semiMonthly * (24 / 12);
   } else if (mortgageFrequency === 'Bi-Weekly (every 2 weeks)') {
     numberPayments = mortgagePeriod * 26;
     mortgageEPR = (1 + mortgageEAR) ** (1 / 26) - 1;
     interestPayment = mortgageAmount * mortgageEPR;
-    let biWeekly =
+    monthly =
       mortgageAmount /
       ((1 - 1 / (1 + mortgageEPR) ** numberPayments) / mortgageEPR);
-    monthly = biWeekly * (26 / 12);
   }
 
   const firstPayment = monthly - interestPayment;
 
   try {
-    const updateMortgage = await Mortgage.findByIdAndUpdate(
-      user.Mortgages[0],
+    const updateMortgage = await Mortgage.findOneAndUpdate(
+      { user: req.body.user },
       {
         $set: {
           'mortgage.amount': req.body.amount,
@@ -173,7 +169,7 @@ export const updateMortgage = async (req: Request, res: Response) => {
           'payments.epr': (mortgageEPR * 100).toFixed(2),
           'payments.interestPayment': interestPayment.toFixed(2),
           'payments.firstPayment': firstPayment.toFixed(2),
-          'payments.monthlyPayment': monthly.toFixed(2),
+          'payments.payment': monthly.toFixed(2),
           frequency: req.body.frequency,
         },
       },

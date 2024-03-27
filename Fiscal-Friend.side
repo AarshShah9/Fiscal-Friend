@@ -1,0 +1,836 @@
+{
+  "id": "2982ae7d-618b-4127-a97f-40a54af0970e",
+  "version": "2.0",
+  "name": "Fiscal Friend",
+  "url": "https://fiscal-friend.vercel.app/",
+  "tests": [{
+    "id": "1156158b-16a4-4714-8986-90bdbca0c393",
+    "name": "Login",
+    "commands": [{
+      "id": "a865c3a8-1ee7-4672-b7c3-0ca3fd45a6e2",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e794a932-0b9e-425a-ac34-d8749300061b",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1048",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b3622656-dcf4-4243-87a0-4692eba62402",
+      "comment": "",
+      "command": "click",
+      "target": "css=.px-4:nth-child(7)",
+      "targets": [
+        ["css=.px-4:nth-child(7)", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]", "xpath:idRelative"],
+        ["xpath=//button[4]", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "bf6c349c-26d4-431e-af02-6075ff5a6123",
+      "comment": "",
+      "command": "click",
+      "target": "id=email",
+      "targets": [
+        ["id=email", "id"],
+        ["name=email", "name"],
+        ["css=#email", "css:finder"],
+        ["xpath=//input[@id='email']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "e270a88e-7384-4159-9669-93e46ccf9d2a",
+      "comment": "",
+      "command": "type",
+      "target": "id=email",
+      "targets": [
+        ["id=email", "id"],
+        ["name=email", "name"],
+        ["css=#email", "css:finder"],
+        ["xpath=//input[@id='email']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "aarsh@live.ca"
+    }, {
+      "id": "1048dd60-1d6f-40d3-98f3-2528075bfc54",
+      "comment": "",
+      "command": "type",
+      "target": "id=password",
+      "targets": [
+        ["id=password", "id"],
+        ["name=password", "name"],
+        ["css=#password", "css:finder"],
+        ["xpath=//input[@id='password']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/form/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "password"
+    }, {
+      "id": "5d9e4638-0728-4e6b-ac5f-3e8680d6f1d0",
+      "comment": "",
+      "command": "click",
+      "target": "css=.bg-emerald-500",
+      "targets": [
+        ["css=.bg-emerald-500", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/form/div[3]/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Sign in')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "0045d69b-1b13-461e-b9f8-f9be5d1c447d",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "15d524b0-c480-45e3-8444-52948a69d818",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1",
+      "targets": [
+        ["css=.ml-3", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Hello, Aarsh M Shah')]", "xpath:innerText"]
+      ],
+      "value": "Hello, Aarsh M Shah"
+    }]
+  }, {
+    "id": "04006dbc-2099-4201-bce7-230674984186",
+    "name": "Stock",
+    "commands": [{
+      "id": "c5b9bbb1-bf69-4be4-971c-c8939fa1ef0e",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/dashboard/stocks",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "357f44ab-9adb-47da-a0d7-90ca73187458",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1048",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fc56c032-10c5-4486-89a9-b75664bb76b1",
+      "comment": "",
+      "command": "click",
+      "target": "id=stockSymbol",
+      "targets": [
+        ["id=stockSymbol", "id"],
+        ["css=#stockSymbol", "css:finder"],
+        ["xpath=//input[@id='stockSymbol']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ca9e07f9-65cd-4ac6-86b6-1c8301b02e30",
+      "comment": "",
+      "command": "type",
+      "target": "id=stockSymbol",
+      "targets": [
+        ["id=stockSymbol", "id"],
+        ["css=#stockSymbol", "css:finder"],
+        ["xpath=//input[@id='stockSymbol']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "VOO"
+    }, {
+      "id": "be011077-3785-446c-a1d2-ef4d2a1e0458",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div[2]/button",
+      "targets": [
+        ["css=.bg-emerald-500 > button", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div[2]/button", "xpath:idRelative"],
+        ["xpath=//main/div/div/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b405b2de-b6ea-4748-85e7-80d726c64ddd",
+      "comment": "",
+      "command": "waitForElementPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/span",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "f0470949-3058-4f7b-b517-ea7fed24ab6e",
+      "comment": "",
+      "command": "verifyElementPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/span",
+      "targets": [
+        ["css=.cursor-pointer", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/span", "xpath:idRelative"],
+        ["xpath=//div[2]/div/span", "xpath:position"],
+        ["xpath=//span[contains(.,'VOO')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "5f8b5539-d82a-427c-852b-38ba5f8befe5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-4 > path",
+      "targets": [
+        ["css=.w-4 > path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "fb0cc87b-1779-4cf3-8bbf-abda26aeeca8",
+      "comment": "",
+      "command": "waitForElementNotPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/span",
+      "targets": [],
+      "value": "30000"
+    }, {
+      "id": "85c5f8d3-04f4-4a9a-8545-f051ef7b4eac",
+      "comment": "",
+      "command": "verifyElementNotPresent",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/span",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "09d6c849-53fe-4fd9-b905-4941dff50d97",
+    "name": "Edit Profile",
+    "commands": [{
+      "id": "9f19de76-ab9c-4c5d-abc7-0681aab78ebb",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "24656b6d-752b-4354-abae-9c3cfc3cfc38",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1032",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4265b908-f9fb-4dfc-96fd-cecf7e494f79",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]",
+      "targets": [
+        ["css=.px-4:nth-child(7)", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]", "xpath:idRelative"],
+        ["xpath=//button[4]", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c658ba5c-efec-448e-b57c-0096afa427ef",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span",
+      "targets": [
+        ["css=.ml-4", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span", "xpath:idRelative"],
+        ["xpath=//span[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8a62de0f-1ef3-452b-a16c-20e94007de8f",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span",
+      "targets": [
+        ["css=.ml-4", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span", "xpath:idRelative"],
+        ["xpath=//span[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "32790445-b6b0-4f19-a9ad-1f4517a1aa24",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span",
+      "targets": [
+        ["css=.ml-4", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span", "xpath:idRelative"],
+        ["xpath=//span[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "00179c53-a7e7-4611-9d57-1d607dc256be",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@id='headlessui-menu-item-:r2:']",
+      "targets": [
+        ["id=headlessui-menu-item-:r2:", "id"],
+        ["css=#headlessui-menu-item-\\3Ar2\\3A", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-item-:r2:']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-menu-items-:r1:']/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Your profile')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "48c51a54-b9cf-47c2-94f6-57d828154c07",
+      "comment": "",
+      "command": "click",
+      "target": "id=first-name",
+      "targets": [
+        ["id=first-name", "id"],
+        ["name=firstName", "name"],
+        ["css=#first-name", "css:finder"],
+        ["xpath=//input[@id='first-name']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div/div[2]/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5b650700-4918-44e7-8d5a-ba907d60511b",
+      "comment": "",
+      "command": "click",
+      "target": "id=first-name",
+      "targets": [
+        ["id=first-name", "id"],
+        ["name=firstName", "name"],
+        ["css=#first-name", "css:finder"],
+        ["xpath=//input[@id='first-name']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div/div[2]/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b5d2d275-a8c8-4dae-b15e-fb69f9ec265e",
+      "comment": "",
+      "command": "type",
+      "target": "id=first-name",
+      "targets": [
+        ["id=first-name", "id"],
+        ["name=firstName", "name"],
+        ["css=#first-name", "css:finder"],
+        ["xpath=//input[@id='first-name']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div/div[2]/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Aarsh M"
+    }, {
+      "id": "cabd23e6-d849-4b4e-8ca8-e962c7a08cba",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div/div[2]/div/div/label",
+      "targets": [
+        ["css=.sm\\3A col-span-3:nth-child(1) > .block", "css:finder"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div/div[2]/div/div/label", "xpath:idRelative"],
+        ["xpath=//label", "xpath:position"],
+        ["xpath=//label[contains(.,'First name')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "78775b8e-29c8-4811-a78b-a9663727227f",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div[2]/button",
+      "targets": [
+        ["css=.sm\\3A col-start-2", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r5:']/form/div[2]/button", "xpath:idRelative"],
+        ["xpath=//form/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "70fe75bf-1426-4d18-b8a0-6104b7b18ba9",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1",
+      "targets": [
+        ["css=.ml-3", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div/div/div/div/div/div/div/h1", "xpath:idRelative"],
+        ["xpath=//h1", "xpath:position"],
+        ["xpath=//h1[contains(.,'Hello, Aarsh M Shah')]", "xpath:innerText"]
+      ],
+      "value": "Hello, Aarsh M Shah"
+    }]
+  }, {
+    "id": "67def681-997d-420c-abd4-4d46aa8fa8de",
+    "name": "Edit Accounts",
+    "commands": [{
+      "id": "41c69b4b-4f26-40ec-98ef-dd16fe4ca3e3",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/dashboard/budget",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "267fedfd-7e1f-4d69-b65a-d955e31d06bc",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1032",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ee7c6232-f0b3-4c25-b5c1-782bf80ff35a",
+      "comment": "",
+      "command": "click",
+      "target": "css=li:nth-child(2) .h-6",
+      "targets": [
+        ["css=li:nth-child(2) .h-6", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "2ab30719-a13b-43d6-abbc-ce3ed1efd1bb",
+      "comment": "",
+      "command": "click",
+      "target": "name=chequing",
+      "targets": [
+        ["name=chequing", "name"],
+        ["css=.flex:nth-child(1) > .pb-8:nth-child(1) > .rounded-md", "css:finder"],
+        ["xpath=//input[@name='chequing']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5db61dc6-6039-4a26-b1a7-d3baae6f330b",
+      "comment": "",
+      "command": "type",
+      "target": "name=chequing",
+      "targets": [
+        ["name=chequing", "name"],
+        ["css=.flex:nth-child(1) > .pb-8:nth-child(1) > .rounded-md", "css:finder"],
+        ["xpath=//input[@name='chequing']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "1000"
+    }, {
+      "id": "0e6851ae-786b-4ec3-bade-36b8a636954f",
+      "comment": "",
+      "command": "type",
+      "target": "name=savings",
+      "targets": [
+        ["name=savings", "name"],
+        ["css=.flex:nth-child(1) > .pb-8:nth-child(2) > .rounded-md", "css:finder"],
+        ["xpath=//input[@name='savings']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "10000"
+    }, {
+      "id": "ffbc3ec0-8946-4e2c-b11b-42bec90f9929",
+      "comment": "",
+      "command": "type",
+      "target": "name=resp",
+      "targets": [
+        ["name=resp", "name"],
+        ["css=.pb-8:nth-child(3) > .rounded-md", "css:finder"],
+        ["xpath=//input[@name='resp']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div/div[3]/input", "xpath:idRelative"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "1200"
+    }, {
+      "id": "59816c44-2ae2-4c01-a279-030b096734b8",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/button",
+      "targets": [
+        ["css=.w-50", "css:finder"],
+        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "907b4814-1cf1-41e8-a581-9a7c8f92ba8d",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/button",
+      "targets": [
+        ["css=.w-50", "css:finder"],
+        ["xpath=(//button[@type='button'])[3]", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Submit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "022f2222-df63-4366-bfb6-8c49c0af5a8c",
+      "comment": "",
+      "command": "pause",
+      "target": "",
+      "targets": [],
+      "value": "1000"
+    }, {
+      "id": "64932418-d4db-4d8a-9ad5-ffe6a4e926ea",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div/dd",
+      "targets": [
+        ["css=.flex-col:nth-child(4) .overflow-hidden:nth-child(1) > .mt-1", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div/dd", "xpath:idRelative"],
+        ["xpath=//dd", "xpath:position"],
+        ["xpath=//dd[contains(.,'$1,000.00')]", "xpath:innerText"]
+      ],
+      "value": "$1,000.00"
+    }, {
+      "id": "4d834faa-af79-4658-9bc1-fdedfe4e12d9",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div[2]/dd",
+      "targets": [
+        ["css=.flex-col:nth-child(4) .overflow-hidden:nth-child(2) > .mt-1", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div[2]/dd", "xpath:idRelative"],
+        ["xpath=//div[2]/dd", "xpath:position"],
+        ["xpath=//dd[contains(.,'$10,000.00')]", "xpath:innerText"]
+      ],
+      "value": "$10,000.00"
+    }, {
+      "id": "65eeae66-ccbd-4845-9883-3287b711d7aa",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div[3]/dd",
+      "targets": [
+        ["css=.overflow-hidden:nth-child(3) > .mt-1", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/dl/div[3]/dd", "xpath:idRelative"],
+        ["xpath=//div[3]/dd", "xpath:position"],
+        ["xpath=//dd[contains(.,'$1,200.00')]", "xpath:innerText"]
+      ],
+      "value": "$1,200.00"
+    }]
+  }, {
+    "id": "40be8c68-4348-4cd0-ab61-af7124005c3c",
+    "name": "Main Page",
+    "commands": [{
+      "id": "4d2a86fb-9d56-479a-9dac-b583bb0d5545",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/dashboard",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a30c6da2-4fd1-4c22-958c-e2fc9c395b59",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1032",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bab7abfc-1456-4725-8b5b-3b6ca46ca5a9",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=dd > .text-lg",
+      "targets": [
+        ["css=dd > .text-lg", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[2]/div/div/div/div/div/div[2]/dl/dd/div", "xpath:idRelative"],
+        ["xpath=//dd/div", "xpath:position"]
+      ],
+      "value": "12200"
+    }]
+  }, {
+    "id": "d8791bb6-dbef-463c-bd04-9a4608ec02c8",
+    "name": "Logout",
+    "commands": [{
+      "id": "354ffec4-dcc1-477d-8795-bf1a803027c0",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7bb4b3b0-8970-4edb-a7db-9c99891e84da",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x1032",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0120369a-56de-426b-8dab-5c5147618e20",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]",
+      "targets": [
+        ["css=.px-4:nth-child(7)", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]", "xpath:idRelative"],
+        ["xpath=//button[4]", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "83198f47-ead0-45d8-bb0d-7c51bce3d226",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span",
+      "targets": [
+        ["css=.ml-4", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-button-:r0:']/span[2]/span", "xpath:idRelative"],
+        ["xpath=//span[2]/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "07c694df-0d9e-472d-9eac-cf12aa39a413",
+      "comment": "",
+      "command": "click",
+      "target": "id=headlessui-menu-item-:r3:",
+      "targets": [
+        ["id=headlessui-menu-item-:r3:", "id"],
+        ["css=#headlessui-menu-item-\\3Ar3\\3A", "css:finder"],
+        ["xpath=//button[@id='headlessui-menu-item-:r3:']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-menu-items-:r1:']/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'Sign out')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4ca5339b-d8cc-4dc8-acab-266c822dd35e",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]",
+      "targets": [
+        ["css=.px-4:nth-child(7)", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/div/div[2]/button[4]", "xpath:idRelative"],
+        ["xpath=//button[4]", "xpath:position"],
+        ["xpath=//button[contains(.,'Login')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "8ae4ae9f-500a-46e2-909c-9c87dcd5baf6",
+      "comment": "",
+      "command": "verifyText",
+      "target": "xpath=//div[@id='root']/div/div/div/h2",
+      "targets": [
+        ["css=.text-2xl", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div/h2", "xpath:idRelative"],
+        ["xpath=//h2", "xpath:position"],
+        ["xpath=//h2[contains(.,'Sign in to your account')]", "xpath:innerText"]
+      ],
+      "value": "Sign in to your account"
+    }]
+  }, {
+    "id": "6c3e6a42-5d46-42a4-96d9-109da8014031",
+    "name": "Expenses",
+    "commands": [{
+      "id": "e41222eb-9f43-4f66-99a0-bf888f6c4d3a",
+      "comment": "",
+      "command": "open",
+      "target": "https://fiscal-friend.vercel.app/dashboard/budget",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "29ac6e08-bf78-4bd1-825d-7644a2fd95d2",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1048",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "993cf9fb-8531-418a-985c-e712ddfc76e6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mb-4",
+      "targets": [
+        ["css=.mb-4", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Manage Expenses')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "421b45a5-8d28-437a-824d-3b631e6563f3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.inline-flex",
+      "targets": [
+        ["css=.inline-flex", "css:finder"],
+        ["xpath=(//button[@type='button'])[5]", "xpath:attributes"],
+        ["xpath=//h2[@id='headlessui-dialog-title-:r9:']/button", "xpath:idRelative"],
+        ["xpath=//h2/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Create new expense')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "80cb4447-07c8-4cb7-8138-495f66e8a8ae",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.inline-flex",
+      "targets": [
+        ["css=.inline-flex", "css:finder"],
+        ["xpath=(//button[@type='button'])[5]", "xpath:attributes"],
+        ["xpath=//h2[@id='headlessui-dialog-title-:r9:']/button", "xpath:idRelative"],
+        ["xpath=//h2/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Create new expense')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3193682e-3aae-4728-9e05-490dba6b71ed",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.focus-visible\\3Aoutline",
+      "targets": [
+        ["css=.focus-visible\\3Aoutline", "css:finder"],
+        ["xpath=(//button[@type='button'])[4]", "xpath:attributes"],
+        ["xpath=//h2[@id='headlessui-dialog-title-:r9:']/button", "xpath:idRelative"],
+        ["xpath=//h2/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Create new expense')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9eefb6da-943b-4b06-98dd-8ed6cfd7b421",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div/div/div/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "New Expense"
+    }, {
+      "id": "b55fa24f-df19-44d4-a302-841e930ba629",
+      "comment": "",
+      "command": "click",
+      "target": "id=amount",
+      "targets": [
+        ["id=amount", "id"],
+        ["name=amount", "name"],
+        ["css=#amount", "css:finder"],
+        ["xpath=//input[@id='amount']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div/div/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8038ed59-e6a0-425c-a4d9-e0227f2795f1",
+      "comment": "",
+      "command": "type",
+      "target": "id=amount",
+      "targets": [
+        ["id=amount", "id"],
+        ["name=amount", "name"],
+        ["css=#amount", "css:finder"],
+        ["xpath=//input[@id='amount']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div/div/div/div/div/div[2]/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/input", "xpath:position"]
+      ],
+      "value": "100"
+    }, {
+      "id": "42df2833-84b0-47fe-9943-c041e78d2b68",
+      "comment": "",
+      "command": "click",
+      "target": "id=recurring",
+      "targets": [
+        ["id=recurring", "id"],
+        ["name=recurring", "name"],
+        ["css=#recurring", "css:finder"],
+        ["xpath=//select[@id='recurring']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div/div/div/div/div/div[3]/div/select", "xpath:idRelative"],
+        ["xpath=//select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c315be0f-a988-42b3-996e-1c91832756a6",
+      "comment": "",
+      "command": "select",
+      "target": "id=recurring",
+      "targets": [],
+      "value": "label=Monthly"
+    }, {
+      "id": "5df99c84-ce86-4ac4-80be-46c78f267784",
+      "comment": "",
+      "command": "click",
+      "target": "id=category",
+      "targets": [
+        ["id=category", "id"],
+        ["name=category", "name"],
+        ["css=#category", "css:finder"],
+        ["xpath=//select[@id='category']", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div/div/div/div/div/div[4]/div/select", "xpath:idRelative"],
+        ["xpath=//div[4]/div/select", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "20e75352-56bb-4523-b0fa-c8948ea25ec8",
+      "comment": "",
+      "command": "select",
+      "target": "id=category",
+      "targets": [],
+      "value": "label=Utilities"
+    }, {
+      "id": "b0cc55ae-87bc-4043-b202-c7536645266e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sm\\3Aml-3",
+      "targets": [
+        ["css=.sm\\3Aml-3", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:rb:']/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "3a07bf82-c23c-42cd-9dfc-b0433b2d02cc",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.text-lg:nth-child(2)",
+      "targets": [
+        ["css=.text-lg:nth-child(2)", "css:finder"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r2:']/div[2]/div[3]/div/div/div/div/div/h2[2]", "xpath:idRelative"],
+        ["xpath=//h2[2]", "xpath:position"],
+        ["xpath=//h2[contains(.,'$100')]", "xpath:innerText"]
+      ],
+      "value": "$100"
+    }, {
+      "id": "cde51c3d-61d8-413a-a431-36e3447b0a34",
+      "comment": "",
+      "command": "click",
+      "target": "css=.text-grey-500",
+      "targets": [
+        ["css=.text-grey-500", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b36004b4-085c-4f21-a55b-77bda3bbfe7e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.-inset-2\\.5",
+      "targets": [
+        ["css=.-inset-2\\.5", "css:finder"],
+        ["xpath=//div[@id='headlessui-dialog-panel-:r2:']/div/button/span", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div/div[2]/div/div/div/div/button/span", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "392f4edc-e537-411f-bee8-2d68664676c4",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["1156158b-16a4-4714-8986-90bdbca0c393"]
+  }, {
+    "id": "c187897f-395d-4635-9768-f50df3bc31eb",
+    "name": "Suite!",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["1156158b-16a4-4714-8986-90bdbca0c393", "09d6c849-53fe-4fd9-b905-4941dff50d97", "04006dbc-2099-4201-bce7-230674984186", "67def681-997d-420c-abd4-4d46aa8fa8de", "40be8c68-4348-4cd0-ab61-af7124005c3c", "6c3e6a42-5d46-42a4-96d9-109da8014031", "d8791bb6-dbef-463c-bd04-9a4608ec02c8"]
+  }],
+  "urls": ["https://fiscal-friend.vercel.app/"],
+  "plugins": []
+}

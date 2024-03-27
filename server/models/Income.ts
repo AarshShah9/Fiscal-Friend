@@ -5,7 +5,14 @@ interface IIncome extends Document {
   name: string;
   amount: number;
   date?: Date;
-  recurring: 'One-time' | 'Weekly' | 'Bi-Weekly' | 'Monthly' | 'Quarterly' | 'Annually';
+  recurring:
+    | 'One-time'
+    | 'Weekly'
+    | 'Bi-Weekly'
+    | 'Monthly'
+    | 'Quarterly'
+    | 'Annually'
+    | 'Semi-Monthly';
 }
 
 const incomeSchema = new mongoose.Schema({
@@ -13,7 +20,19 @@ const incomeSchema = new mongoose.Schema({
   name: { type: String, required: true },
   amount: { type: Number, required: true },
   date: Date,
-  recurring: { type: String, enum: ['One-time', 'Weekly', 'Bi-Weekly', 'Monthly', 'Quarterly', 'Annually'], required: true},
+  recurring: {
+    type: String,
+    enum: [
+      'One-time',
+      'Weekly',
+      'Bi-Weekly',
+      'Monthly',
+      'Quarterly',
+      'Annually',
+      'Semi-Monthly',
+    ],
+    required: true,
+  },
 });
 
 const Income = mongoose.model<IIncome>('Income', incomeSchema);

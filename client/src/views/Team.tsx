@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const people = [
   {
     name: 'Aarsh Shah',
@@ -22,11 +24,35 @@ const people = [
     imageUrl:
       'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg',
   },
+  {
+    name: 'Ken Liu',
+    role: 'Senior UI/UX Developer',
+    imageUrl: 'https://cdn2.vectorstock.com/i/1000x1000/54/16/potato-character-with-cute-face-and-simple-body-vector-38635416.jpg'
+  },
+  {
+    name: 'Findlay Brown',
+    role: 'Ambassador of Awkward Encounters',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ99WOHy77ede5H8A3b29QUt7CHhwByJ4SS9kXNT6mzPg&s'
+  },
+  {
+    name: 'Brandon McGee',
+    role: 'Lead Daddy',
+    imageUrl: 'https://i.pinimg.com/736x/31/e2/a1/31e2a17fc75dd7d332086446d8ebb40d.jpg'
+  }
 ];
 
 export default function Team() {
   return (
     <div className="bg-white py-24 sm:py-32 min-h-screen">
+      <div className="absolute top-4 left-4 z-10 rounded-full bg-white p-2">
+        <Link to="/dashboard">
+              <img
+                className="mx-auto h-20 w-auto"
+                src="/images/logo.svg"
+                alt="Fiscal-Friend logo"
+              />
+        </Link>
+      </div>
       <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
         <div className="max-w-2xl pr-6">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
