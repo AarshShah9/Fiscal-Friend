@@ -30,7 +30,6 @@ export const createSavings = async (req: Request, res: Response) => {
     },
     loanAccount: {
       loc: req.body.loc,
-      mortgage: req.body.mortgage,
     },
   });
 
@@ -60,7 +59,7 @@ export const getSavings = async (req: Request, res: Response) => {
       .json({ success: false, message: 'User not authenticated' });
   }
 
-  const savings = await SavingsModel.find({ user: req.body.user });
+  const savings = await SavingsModel.findOne({ user: req.body.user });
 
   return res.status(201).json({ success: true, savings });
 };
@@ -85,15 +84,14 @@ export const updateSavings = async (req: Request, res: Response) => {
   }
 
   try {
-    const updateSavings = await SavingsModel.findByIdAndUpdate(
-      user.Savings[0],
+    const updateSavings = await SavingsModel.findOneAndUpdate(
+      { user: req.body.user},
       {
         $set: {
           'savingAccount.chequing': req.body.chequing,
           'savingAccount.savings': req.body.savings,
           'savingAccount.resp': req.body.resp,
           'loanAccount.loc': req.body.loc,
-          'loanAccount.mortgage': req.body.mortgage,
         },
       },
       { new: true, useFindAndModify: false }
@@ -102,7 +100,7 @@ export const updateSavings = async (req: Request, res: Response) => {
     return res.status(201).json({
       success: true,
       message: 'Savings created',
-      expense: updateSavings,
+      savings: updateSavings,
     });
   } catch (e) {
     return res.status(500).json({ success: false, message: 'Server error', e });
@@ -135,4 +133,19 @@ export const getAllSavings = async (req: Request, res: Response) => {
     success: true,
     netWorth: netWorth,
   });
+};
+
+export const removeSavings = async (req: Request, res: Response) => {
+  if (!req.body.user) {
+    return res
+      .status(400)
+      .json({ success: false, message: 'User not authenticated' });
+  }
+
+  try {
+    await SavingsModel.findByIdAndDelete(req.body.savings);
+    return res.status(201).json({ success: true, message: 'Savings removed' });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
 };

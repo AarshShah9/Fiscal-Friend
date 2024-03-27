@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const people = [
   {
     name: 'Aarsh Shah',
@@ -32,6 +34,15 @@ const people = [
 export default function Team() {
   return (
     <div className="bg-white py-24 sm:py-32 min-h-screen">
+      <div className="absolute top-4 left-4 z-10 rounded-full bg-white p-2">
+        <Link to="/dashboard">
+              <img
+                className="mx-auto h-20 w-auto"
+                src="/images/logo.svg"
+                alt="Fiscal-Friend logo"
+              />
+        </Link>
+      </div>
       <div className="mx-auto grid max-w-7xl gap-x-8 gap-y-20 px-6 lg:px-8 xl:grid-cols-3">
         <div className="max-w-2xl pr-6">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">

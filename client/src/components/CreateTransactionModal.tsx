@@ -158,6 +158,7 @@ const CreateTransactionModal: React.FC<CreateTransactionModalProps> = ({ isOpen,
                                                             >
                                                                 <option value="One-time">One-time</option>
                                                                 <option value="Weekly">Weekly</option>
+                                                                <option value="Semi-Monthly">Semi-Monthly</option>
                                                                 <option value="Bi-Weekly">Bi-Weekly</option>
                                                                 <option value="Monthly">Monthly</option>
                                                                 <option value="Quarterly">Quarterly</option>

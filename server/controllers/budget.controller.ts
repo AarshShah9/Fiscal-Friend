@@ -84,15 +84,16 @@ export const getBudget = async (req: Request, res: Response) => {
        // Calculate total expenses for the month grouping by category
        let totalExpenses = 0;
        const itemizedExpenses = {
-           food: 0,
-           utilities: 0,
-           rent: 0,
-           transportation: 0,
-           insurance: 0,
-           wellness: 0,
-           entertainment: 0,
-           savings: 0,
-           other: 0,
+            food: 0,
+            utilities: 0,
+            rent: 0,
+            transportation: 0,
+            insurance: 0,
+            wellness: 0,
+            entertainment: 0,
+            savings: 0,
+            other: 0,
+            mortgage: 0,
        };
 
        for (let i = 0; i < expenses.length; i++) {
@@ -109,8 +110,11 @@ export const getBudget = async (req: Request, res: Response) => {
                    amount = parseFloat(((expenses[i]?.amount || 0) * 4).toFixed(2));
                    break;
                case 'Bi-Weekly':
-                   amount = parseFloat(((expenses[i]?.amount || 0) * 2).toFixed(2));
+                   amount = parseFloat(((expenses[i]?.amount || 0) * 26/12).toFixed(2));
                    break;
+                case 'Semi-Monthly':
+                    amount = parseFloat(((expenses[i]?.amount || 0) * 2).toFixed(2));
+                    break;
                case 'Monthly':
                    amount = parseFloat((expenses[i]?.amount || 0).toFixed(2));
                    break;
@@ -155,10 +159,35 @@ export const getBudget = async (req: Request, res: Response) => {
             }
         }
 
+        //Mortgage integration
+        const mortgages = await Mortgage.find({ user: req.body.user });
+
+        for (let i = 0; i < mortgages.length; i++) {
+            let amount = 0;
+            switch (mortgages[i]?.frequency) {
+                case 'Bi-Weekly (every 2 weeks)':
+                    amount = parseFloat(((mortgages[i]?.payments.payment || 0) * 26/12).toFixed(2));
+                    break;
+                case 'Semi-Monthly (24x per year)':
+                    amount = parseFloat(((mortgages[i]?.payments.payment || 0) * 2).toFixed(2));
+                    break;
+                case 'Monthly (12x per year)':
+                    amount = parseFloat((mortgages[i]?.payments.payment || 0).toFixed(2));
+                    break;
+                default:
+                    break;
+            }
+            totalExpenses += amount;
+            itemizedExpenses.mortgage += amount;
+        }
+
         // Calculate total recommended budget for the month
         let flexibleIncome = totalIncome;
         if (itemizedExpenses.rent > 0) {
             flexibleIncome -= itemizedExpenses.rent;
+        }
+        if (itemizedExpenses.mortgage > 0) {
+            flexibleIncome -= itemizedExpenses.mortgage;
         }
         let recommendedBudget;
         if (flexibleIncome <= 0) {

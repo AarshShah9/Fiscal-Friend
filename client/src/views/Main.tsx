@@ -156,7 +156,7 @@ const Main = () => {
                   <div className="text-sm">
                     <button
                       onClick={() => {
-                        navigate('/dashboard/account');
+                        navigate('/dashboard/accounts');
                       }}
                       className="font-medium text-emerald-700 hover:text-emerald-900"
                     >

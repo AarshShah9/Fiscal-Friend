@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Expense, Income } from '../models';
+import { Expense, Income, Mortgage } from '../models';
 
 interface ITransaction {
     id: string,
@@ -188,7 +188,7 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
                     });
                     break;
                 case 'Quarterly':
-                    if(currentMonth % 3 === 0) {
+                    if(currentMonth + 1 % 3 === 0) {
                         addTransaction({
                             id: income._id.toHexString(),
                             name: income.name,
@@ -214,6 +214,56 @@ export const getRecentTransactions = async (req: Request, res: Response) => {
                     }
                     break;
             };
+        });
+
+        const mortgages = await Mortgage.find({ user: req.body.user });
+
+        mortgages.forEach(mortgage => {
+            let currentWeek = Math.floor(currentDate.getDate() / 7);
+            let currentMonth = currentDate.getMonth();
+            switch(mortgage.frequency) {
+                case 'Monthly (12x per year)':
+                    addTransaction({
+                        id: mortgage._id.toHexString(),
+                        name: 'Mortgage Payment',
+                        date: new Date(currentDate.getFullYear(), currentMonth, 1),
+                        amount: mortgage.payments.payment,
+                        category: 'mortgage',
+                        icon: 'out',
+                        recurring: 'Monthly',
+                    });
+                    break;
+                case 'Semi-Monthly (24x per year)':
+                    for (let week = 0; week < currentWeek; week += 2) {
+                        addTransaction({
+                            id: mortgage._id.toHexString(),
+                            name: "Mortgage Payment",
+                            date: new Date(currentDate.getFullYear(), currentDate.getMonth(), week * 7 + 1),
+                            amount: mortgage.payments.payment,
+                            category: null,
+                            icon: 'out',
+                            recurring: 'Semi-Monthly',
+                        });
+                    }
+                    break;
+                case 'Bi-Weekly (every 2 weeks)':
+                    let dateIteration = new Date(currentDate.getFullYear(), 0, 1);
+                    while(dateIteration <= currentDate) {
+                        if(dateIteration.getMonth() === currentMonth) {
+                            addTransaction({
+                                id: mortgage._id.toHexString(),
+                                name: 'Mortgage Payment',
+                                date: dateIteration,
+                                amount: mortgage.payments.payment,
+                                category: 'mortgage',
+                                icon: 'out',
+                                recurring: 'Bi-Weekly',
+                            });
+                        }
+                        dateIteration.setDate(dateIteration.getDate() + 14);
+                    }
+                    break;
+            }
         });
         
         // Sort transactions by date

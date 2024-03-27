@@ -214,6 +214,29 @@ export default function Layout() {
 
             <div className="flex flex-1 gap-x-4 justify-end self-stretch lg:gap-x-6">
               <div className="flex items-center gap-x-4 lg:gap-x-6">
+                {/* Testimonials */}
+                <button
+                  onClick={() => navigate('/testimonials')}
+                  className="group flex items-center px-3 py-2 rounded-md text-sm font-semibold text-black hover:text-white hover:bg-emerald-600"
+                >
+                  <span>Testimonials</span>
+                </button>
+
+                {/* About Us */}
+                <button
+                  onClick={() => navigate('/aboutus')}
+                  className="group flex items-center px-3 py-2 rounded-md text-sm font-semibold text-black hover:text-white hover:bg-emerald-600"
+                >
+                  <span>About Us</span>
+                </button>
+
+                {/* Team */}
+                <button
+                  onClick={() => navigate('/team')}
+                  className="group flex items-center px-3 py-2 rounded-md text-sm font-semibold text-black hover:text-white hover:bg-emerald-600"
+                >
+                  <span>Team</span>
+                </button>
                 {/* Separator */}
                 <div
                   className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"

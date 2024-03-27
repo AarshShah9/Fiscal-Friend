@@ -92,15 +92,39 @@ const SavingsSummary: React.FC<SavingAccountType> = ({
   }, [savingsAccount]);
 
   var savingStats = [
-    { name: 'Chequings', stat: '$' + savingsAccount.chequing },
-    { name: 'Savings', stat: '$' + savingsAccount.savings },
-    { name: 'RESP', stat: '$' + savingsAccount.resp },
+    {
+      name: 'Chequings',
+      stat:
+        '$' +
+        savingsAccount.chequing.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
+    {
+      name: 'Savings',
+      stat:
+        '$' +
+        savingsAccount.savings.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
+    {
+      name: 'RESP',
+      stat:
+        '$' +
+        savingsAccount.resp.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }),
+    },
   ];
 
   return (
     <div className="flex-col items-center justify-center pt-6">
       <h3 className="text-base font-semibold leading-6 text-gray-900">
-        Saving Account
+        Accounts
       </h3>
       <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
         {savingStats.map((item) => (
