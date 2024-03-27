@@ -28,6 +28,16 @@ const people = [
     name: 'Ken Liu',
     role: 'Senior UI/UX Developer',
     imageUrl: 'https://cdn2.vectorstock.com/i/1000x1000/54/16/potato-character-with-cute-face-and-simple-body-vector-38635416.jpg'
+  },
+  {
+    name: 'Findlay Brown',
+    role: 'Ambassador of Awkward Encounters',
+    imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ99WOHy77ede5H8A3b29QUt7CHhwByJ4SS9kXNT6mzPg&s'
+  },
+  {
+    name: 'Brandon McGee',
+    role: 'Lead Daddy',
+    imageUrl: 'https://i.pinimg.com/736x/31/e2/a1/31e2a17fc75dd7d332086446d8ebb40d.jpg'
   }
 ];
 
