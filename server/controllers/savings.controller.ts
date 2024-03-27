@@ -36,12 +36,6 @@ export const createSavings = async (req: Request, res: Response) => {
   try {
     const savedSavings = await newSavings.save();
 
-    await User.findByIdAndUpdate(
-      req.body.user,
-      { $push: { Savings: savedSavings._id } },
-      { new: true, useFindAndModify: false }
-    );
-
     return res.status(201).json({
       success: true,
       message: 'Savings created',
