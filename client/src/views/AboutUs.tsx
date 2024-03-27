@@ -1,10 +1,11 @@
+import { Link } from 'react-router-dom';
+
 const links = [
-  { name: 'Our values', href: '/' },
   { name: 'Meet our leadership', href: '/team' },
 ];
 const stats = [
-  { name: 'Offices worldwide', value: '12' },
-  { name: 'Full-time staff', value: '300+' },
+  { name: 'Offices worldwide', value: '1' },
+  { name: 'Full-time staff', value: '7' },
   { name: 'Lifetime', value: '$0' },
   { name: 'Expert Advice', value: 'Unlimited' },
 ];
@@ -12,6 +13,15 @@ const stats = [
 export default function AboutUs() {
   return (
     <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm: min-h-screen">
+      <div className="absolute top-4 left-4 z-10 rounded-full bg-white p-2">
+        <Link to="/dashboard">
+              <img
+                className="mx-auto h-20 w-auto"
+                src="/images/logo.svg"
+                alt="Fiscal-Friend logo"
+              />
+        </Link>
+      </div>
       <img
         src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&crop=focalpoint&fp-y=.8&w=2830&h=1500&q=80&blend=111827&sat=-100&exp=15&blend-mode=multiply"
         alt=""
