@@ -8,12 +8,17 @@
 ![Amazon Web Services Badge](https://img.shields.io/badge/Amazon%20Web%20Services-232F3E?logo=amazonwebservices&logoColor=fff&style=for-the-badge)
 ![Amazon RDS Badge](https://img.shields.io/badge/Amazon%20RDS-527FFF?logo=amazonrds&logoColor=fff&style=for-the-badge)
 ![Amazon EC2 Badge](https://img.shields.io/badge/Amazon%20EC2-F90?logo=amazonec2&logoColor=fff&style=for-the-badge)
+![Jest Badge](https://img.shields.io/badge/Jest-C21325?logo=jest&logoColor=fff&style=for-the-badge)
 
 # Fiscal-Friend
 
 ## About
 
-This is a MERN stack project that is meant to be your 'Fiscal Friend" which helps you budget your finances, keep track of your investments such as stocks, and much more. The technologies used include, React, Express, Node.js, Mongoose, MongoDB, TailwindCSS and external REST Web APIs to get historical and present stock data. The application was also hosted using AWS (CodePipeline, CodeBuilds, ElasticBeanstalk, EC2 and RDS).
+This is a MERN stack project that is meant to be your 'Fiscal Friend" which helps you budget your finances, keep track of your investments such as stocks, and much more. The technologies used include, React, Express, Node.js, Mongoose, MongoDB, TailwindCSS and external REST Web APIs to get historical and present stock data. The application was also hosted using AWS (CodePipeline, CodeBuilds, ElasticBeanstalk, EC2 and RDS). There is also a full unit testing suite using JEST.
+
+### Architecture Overview
+![Architecture (1)](https://github.com/user-attachments/assets/cc2f503e-ffb3-4122-9362-a4dd41d8e0e1)
+
 
 ### Running the dev server
 - When in base directory, to install all dependencies run:
